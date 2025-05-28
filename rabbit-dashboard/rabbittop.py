@@ -20,7 +20,6 @@ nonprod_urls = [
     "https://rmq-2f230abb-6e0e-4926-9574-404d85be7de6.sys.asp2.us-east-2.aws.cernercf.io/api/overview",
     "https://rmq-e1c4329e-56ed-4705-9afe-6b29d2133910.sys.asp2.us-east-2.aws.cernercf.io/api/overview",
     "https://rmq-76432a94-bde9-479b-ad2f-7e725d9a6219.sys.asp2.us-east-2.aws.cernercf.io/api/overview",
-
     #NON_PROD_ORD
     "https://rmq-83cf3621-1276-46bf-ab07-bdaeb2fa7a0b.sys.prod.rths.ord.oci.cernercf.io/api/overview",
     "https://rmq-90d16f7b-20bf-432b-8c3e-fbd854f85151.sys.prod.rths.ord.oci.cernercf.io/api/overview",
@@ -29,11 +28,9 @@ nonprod_urls = [
     "https://rmq-14245fd4-1252-48ce-a2ff-a85cb2582e02.sys.prod.rths.ord.oci.cernercf.io/api/overview",
     "https://rmq-54fa602b-5a3d-425f-a68d-a155c0b6bf2b.sys.prod.rths.ord.oci.cernercf.io/api/overview",
     "https://rmq-3c5de38b-45cc-4fef-b004-e3335e1b9753.sys.prod.rths.ord.oci.cernercf.io/api/overview",
-
     #NON_PROD_JED
     "https://rmq-d408e20d-d32b-4395-87e7-c1f7cefeb4f1.sys.prod.rths.jed.oci.cernercf.io/api/overview",
     "https://rmq-ad4ee067-421f-431c-bbd1-76335c48468b.sys.prod.rths.jed.oci.cernercf.io/api/overview",
-
     #NON_PROD_DXB
     "https://rmq-cc71f860-02cb-4ad3-8de6-d7ae4aebc624.sys.prod.rths.dxb.oci.cernercf.io/api/overview",
     "https://rmq-a403c4f4-09db-42b7-96f5-5a26ce401a86.sys.prod.rths.dxb.oci.cernercf.io/api/overview"
