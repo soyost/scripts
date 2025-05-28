@@ -1,9 +1,12 @@
 ## INSTRUCTIONS
 Pre-reqs: Python 3.10+ installed
 
-Install required Python libraries: Run in terminal:
+Install required Python libraries: 
+Run in terminal:
 
-`pip install requests plotly dash`
+```bash
+pip install requests plotly dash
+```
 
 Save the above Python script as rabbittop.py
 
