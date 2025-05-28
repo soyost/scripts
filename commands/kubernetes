@@ -1,0 +1,45 @@
+### K8 Kubernetes:
+kubectl get pods --sort-by=.status.startTime
+# kubectl logs <container> -n ibus-cloud-prod $MID0 | sed 's/\\n/\/g’ > logfile.log
+kubectl logs <container> -n ibus-cloud-prod $MID0 --tail=100
+kubectl describe pod <container> -n ibus-cloud-prod $MID0
+kubectl get deployment -n ibus-cloud-prod $MID0
+kubectl rollout restart deployment <deployment> -n ibus-cloud-prod $MID0 # there is also $PRES0
+kubectl rollout restart deployment <deployment-name> -n <namespace>
+    example:
+        kubectl rollout restart deployment ibustenantconfig -n ibus-cloud-prod
+kubectl delete pod <pod-name> -n <namespace>
+kubectl logs <pod_name> > logs.txt
+kubectl get deployments --all-namespaces -o custom-columns='NAMESPACE:.metadata.namespace,NAME:.metadata.name,PODS:.status.availableReplicas' | grep -v '^[[:space:]]*[^[:space:]]*[[:space:]]*[1-9][0-9]*[[:space:]]*$'
+# if not fed
+kubectl get pods --namespace=ibus-cloud-eng
+# look for specific pods
+kubectl get pods | grep <name> (#if in Fed need the namespace) 
+#look thought pod logs
+kubectl logs <full name>  | vim - # exmaple kubectl logs hopsschedule-cloudqasystem-5777f69bc7-tn4kz | vim -
+kubectl get nodes -o json | jq '.items[] | {addr: .metadata.labels.internal_addr, taints: .spec.taints}'
+WHERE
+kubectl config view --minify 
+kubectl exec -it ibusauthentication-cloudgov-5bb6b6f5d8-6qqjr $MID0 -n ibus-cloud-prod -- bash
+##WATCH
+watch -n <number> "kubectl get pods -n ibus-cloud-prod | grep <name>
+watch -n 1 "kubectl get pods -n ibus-cloud-prod | grep tenantconfig"
+
+## NOT running
+kubectl get pods --all-namespaces --field-selector=status.phase!=Running
+## Other phases:
+kubectl get pods --all-namespaces | grep -E "CrashLoopBackOff|Error|Evicted|Failed|Pending"
+## LOOK for persistent volume chains
+kubectl get pvc -n <namespace> --field-selector=status.phase=Pending
+## list node labels
+kubectl get nodes -o json | jq -r '.items[].metadata.labels["node-type"]' | sort -u
+## list release from helm
+helm list -A
+#Replica Sets
+kubectl get rs ibustempinfusiondatastore-prodcayul-5995c87c6b -n ibus-cloud-prod
+## Scale replica set, scale deployment
+##proof
+sy018616-mac:~ sy018616$ kubectl describe rs ibustempinfusiondatastore-prodcayul-5995c87c6b -n ibus-cloud-prod | grep Deployment
+Controlled By:  Deployment/ibustempinfusiondatastore-prodcayul
+## Scale deployment
+kubectl scale deployment ibustempinfusiondatastore-prodcayul --replicas=4 -n ibus-cloud-prod
