@@ -7,7 +7,7 @@ Run in terminal:
 
 pip install requests plotly dash
 
-Save the above Python script as rabbit_gui.py
+Save the above Python script as rabbittop.py
 
 Execute:
 python3 rabbit_gui.py -p
