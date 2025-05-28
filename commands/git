@@ -1,0 +1,50 @@
+## Git
+# get repo from remote to local
+git checkout -b <local-branch-name> origin/<remote-branch-name>
+git fetch origin
+git checkout <your-branch-name>
+git pull origin branch_name
+git merge origin/<your-branch-name>
+git clone <repository_url>
+# or
+git fetch --all
+# fix your forked copy
+git remote add upstream <master repo you forked from>
+git fetch upstream
+git reset --hard upstream/master
+git fetch
+
+# I made a change and I want to send it to origin
+git add .  # Stage all changes (replace `.` with specific files/directories if needed)
+git commit -m "Your commit message here"
+git checkout -b <name>
+git push origin <name>
+
+# branch history:
+git log --oneline --graph --decorate --all
+
+# git add commit from another branch
+git checkout <target branch adding the commit>
+git cherry-pick <desired commit hash>
+# or cherry-pick remotely
+git cherry-pick <remote>/<branch-name> <commit-hash> #assuming you are on the target branch
+## comparing files across different branches
+git diff <branch1>:<path/to/file> <branch2>:<path/to/file>
+### Git make a new branch, make changes, publish branch
+git add .
+git checkout -b "branch-name"
+git commit -m "commit message"
+git push --set-upstream origin branch-name
+#### Git make changes to branch
+git checkout branch-name
+git pull
+<make change>
+git add .
+git commit -m "commit message"
+git push origin
+
+
+
+###git cherry-pick automatically stages the changes, meaning it prepares the changes for commit.
+##It also creates a commit immediately, containing the applied changes from the original commit.
+##You only run git add or git commit if there are manual edits or conflict resolutions that need to be staged or committed.
