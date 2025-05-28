@@ -1,0 +1,56 @@
+# Linux commands
+sudo yum install -y nc
+ls -lSr # sort list by size
+find /ibus/log/<path>/<name>.log -newermt 'Nov 14 00:00' \! -newermt 'Nov 15 00:00' -ls
+watch -n 300 ls -al # performs a ls -al every 5 mins (300 secs)
+find . -type f -name '<file name>' -exec wc -l {} +  #list and print file names that match given prompt
+# count in a given directory
+<whatever search> | wc -l
+# interactive file removal to see which ones before deleting
+rm -vi <file name>
+# chown owner_name file_name
+chmod 777 file_name # this is pretty opem
+chmod 600 /Users/sy018616/Desktop/key.txt # this is really close
+# sort var/log by size
+du -a /var/log/ | sort -n -r | head -n 20 # du or find largest files 
+# sort list by size
+ls -lSr
+# find log files via given path during given date
+find /ibus/log/<path>/<file name or woldcard>.log -newermt 'Nov 14 00:00' \! -newermt 'Nov 15 00:00' -ls
+# append -delete to remove
+# truncate logs within a date
+truncate -s <siez, usually date> postgresql-2024-03-25_*.log postgresql-2024-03-26_*.log
+# obtain checksum of a file
+rpm -K <path_to_rpm_file>
+# obtain checksum w/o additional information
+rpm -K --nosignature <path_to_rpm_file>
+# list all files for given rpm installed package
+rpm -ql <name>
+# check all installes packages from rom
+rpm --verify -a | grep <name>
+# rpm db commands:
+sudo db5_recover -v -h /var/lib/rpm/
+sudo rm -f /var/lib/rpm/__db*
+sudo rpm --rebuilddb
+
+# identify pid of running process
+ps -ef | grep <name>
+# list processes as well
+ps aux | grep <name>
+# stop a pid identified
+kill -9 <pid>
+# linux kernel
+uname -srv 
+# syslog
+sudo tail -n 100 /var/log/syslog
+# find
+sudo find / -name <name here> 2>/dev/null
+find / -name '<name here>' 2>/dev/null
+find / -type f -name "*<thing>"
+# user lock locked faillock
+# located in /var/run/faillock
+faillock --user username --reset
+# top TOP show single PID every second
+top -p <PID> -d 1
+# decode echo command
+echo -e "$(echo "<value>" | base64 --decode)"
