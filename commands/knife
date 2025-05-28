@@ -1,0 +1,60 @@
+# KNIFE knife COMMANDS:
+knife data bag show vail_co_vdc-ets_users
+knife node list | grep <node name>
+knife search node "name:*<name>*" | grep -i name
+knife node show <name>
+knife block list
+knife block use <prod-main /prod-cho_prod>
+knife data bag show ibus_tenants | grep <fist four of build>
+knife role list | grep <role>
+knife role edit <role file>
+knife node delete -y <full node name>
+knife client delete -y <full node name>
+knife node run_list set <wrtnwvwdcc031cca102.wrtn-wv-wdc.cernercloud.net> "role[<wrtn_wv_wdc-cho_ibus-b0581_c03>]"
+knife environment list | grep ibus
+      cho_appliance_ibus_prod
+      cho_appliance_ibus_prod_canary
+      cho_appliance_ibus_sandbox
+      cho_appliance_ibus_staging
+knife environment edit
+knife node run_list set <appliance_host_fqdn> <service_run_list>
+# look for nodes in a given environment file
+knife search node "chef_environment:cho_appliance_ibus_prod_canary" | grep "Node Name"
+# run specific recipe
+chef-client -o "recipe[<recipe>]"
+# show specific cookbook
+knife cookbook show cerner_splunk
+# show runlist for node
+knife node show <fqdn> --run-list
+# chef attributes https://docs.chef.io/attribute_precedence/
+default['my_cookbook']['attribute'] = 'default_value'
+# vs #
+{
+  "name": "my_role",
+  "description": "Role to override cookbook attributes",
+  "default_attributes": {
+    "my_cookbook": {
+      "attribute": "override_value"
+    }
+  }
+}
+# look for which nodes are using which recipe 
+knife search node "run_list:<cookbook_name>::<recipe_name>"
+# knife bootstrap 
+knife bootstrap <ip> -N <name for chef server> -x root -P  <user_pass> --bootstrap-install-command "rpm -i https://cernerrepos.net/yum/chef/el7/x86_64/chef_stable/chef-16.16.13-1.el7.x86_64.rpm" -E <environment>
+
+# knife ssh commands
+# prep
+USER=sy018616
+read -s pass
+#enter asp password
+# if errors running after read pass
+ssh-add ~/.ssh/id_rsa
+#knife ssh (this case to run health check on applpiances in the staging env)
+knife ssh "chef_environment:cho_appliance_ibus_staging" "sudo /opt/gabor_health/bin/verify_health" --ssh-gateway ${USER}@choaplmgmt101 -C 10 -x ${USER} -P $pass | grep -i -e 'failure' -e 'passed' | awk '{print $NF}' | sort | uniq -c
+#
+output=$(knife ssh "chef_environment:cho_appliance_ibus_staging" "sudo /opt/holo/bin/check-health --user svc_gabor_health" --ssh-gateway ${USER}@choaplmgmt101 -C 10 -x ${USER} -P $pass | grep -i -e 'failure' -e 'passed' | sort | uniq -c)
+echo "$output"
+echo "Total nodes: $(echo "$output" | wc -l)"
+## Connect cert check
+knife ssh "chef_environment:*ibus_prod AND fqdn:ahsw* AND (fqdn:*cca10*.*.cernercloud.net)" "echo | openssl s_client -connect 127.0.0.1:443 2>/dev/null | openssl x509 -noout -enddate" --ssh-gateway ${USER}@choaplmgmt101 -C 20 -x ${USER} -P $pass | sort
