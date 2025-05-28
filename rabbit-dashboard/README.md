@@ -13,6 +13,7 @@ Save the above Python script as rabbittop.py
 Execute: 
 ```bash 
 python3 rabbittop.py -p
+python3 rabbittop.py -n
 ```
 This will run in a terminal session while active. To quit the script, use Crtl + C in the terminal where you are running the script
 
