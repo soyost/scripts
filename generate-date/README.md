@@ -1,6 +1,6 @@
 ## Usage
 Example:
-<pre> ```bash export HOST='dwxibclsql03.northamerica.cerner.net' export USER='service' export PASSWORD='XXX' export DATABASE='laborders_c1801_qasystem' ``` </pre>
+<pre> ```export HOST='dwxibclsql03.northamerica.cerner.net' export USER='service' export PASSWORD='XXX' export DATABASE='laborders_c1801_qasystem' ``` </pre>
 
 Example output:
 
