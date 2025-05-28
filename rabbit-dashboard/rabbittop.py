@@ -11,29 +11,7 @@ from dash import Dash, dcc, html
 from dash.dependencies import Output, Input
 
 nonprod_urls = [
-    nonprod_urls = [
-    #US_NON_PROD
-    "https://rmq-03291445-a3bd-4cd7-95e3-b096f4ebbab3.sys.asp2.us-east-2.aws.cernercf.io/api/overview",
-    "https://rmq-151dcb60-9b65-44dc-bdee-865061d41530.sys.asp2.us-east-2.aws.cernercf.io/api/overview",
-    "https://rmq-fb9fb0a8-f980-4cc2-8ea4-282c709b1e11.sys.asp2.us-east-2.aws.cernercf.io/api/overview",
-    "https://rmq-c0883636-f9e4-4089-9bc7-583879fc414d.sys.asp2.us-east-2.aws.cernercf.io/api/overview",
-    "https://rmq-2f230abb-6e0e-4926-9574-404d85be7de6.sys.asp2.us-east-2.aws.cernercf.io/api/overview",
-    "https://rmq-e1c4329e-56ed-4705-9afe-6b29d2133910.sys.asp2.us-east-2.aws.cernercf.io/api/overview",
-    "https://rmq-76432a94-bde9-479b-ad2f-7e725d9a6219.sys.asp2.us-east-2.aws.cernercf.io/api/overview",
-    #NON_PROD_ORD
-    "https://rmq-83cf3621-1276-46bf-ab07-bdaeb2fa7a0b.sys.prod.rths.ord.oci.cernercf.io/api/overview",
-    "https://rmq-90d16f7b-20bf-432b-8c3e-fbd854f85151.sys.prod.rths.ord.oci.cernercf.io/api/overview",
-    "https://rmq-d1397b26-12e0-4c7a-85bb-07191e32ecb0.sys.prod.rths.ord.oci.cernercf.io/api/overview",
-    "https://rmq-4c17f374-3e52-4286-b7f0-06db513ade92.sys.prod.rths.ord.oci.cernercf.io/api/overview",
-    "https://rmq-14245fd4-1252-48ce-a2ff-a85cb2582e02.sys.prod.rths.ord.oci.cernercf.io/api/overview",
-    "https://rmq-54fa602b-5a3d-425f-a68d-a155c0b6bf2b.sys.prod.rths.ord.oci.cernercf.io/api/overview",
-    "https://rmq-3c5de38b-45cc-4fef-b004-e3335e1b9753.sys.prod.rths.ord.oci.cernercf.io/api/overview",
-    #NON_PROD_JED
-    "https://rmq-d408e20d-d32b-4395-87e7-c1f7cefeb4f1.sys.prod.rths.jed.oci.cernercf.io/api/overview",
-    "https://rmq-ad4ee067-421f-431c-bbd1-76335c48468b.sys.prod.rths.jed.oci.cernercf.io/api/overview",
-    #NON_PROD_DXB
-    "https://rmq-cc71f860-02cb-4ad3-8de6-d7ae4aebc624.sys.prod.rths.dxb.oci.cernercf.io/api/overview",
-    "https://rmq-a403c4f4-09db-42b7-96f5-5a26ce401a86.sys.prod.rths.dxb.oci.cernercf.io/api/overview"
+    # Add your non-production URLs here
 ]
 
 prod_urls = [
@@ -56,7 +34,14 @@ prod_urls = [
     "https://rmq-943b9068-0091-4744-a618-32edabb6dbd1.sys.asp.ap-southeast-2.aws.cernercf.io/api/overview",
     #PROD_UK
     "https://rmq-1ef49848-a7b3-4838-84c9-938df3a06560.sys.asp.eu-west-2.aws.cernercf.io/api/overview",
-    "https://rmq-07190040-ffd4-49c7-93e7-dcac59777641.sys.asp.eu-west-2.aws.cernercf.io/api/overview"
+    "https://rmq-07190040-ffd4-49c7-93e7-dcac59777641.sys.asp.eu-west-2.aws.cernercf.io/api/overview",
+    #PROD_US_ORD
+    "https://rmq-51e9f95e-7909-4ffd-a570-050b66aed98b.sys.prod.rths.ord.oci.cernercf.io/api/overview",
+    "https://rmq-6cdf450c-80a3-4e22-a8df-14f80da84491.sys.prod.rths.ord.oci.cernercf.io/api/overview",
+    "https://rmq-55afa1d6-8961-4b92-9834-6113ed1f6f94.sys.prod.rths.ord.oci.cernercf.io/api/overview",
+    "https://rmq-15cdce48-fcd9-4153-b115-aad48d6e92ab.sys.prod.rths.ord.oci.cernercf.io/api/overview",
+    "https://rmq-4345aadb-9e68-41a6-a661-3cf69e17d1c0.sys.prod.rths.ord.oci.cernercf.io/api/overview",
+    "https://rmq-1fd05693-1bd5-4fd4-bc2f-689beacc3a28.sys.prod.rths.ord.oci.cernercf.io/api/overview"
 ]
 
 
