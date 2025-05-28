@@ -7,7 +7,11 @@ Install required Python libraries: Run in terminal:
 
 Save the above Python script as rabbittop.py
 
-Execute: `python3 rabbittop.py -p` This will run in a terminal session while active. To quit the script, use Crtl + C in the terminal where you are running the script
+Execute: 
+```bash 
+python3 rabbittop.py -p
+```
+This will run in a terminal session while active. To quit the script, use Crtl + C in the terminal where you are running the script
 
 Go to browser
 
