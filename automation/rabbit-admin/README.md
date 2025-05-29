@@ -1,2 +1,2 @@
 # Usage
-`bash get-rabbit01-creds.sh`
+`bash get-rabbit-creds.sh`
