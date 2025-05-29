@@ -1,5 +1,6 @@
 # Usage
-`bash get-rabbit-creds.sh`
+```bahs
+bash get-rabbit-creds.sh```
 Sample output
 ```bash
 ===============================
