@@ -1,7 +1,11 @@
 # Usage
 ```bahs
 bash get-rabbit-creds.sh```
+
+
 Sample output
+
+
 ```bash
 ===============================
 Secret:   rabbitmq-01-prodcayul-default-user
