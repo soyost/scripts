@@ -1,0 +1,122 @@
+-data
+@user.home/.iCommand
+-Xmx1024m
+-vmargs
+-Declipse.application=com.cerner.icommand.gui.launcher.application
+-Djava.util.logging.config.file=logging.properties
+# Change the default views when opening iCommand
+-Dcom.cerner.icommand.gui.view.upper.default=Management
+-Dcom.cerner.icommand.gui.view.lower.default=Container
+#"all" or "true": Disables updates entirely.
+#"add": Prevents previously unused assemblies from being added.
+#"remove": Prevents currently used assemblies from being removed.
+#"upgrade": Prevents currently used assemblies from being upgraded.
+#"downgrade": Prevents currently used assemblies from being downgraded.
+-Dibus.assembly.updates.disable=downgrade,remove
+-Dibus.login.env=NONPROD, PROD_US, PROD_UK, PROD_CA, PROD_EMEA2, PROD_AP1, PERF, RELEASE, QA, CLOUD_QASYSTEM, ENG, OCI_ENG, NONPROD_US_ORD, NONPROD_ME_DXB, NONPROD_ME_JED, NONPROD_CA_YUL, PROD_US_ORD, PROD_ME_DXB, PROD_ME_JED, PROD_US_LUF, PROD_CA_YUL, ENG_OKE
+#ASP Domains - Be on CWxVPN
+-Dibus.login.tenant.NONPROD=SYSTEM
+-Dibus.login.tenant.PROD_US=SYSTEM
+-Dibus.login.tenant.PROD_CA=SYSTEM
+-Dibus.login.tenant.PROD_UK=SYSTEM
+-Dibus.login.tenant.PROD_EMEA2=SYSTEM
+-Dibus.login.tenant.PROD_AP1=SYSTEM
+-Dibus.connection.endpoint.url.NONPROD=wss://ibus-wsbridge.nonprod.us.careaware.com
+-Dibus.connection.endpoint.url.PROD_US=wss://ibus-wsbridge.prod.us.careaware.com
+-Dibus.connection.endpoint.url.PROD_UK=wss://ibus-wsbridge.prod.uk.careaware.com
+-Dibus.connection.endpoint.url.PROD_CA=wss://ibus-wsbridge.prod.ca.careaware.com
+-Dibus.connection.endpoint.url.PROD_EMEA2=wss://ibus-wsbridge.prod.emea-2.careaware.com
+-Dibus.connection.endpoint.url.PROD_AP1=wss://ibus-wsbridge.prod.ap-1.careaware.com
+# OCI domains
+-Dibus.login.tenant.OCI_ENG=SYSTEM
+-Dibus.connection.endpoint.url.OCI_ENG=wss://ibus-wsbridge.apps.dev.rths.iad.oci.cernercf.io
+-Dibus.login.tenant.NONPROD_US_ORD=SYSTEM
+-Dibus.connection.endpoint.url.NONPROD_US_ORD=wss://ibus-wsbridge.nonprod.ord.us.oci.careaware.com
+-Dibus.login.tenant.NONPROD_CA_YUL=SYSTEM
+-Dibus.connection.endpoint.url.NONPROD_CA_YUL=wss://ibus-wsbridge.nonprod.yul.ca.oracle.careaware.com
+-Dibus.login.tenant.NONPROD_ME_DXB=SYSTEM
+-Dibus.connection.endpoint.url.NONPROD_ME_DXB=wss://ibus-wsbridge.nonprod.dxb.me.oci.careaware.com
+-Dibus.login.tenant.NONPROD_ME_JED=SYSTEM
+-Dibus.connection.endpoint.url.NONPROD_ME_JED=wss://ibus-wsbridge.nonprod.jed.me.oci.careaware.com
+-Dibus.login.tenant.PROD_US_ORD=SYSTEM
+-Dibus.connection.endpoint.url.PROD_US_ORD=wss://ibus-wsbridge.prod.ord.us.oci.careaware.com
+-Dibus.login.tenant.PROD_CA_YUL=SYSTEM
+-Dibus.connection.endpoint.url.PROD_CA_YUL=wss://ibus-wsbridge.prod.yul.ca.oracle.careaware.com
+-Dibus.login.tenant.PROD_ME_DXB=SYSTEM
+-Dibus.connection.endpoint.url.PROD_ME_DXB=wss://ibus-wsbridge.prod.dxb.me.oci.careaware.com
+-Dibus.login.tenant.PROD_ME_JED=SYSTEM
+-Dibus.connection.endpoint.url.PROD_ME_JED=wss://ibus-wsbridge.prod.jed.me.oci.careaware.com
+-Dibus.login.tenant.PROD_US_LUF=SYSTEM
+-Dibus.connection.endpoint.url.PROD_US_LUF=wss://ibus-wsbridge.prod.luf.us.oci.careaware.com
+-Dibus.login.tenant.ENG_OKE=SYSTEM
+-Dibus.connection.endpoint.url.ENG_OKE=wss://ibus-wsbridge.eng.oke.devcareaware.net
+# Internal Domains - Be on CORP VPN
+-Dibus.login.tenant.ENG=SYSTEM
+-Dibus.login.tenant.QA=SYSTEM
+-Dibus.login.tenant.PERF=SYSTEM
+-Dibus.login.tenant.RELEASE=SYSTEM
+-Dibus.connection.endpoint.url.ENG=wss://ibus-wsbridge.eng.us.devcareaware.net
+-Dibus.connection.endpoint.url.CLOUD_QASYSTEM=wss://ibus-wsbridge.cloud-qasystem.devcareaware.net
+-Dibus.connection.endpoint.url.QA=wss://ibus-wsbridge.qa.us.devcareaware.net
+-Dibus.connection.endpoint.url.PERF=wss://ibus-wsbridge.perf.us.devcareaware.net
+-Dibus.connection.endpoint.url.RELEASE=wss://ibus-wsbridge.release.us.devcareaware.net
+# Splunk logging AWS
+-Dibus.splunk.url.PROD_US=https://logs.cerner.com/en-US/app/cerner_deviceworks
+-Dibus.splunk.isTas.PROD_US=true
+-Dibus.splunk.index.PROD_US=ibus_cloud
+-Dibus.splunk.url.PROD_UK=https://logs.eu.cerner.com/en-US/app/millennium_plus
+-Dibus.splunk.isTas.PROD_UK=true
+-Dibus.splunk.index.PROD_UK=app_uk_careaware_ibus
+-Dibus.splunk.url.PROD_CA=https://app.splunk.ca.cernerops.net/en-US/app/millennium_plus
+-Dibus.splunk.isTas.PROD_CA=true
+-Dibus.splunk.index.PROD_CA=app_ca_careaware_ibus
+-Dibus.splunk.url.PROD_EMEA2=http://logs.cernse.com/en-US/app/millennium_plus
+-Dibus.splunk.isTas.PROD_EMEA2=true
+-Dibus.splunk.index.PROD_EMEA2=app_emea-2_careaware_ibus
+# Splunk logging oci
+-Dibus.splunk.url.PROD_US_ORD=https://app.splunk.splunk.us-chicago-1.svc.observabilityops.net/en-US/app/cerner_deviceworks/search
+-Dibus.splunk.isTas.PROD_US_ORD=true
+-Dibus.splunk.index.PROD_US_ORD=app_ord_careaware_ibus_prod
+-Dibus.splunk.url.NONPROD_US_ORD=https://app.splunk.splunk.us-chicago-1.svc.observabilityops.net/en-US/app/cerner_deviceworks/search
+-Dibus.splunk.isTas.NONPROD_US_ORD=true
+-Dibus.splunk.index.NONPROD_US_ORD=app_ord_careaware_ibus_prod
+-Dibus.splunk.url.PROD_ME_JED=https://app.splunk.splunk.me-jeddah-1.svc.observabilityops.net/en-US/app/cerner_deviceworks/search
+-Dibus.splunk.isTas.PROD_ME_JED=true
+-Dibus.splunk.index.PROD_ME_JED=app_jed_careaware_ibus_prod
+-Dibus.splunk.url.NONPROD_ME_JED=https://app.splunk.splunk.me-jeddah-1.svc.observabilityops.net/en-US/app/cerner_deviceworks/search
+-Dibus.splunk.isTas.NONPROD_ME_JED=true
+-Dibus.splunk.index.NONPROD_ME_JED=app_jed_careaware_ibus_prod
+-Dibus.splunk.url.PROD_ME_DXB=https://app.splunk.splunk.me-dubai-1.svc.observabilityops.net/en-US/app/cerner_deviceworks/search
+-Dibus.splunk.isTas.PROD_ME_DXB=true
+-Dibus.splunk.index.PROD_ME_DXB=app_dxb_careaware_ibus_prod
+-Dibus.splunk.url.NONPROD_ME_DXB=https://app.splunk.splunk.me-dubai-1.svc.observabilityops.net/en-US/app/cerner_deviceworks/search
+-Dibus.splunk.isTas.NONPROD_ME_DXB=true
+-Dibus.splunk.index.NONPROD_ME_DXB=app_dxb_careaware_ibus_prod
+-Dorg.osgi.framework.system.packages.extra=sun.misc
+-Dosgi.console.enable.builtin=true
+# Below is needed for Java 11/17 support
+-Dorg.osgi.framework.system.capabilities=osgi.ee; osgi.ee="JavaSE";version:List="1.0,1.1,1.2,1.3,1.4,1.5,1.6,1.7,1.8", osgi.ee; osgi.ee="OSGi/Minimum"; version:List="1.0,1.1,1.2"
+--add-opens=java.base/java.net=ALL-UNNAMED
+--add-opens=java.base/java.lang=ALL-UNNAMED
+--add-opens=java.base/java.util=ALL-UNNAMED
+# Optionally, modify the properties below as needed. Note: these can now be configured in a common location at C:\Program Files\Cerner\iBus\ibus-login.properties
+#-Dibus.login.env=<ENV1>,<ENV2>
+#-Dibus.login.username.<ENV>=<USERNAME>
+#-Dibus.login.password.<ENV>=<PASSWORD>
+#-Dibus.login.tenant.<ENV>=<TENANT1>,<TENANT2>
+#-Dibus.connection.endpoint.url.<ENV>=tcp://<server1:3506>,<server2:3506>
+# Optionally, set the below properties to override the Splunk config for a given environment. Can also be set in the above mentioned ibus-login.properties file
+# sets the base path for splunk query's URL
+#-Dibus.splunk.url.<ENV>=https://logs.cerner.com/en-US/app/cerner_deviceworks
+# specifies if the given environment is running on TAS or K8S
+#-Dibus.splunk.isTas.<ENV>=true
+# specifies if the splunk URL for containers assigned to container agent be different from the default (or the above configured) splunk URL for the environment
+#-Dibus.splunk.containeragent.enabled<ENV>=true
+# if the above property is set to true, the below property specifies the Splunk's base URL for containers assigned to container agents
+#-Dibus.splunk.containeragent.url.<ENV>=https://logs.sandbox.cerner.com/en-US/app/cerner_deviceworks
+# Optionally, set the below properties to override the default Upper and Lower views during iCommand launch. By default, the Upper and Lower views are Management and Device respectively.
+#-Dcom.cerner.icommand.gui.view.upper.default=Configuration
+#-Dcom.cerner.icommand.gui.view.lower.default=System
+# Optionally,set the below properties to make environment and tenant combos dithered/read-only during iCommand login
+#-Dibus.login.env.dither=true
+#-Dibus.login.tenant.dither=true
