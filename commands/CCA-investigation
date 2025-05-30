@@ -1,0 +1,116 @@
+##### etsops - pre-req
+# git clone git@github.cerner.com:ETS-Bespin/gps-vault.git
+ssh-add ~<gps-vault location>/chef.cerner.com/cho_prod/<facility>/etsops.pem
+# Enter password from vault https://vault.cerner.com/safe?companyID=7522
+ssh -i etsops.pem etsops@<CCA VPN IP>
+
+##### Troubleshooting
+# test resolution to the vpn head-in
+ifconfig
+curl -v https://choaplvpn.cernerworks.com
+#need to resolve the url, they are exposed to the public
+#(global pat firewall from onsite ino the VPN head end)
+#use F5 cert to allow with cert and key so VPN can provide full record.
+# If cant resolve DNS, need test client dns host
+# port 53 for DNS communication
+curl http://ifconfig.me/ #global pat listed here
+grep -i gateway /etc/sysconfig/network-scripts/ifcfg-eth0 # list the gateway to see if VMs can talk to each outher
+traceroute 159.140.6.103 -p 443 #is the first hop out through the gateway, can it leave client network?
+# does the first hop match the gateway ?
+# cat /etc/resolv.conf to find the client DNS
+nslookup choaplvpn.cernerworks.com <client dns> 
+Cant resolve thier dns?
+ping gateway
+to confirm that VMs can talk to each other. (each subnet has its gateway)
+cat /etc/resolv.conf # find the client DNS nameserver
+nslookup <host> <IP from etc/resolv.conf> # forces nslookup from client nameserver
+
+#### jumpbox jump box
+# EMEA2
+7.207.3.53 choaplsemgmt201.cernse.com
+# US
+choaplmgmt101.cernerasp.com # bastion
+# Canda CA CD
+10.23.34.86 # ip-10-23-34-86.ca-central-1.compute.internal # Canada
+# UK 
+ssh ssh.cernuksphere.net
+<password for uk>
+1 # for duo push
+ssh 7.168.0.18 # don't forget this
+<password for uk>
+ssh <VPN as normal>
+# AU
+10.23.165.51
+#####
+# check to see if able to reach out to AWS
+curl -v https://ibus-aws-proxy.prod.us.careaware.com/meta/health
+# if non-prod
+curl -v https://ibus-aws-proxy.nonprod.us.careaware.com/meta/health
+
+### Failed to pull image, can't reach proxy
+# log onto host and run below command to GENERATE PASSWORD for testing logging indirectly via docker
+/usr/bin/java -jar /tmp/ibus-jwtgenerator.jar -jwk <jwkSet> -tenantKey <tenant Key>
+
+# docker login using the generated password. proxy URL example = https://ibus-aws-proxy.prod.us.careaware.com
+docker login -u <tenant_key> -p <generated pass> <aws proxy url> 
+
+
+### single user
+# single Single user mode 
+hit'e' on the reboot before mounting
+rw init=/sysroot/bin/sh/
+ctrl+x to reboot
+chroot /sysroot
+cd /etc/
+cat passwd
+vim passwd
+root---> /bin/bash
+passwd root
+(change to) root
+
+###### Checks
+
+# TLS version
+openssl ciphers -v | awk '{print $2}' | sort | uniq
+
+# certs
+From within /etc/pki/tls/certs/
+<or>
+openssl x509 -in /etc/pki/tls/certs/$(hostname -f).crt -text -noout | grep -E "Before|After"
+# view cert
+openssl x509 -in <path to cert> -noout -text
+# HOLO health check
+/opt/holo/bin/check-health --user svc_gabor_health
+# health check script
+vim /etc/holo/host-health-check.conf
+# Health Check CCA
+sudo /opt/gabor_health/bin/verify_health
+
+# Test speed from a CCA
+# USE WITH CAUTION - this is a third party test which may be blocked
+curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py | python -
+
+# Log rotate logrotate.d creation
+sudo vim /etc/logrotate.d/ccmhosts
+
+# example - /ibus/log/MHGR_DC_P41/TelephonyWHC_NRHContainer/freeswitch.log.20*
+/ibus/log/MHGR_DC_P41/DriverCarefusionCCE_Gateway_*_Current.log
+# Manage Container Log Rotation
+/ibus/log/<path to logs>*_Current.log {
+ su root careaware
+ daily
+ rotate 3
+ compress
+ missingok
+ dateext
+ notifempty
+ size=1M
+ create 644 root careaware
+}
+
+# change permissions
+chmod 644 /etc/logrotate.d/ccmhosts
+#to run
+logrotate /etc/logrotate.d/ccmhosts
+# or
+logrotate -d /etc/logrotate.d/ccmhosts
