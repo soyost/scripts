@@ -23,4 +23,4 @@ Go to browser
 
 `http://127.0.0.1:8050`
 
-You can keep it open in a browser tab alongside your usual work. You can hover over the bar graphs for actual totals. You can refresh the tab.
+You can keep it open in a browser tab alongside your usual work. You can hover over the bar graphs for actual totals. You can refresh the tab. Top three queues are published and display by hovering over the bar graph. This tool auto refreshes every 30 minutes by default.
