@@ -81,23 +81,28 @@ def fetch_stats(urls):
             queues = queues_resp.json()
 
             if queues:
-                top_queue = max(
+                top_queues = sorted(
                     queues,
-                    key=lambda q: q.get("messages_ready", 0) + q.get("messages_unacknowledged", 0)
-                )
-                top_queue_name = top_queue.get("name", "unknown")
-                top_queue_total = top_queue.get("messages_ready", 0) + top_queue.get("messages_unacknowledged", 0)
+                    key=lambda q: q.get("messages_ready", 0) + q.get("messages_unacknowledged", 0),
+                    reverse=True
+                )[:3]
+
+                top_queue_names = [q.get("name", "unknown") for q in top_queues]
+                top_queue_totals = [
+                    q.get("messages_ready", 0) + q.get("messages_unacknowledged", 0) for q in top_queues
+        ]
             else:
-                top_queue_name = "none"
-                top_queue_total = 0
+                top_queue_names = ["none"]
+                top_queue_totals = [0]
 
             stats.append({
                 "cluster_name": overview.get("cluster_name", url),
                 "ready": overview.get("queue_totals", {}).get("messages_ready", 0),
                 "unacked": overview.get("queue_totals", {}).get("messages_unacknowledged", 0),
-                "top_queue_name": top_queue_name,
-                "top_queue_total": top_queue_total
+                "top_queue_name": "• " + "<br>• ".join(top_queue_names),
+                "top_queue_total": sum(top_queue_totals)
             })
+
 
         except Exception as e:
             print(f"Error with {queues_url}: {e}")
@@ -161,7 +166,7 @@ def run_dash(urls):
             style={'margin-bottom': '20px'}
         ),
         dcc.Graph(id='bar-chart'),
-        dcc.Interval(id='interval', interval=1800*1000, n_intervals=0)  # refresh every half hour
+        dcc.Interval(id='interval', interval=30*60*1000, n_intervals=0)  # refresh every half hour
     ])
 
     @app.callback(
