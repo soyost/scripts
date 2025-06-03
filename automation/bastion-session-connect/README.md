@@ -2,7 +2,8 @@ Copy to file
 ```bash
 chmod +x
 ```
-Assumption of location of ssh keys, and that these are the ssh keys used for bastion session connection
+Update location of the ssh keys used for Bastion connections here
+`PRIVATE_KEY=~/Desktop/BastionKeys/privateKey.txt`
 
 ## usage
 ./bastion-session.connect.sh '(paste ssh command from OCI bastion here)'
