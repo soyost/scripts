@@ -13,7 +13,7 @@
 #"upgrade": Prevents currently used assemblies from being upgraded.
 #"downgrade": Prevents currently used assemblies from being downgraded.
 -Dibus.assembly.updates.disable=downgrade,remove
--Dibus.login.env=NONPROD, PROD_US, PROD_UK, PROD_CA, PROD_EMEA2, PROD_AP1, PERF, RELEASE, QA, CLOUD_QASYSTEM, ENG, OCI_ENG, NONPROD_US_ORD, NONPROD_ME_DXB, NONPROD_ME_JED, NONPROD_CA_YUL, PROD_US_ORD, PROD_ME_DXB, PROD_ME_JED, PROD_US_LUF, PROD_CA_YUL, ENG_OKE
+-Dibus.login.env=NONPROD, PROD_US, PROD_UK, PROD_CA, PROD_EMEA2, PROD_AP1, PERF, RELEASE, QA, CLOUD_QASYSTEM, ENG, OCI_ENG, NONPROD_US_ORD, NONPROD_ME_DXB, NONPROD_ME_JED, NONPROD_CA_YUL, NONPROD_AP1_SYD, PROD_US_ORD, PROD_ME_DXB, PROD_ME_JED, PROD_US_LUF, PROD_CA_YUL, ENG_OKE
 #ASP Domains - Be on CWxVPN
 -Dibus.login.tenant.NONPROD=SYSTEM
 -Dibus.login.tenant.PROD_US=SYSTEM
@@ -38,6 +38,8 @@
 -Dibus.connection.endpoint.url.NONPROD_ME_DXB=wss://ibus-wsbridge.nonprod.dxb.me.oci.careaware.com
 -Dibus.login.tenant.NONPROD_ME_JED=SYSTEM
 -Dibus.connection.endpoint.url.NONPROD_ME_JED=wss://ibus-wsbridge.nonprod.jed.me.oci.careaware.com
+-Dibus.login.tenant.NONPROD_AP1_SYD=SYSTEM
+-Dibus.connection.endpoint.url.NONPROD_AP1_SYD=wss://ibus-wsbridge.nonprod.syd.ap1.oracle.careaware.com
 -Dibus.login.tenant.PROD_US_ORD=SYSTEM
 -Dibus.connection.endpoint.url.PROD_US_ORD=wss://ibus-wsbridge.prod.ord.us.oci.careaware.com
 -Dibus.login.tenant.PROD_CA_YUL=SYSTEM
@@ -50,6 +52,9 @@
 -Dibus.connection.endpoint.url.PROD_US_LUF=wss://ibus-wsbridge.prod.luf.us.oci.careaware.com
 -Dibus.login.tenant.ENG_OKE=SYSTEM
 -Dibus.connection.endpoint.url.ENG_OKE=wss://ibus-wsbridge.eng.oke.devcareaware.net
+-Dibus.login.tenant.NONPROD_AP1_SYD=SYSTEM
+-Dibus.connection.endpoint.url.NONPROD_AP1_SY=wss://ibus-wsbridge.nonprod.syd.ap1.oracle.careaware.com
+wss://ibus-wsbridge.nonprod.syd.ap1.oracle.careaware.com
 # Internal Domains - Be on CORP VPN
 -Dibus.login.tenant.ENG=SYSTEM
 -Dibus.login.tenant.QA=SYSTEM
