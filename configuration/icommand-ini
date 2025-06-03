@@ -52,9 +52,6 @@
 -Dibus.connection.endpoint.url.PROD_US_LUF=wss://ibus-wsbridge.prod.luf.us.oci.careaware.com
 -Dibus.login.tenant.ENG_OKE=SYSTEM
 -Dibus.connection.endpoint.url.ENG_OKE=wss://ibus-wsbridge.eng.oke.devcareaware.net
--Dibus.login.tenant.NONPROD_AP1_SYD=SYSTEM
--Dibus.connection.endpoint.url.NONPROD_AP1_SY=wss://ibus-wsbridge.nonprod.syd.ap1.oracle.careaware.com
-wss://ibus-wsbridge.nonprod.syd.ap1.oracle.careaware.com
 # Internal Domains - Be on CORP VPN
 -Dibus.login.tenant.ENG=SYSTEM
 -Dibus.login.tenant.QA=SYSTEM
