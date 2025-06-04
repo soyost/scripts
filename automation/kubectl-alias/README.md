@@ -13,7 +13,7 @@ kall         # switch to all namespaces
 kns          # show current namespace flag
 
 kpod         # list pods
-kpods app    # list pods matching "app"
+kpods app    # list pods matching "app". Example: kpods reporting
 kdes mypod   # describe pod
 kwide nginx  # get wide pod output filtered by nginx
 
