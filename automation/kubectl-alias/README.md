@@ -1,7 +1,8 @@
 Save the file in your ~/.bashrc
 `source ~/.bashrc`
 ## Usage
-`Where (mypod) substitute with actual full pod name`
+Where (mypod) substitute with actual full pod name
+```bash
 kdev         # switch to ibus-cloud-eng
 kprod        # switch to ibus-cloud-prod
 kall         # switch to all namespaces
@@ -22,3 +23,4 @@ kdump mypod              # pull heapdump
 kldump mypod             # list dump directory
 kimg mypod               # get image from pod
 khost mypod              # get node name of pod
+```
