@@ -1,5 +1,9 @@
 Save the file in your ~/.bashrc
-`source ~/.bashrc`
+
+```bash
+source ~/.bashrc
+```
+
 ## Usage
 Where (mypod) substitute with actual full pod name
 ```bash
