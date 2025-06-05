@@ -1,0 +1,1 @@
+https://confluence.oraclecorp.com/confluence/pages/viewpage.action?spaceKey=OHAI&title=Simultaneous+Cerner+and+Oracle+VPN+connections+with+OpenConnect+and+vpn-slice
