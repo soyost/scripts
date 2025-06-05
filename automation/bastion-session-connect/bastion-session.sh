@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # --- Configuration ---
-PRIVATE_KEY=~/Desktop/BastionKeys/privateKey.txt
+PRIVATE_KEY=PRIVATE_KEY=~/.ssh/id_rsa
 
 # --- Input validation ---
 if [ -z "$1" ]; then
