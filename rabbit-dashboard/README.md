@@ -8,19 +8,32 @@ Run in terminal:
 pip install requests plotly dash
 ```
 
-Save the above Python script as rabbittop.py
+Save the above Python script as rabbittop.py and rabbittopoke.py
 
+## USAGE
 Execute: 
+For Prod Clusters
 ```bash 
-(For Prod Clusters)
 python3 rabbittop.py -p
-(For NonProd Clusters)
+```
+For NonProd Clusters
+```bash
 python3 rabbittop.py -n
 ```
 This will run in a terminal session while active. To quit the script, use Crtl + C in the terminal where you are running the script
 
-Go to browser
+Go to browser:
+Fot TAS dashboard
 
-`http://127.0.0.1:8050`
+```bash
+http://127.0.0.1:8050
+```
+For OKE dashbpard
+```bash
+http://127.0.0.1:8051
+```
 
-You can keep it open in a browser tab alongside your usual work. You can hover over the bar graphs for actual totals. You can refresh the tab. Top three queues are published and display by hovering over the bar graph. This tool auto refreshes every 30 minutes by default.
+## NOTES
+Loads for the TAS dashbard are about 4 minutes, please be patient
+
+You can keep it open in a browser tab alongside your usual work. You can hover over the bar graphs for actual totals. You can refresh the tab ad hoc. Top three queues are published and display by hovering over the bar graph. This tool auto refreshes every 30 minutes by default.
