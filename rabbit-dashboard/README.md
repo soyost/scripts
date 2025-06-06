@@ -24,8 +24,8 @@ python3 rabbittop.py -n
 This will run in a terminal session while active. To quit the script, use Crtl + C in the terminal where you are running the script
 
 Go to browser:
-For TAS dashboard
 
+For TAS dashboard
 ```bash
 http://127.0.0.1:8050
 ```
