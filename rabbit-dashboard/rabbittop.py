@@ -154,7 +154,7 @@ def create_figure(stats, show_ready=True, show_unacked=True):
 def run_dash(urls):
     app = Dash(__name__)
     app.layout = html.Div([
-        html.H1("RabbitMQ Cluster Overview"),
+        html.H1("TAS RabbitMQ Cluster Overview"),
         dcc.Checklist(
             id='message-type-filter',
             options=[
