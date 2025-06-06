@@ -146,7 +146,10 @@ def create_figure(stats, show_ready=True, show_unacked=True):
         xaxis_title='Cluster',
         yaxis_title='Messages',
         margin=dict(t=60, b=120),
-        height=600
+        height=600,hoverlabel=dict(
+        bgcolor="white",
+        font_size=12,
+        font_color="black"
     )
     return fig
 
