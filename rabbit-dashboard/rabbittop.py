@@ -151,7 +151,7 @@ def create_figure(stats, show_ready=True, show_unacked=True):
             bgcolor="white",
             font_size=12,
             font_color="black"
-    )
+        ))
     return fig
 
 
