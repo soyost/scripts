@@ -3,7 +3,7 @@
 NAMESPACE="ibus-cloud-prod"
 
 # Find all matching secrets for rabbitmq-01 and rabbitmq-02 with "default-user"
-SECRET_NAMES=$(kubectl get secrets -n "$NAMESPACE" | awk '/rabbitmq-0[12].*default-user/ {print $1}')
+SECRET_NAMES=$(kubectl get secrets -n "$NAMESPACE" | awk '/rabbitmq-[0-9].*default-user/ {print $1}')
 
 # Check if any were found
 if [ -z "$SECRET_NAMES" ]; then
