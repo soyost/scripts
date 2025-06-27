@@ -11,7 +11,7 @@ SPRING_SECRETS=$(echo "$ALL_SECRETS" | grep -E '^rabbitmq-spring-cloud-.*default
 SECRET_NAMES=$(echo -e "$CLUSTER_SECRETS\n$SPRING_SECRETS" | sort -u)
 
 if [ -z "$SECRET_NAMES" ]; then
-  echo "❌ No matching secrets found!"
+  echo "No matching secrets found"
   exit 1
 fi
 
