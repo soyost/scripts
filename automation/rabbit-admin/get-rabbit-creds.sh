@@ -2,16 +2,19 @@
 
 NAMESPACE="ibus-cloud-prod"
 
-# Find all matching secrets for rabbitmq-01 and rabbitmq-02 with "default-user"
-SECRET_NAMES=$(kubectl get secrets -n "$NAMESPACE" | awk '/rabbitmq-[0-9].*default-user/ {print $1}')
+ALL_SECRETS=$(kubectl get secrets -n "$NAMESPACE" -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}{end}')
 
-# Check if any were found
+CLUSTER_SECRETS=$(echo "$ALL_SECRETS" | grep -E '^rabbitmq-(0[12]|[0-9]+)-.*default-user$')
+
+SPRING_SECRETS=$(echo "$ALL_SECRETS" | grep -E '^rabbitmq-spring-cloud-.*default-user$')
+
+SECRET_NAMES=$(echo -e "$CLUSTER_SECRETS\n$SPRING_SECRETS" | sort -u)
+
 if [ -z "$SECRET_NAMES" ]; then
-  echo "No matching secrets found!"
+  echo "❌ No matching secrets found!"
   exit 1
 fi
 
-# Loop through and decode each
 for SECRET_NAME in $SECRET_NAMES; do
   USERNAME=$(kubectl get secret "$SECRET_NAME" -n "$NAMESPACE" -o jsonpath='{.data.username}' | base64 --decode)
   PASSWORD=$(kubectl get secret "$SECRET_NAME" -n "$NAMESPACE" -o jsonpath='{.data.password}' | base64 --decode)
