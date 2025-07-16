@@ -11,6 +11,7 @@ kdev         # switch to ibus-cloud-eng
 kprod        # switch to ibus-cloud-prod
 kall         # switch to all namespaces
 kns          # show current namespace flag
+kbroken      # lists all pods in the following non-running state - backoff|error|evicted|unknown
 
 kpod         # list pods
 kpods app    # list pods matching "app". Example: kpods reporting
