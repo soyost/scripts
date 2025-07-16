@@ -43,6 +43,7 @@ alias kwide='kubectl get pods -o wide | grep'
 alias ksvc='kubectl get svc'
 alias kdeploy='kubectl get deployments'
 alias kin='kubectl get ingress'
+alias kbroken='kubectl get pods | grep -iE "backoff|error|evicted|unknown"'
 
 # --- Utility: Pretty logs ---
 kute() {
