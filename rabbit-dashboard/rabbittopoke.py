@@ -23,7 +23,13 @@ prod_urls = [
     "https://rabbitmq-01.prod.yul.ca.oracle.careaware.net/api/overview",
     "https://rabbitmq-02.prod.yul.ca.oracle.careaware.net/api/overview",
     "https://rabbitmq-01.prod.syd.ap1.oracle.careaware.com/api/overview",
-    "https://rabbitmq-02.prod.syd.ap1.oracle.careaware.com/api/overview"
+    "https://rabbitmq-02.prod.syd.ap1.oracle.careaware.com/api/overview",
+    "https://rabbitmq-01.prod.ord.us.oracle.careaware.net/api/overview",
+    "https://rabbitmq-02.prod.ord.us.oracle.careaware.net/api/overview",
+    "https://rabbitmq-03.prod.ord.us.oracle.careaware.net/api/overview",
+    "https://rabbitmq-04.prod.ord.us.oracle.careaware.net/api/overview",
+    "https://rabbitmq-05.prod.ord.us.oracle.careaware.net/api/overview",
+    "https://rabbitmq-06.prod.ord.us.oracle.careaware.net/api/overview"
 ]
 
 
