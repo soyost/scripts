@@ -16,7 +16,18 @@ import plotly.graph_objects as go
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 nonprod_urls = [
-    #TODO
+    "https://rabbitmq-01.nonprod.ord.us.oracle.careaware.net/api/overview",
+    "https://rabbitmq-02.nonprod.ord.us.oracle.careaware.net/api/overview",
+    "https://rabbitmq-03.nonprod.ord.us.oracle.careaware.net/api/overview",
+    "https://rabbitmq-04.nonprod.ord.us.oracle.careaware.net/api/overview",
+    "https://rabbitmq-05.nonprod.ord.us.oracle.careaware.net/api/overview",
+    "https://rabbitmq-06.nonprod.ord.us.oracle.careaware.net/api/overview",
+    "https://rabbitmq-07.nonprod.ord.us.oracle.careaware.net/api/overview",
+    "https://rabbitmq-08.nonprod.ord.us.oracle.careaware.net/api/overview",
+    "https://rabbitmq-09.nonprod.ord.us.oracle.careaware.net/api/overview",
+    "https://rabbitmq-10.nonprod.ord.us.oracle.careaware.net/api/overview",
+    "https://rabbitmq-11.nonprod.ord.us.oracle.careaware.net/api/overview",
+    "https://rabbitmq-12.nonprod.ord.us.oracle.careaware.net/api/overview"
 ]
 
 prod_urls = [
