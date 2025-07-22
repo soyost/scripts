@@ -1,16 +1,20 @@
 $User = "monitor"
 $Password = "monitor"
+
 $SecurePassword = ConvertTo-SecureString $Password -AsPlainText -Force
 $Cred = New-Object System.Management.Automation.PSCredential ($User, $SecurePassword)
 
-# Define URLs
+# --- Force TLS 1.2 for HTTPS connections ---
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+
 $urls = @(
     "https://rabbitmq-01.prod.ord.us.oracle.careaware.net/api/overview",
-    "https://rabbitmq-02.prod.ord.us.oracle.careaware.net/api/overview"
-    # Add more as needed
+    "https://rabbitmq-02.prod.ord.us.oracle.careaware.net/api/overview",
+    "https://rabbitmq-03.prod.ord.us.oracle.careaware.net/api/overview",
+    "https://rabbitmq-04.prod.ord.us.oracle.careaware.net/api/overview",
+    "https://rabbitmq-05.prod.ord.us.oracle.careaware.net/api/overview",
+    "https://rabbitmq-06.prod.ord.us.oracle.careaware.net/api/overview"
 )
-
-[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
 # Ignore SSL certificate errors
 Add-Type @"
@@ -35,7 +39,7 @@ foreach ($url in $urls) {
         $queues = Invoke-RestMethod -Uri $queuesUrl -Credential $Cred -Method Get -UseBasicParsing
 
         if ($queues.Count -gt 0) {
-            $topQueues = $queues | Sort-Object { ($_."messages_ready") } -Descending | Select-Object -First 3
+            $topQueues = $queues | Sort-Object { $_.messages_ready } -Descending | Select-Object -First 3
             Write-Host "`nCluster: $($overview.cluster_name)"
             foreach ($q in $topQueues) {
                 $totalMsgs = $q.messages_ready
@@ -49,3 +53,5 @@ foreach ($url in $urls) {
         Write-Warning "Error retrieving data from $baseUrl - $_"
     }
 }
+
+Read-Host -Prompt "Press Enter to exit"
