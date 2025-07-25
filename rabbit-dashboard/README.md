@@ -42,9 +42,11 @@ You can keep it open in a browser tab alongside your usual work. You can hover o
 
 ## Current PROD ORD PowerShell instructions
 
-Copy rabbitord.ps1 somewhere on the shared box CERNCARUSDPY101
+Currently python installation is not allowed on the CERNCARUSDPY101. This PowerShell script is a work around based on Michael Marnell's Rabbit query.
 
-Create new shortcut (on desktop or somewhere else)
+1.Copy rabbitord.ps1 somewhere on the shared box CERNCARUSDPY101
+
+2.Create new shortcut (on desktop or somewhere else)
 
 C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -ExecutionPolicy Bypass -File "LOCATION OF THE PS1 FILE"
 
