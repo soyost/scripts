@@ -16,31 +16,11 @@ import plotly.graph_objects as go
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 nonprod_urls = [
-    "https://rabbitmq-01.nonprod.ord.us.oracle.careaware.net/api/overview",
-    "https://rabbitmq-02.nonprod.ord.us.oracle.careaware.net/api/overview",
-    "https://rabbitmq-03.nonprod.ord.us.oracle.careaware.net/api/overview",
-    "https://rabbitmq-04.nonprod.ord.us.oracle.careaware.net/api/overview",
-    "https://rabbitmq-05.nonprod.ord.us.oracle.careaware.net/api/overview",
-    "https://rabbitmq-06.nonprod.ord.us.oracle.careaware.net/api/overview",
-    "https://rabbitmq-07.nonprod.ord.us.oracle.careaware.net/api/overview",
-    "https://rabbitmq-08.nonprod.ord.us.oracle.careaware.net/api/overview",
-    "https://rabbitmq-09.nonprod.ord.us.oracle.careaware.net/api/overview",
-    "https://rabbitmq-10.nonprod.ord.us.oracle.careaware.net/api/overview",
-    "https://rabbitmq-11.nonprod.ord.us.oracle.careaware.net/api/overview",
-    "https://rabbitmq-12.nonprod.ord.us.oracle.careaware.net/api/overview"
+    "<API>""
 ]
 
 prod_urls = [
-    "https://rabbitmq-01.prod.yul.ca.oracle.careaware.net/api/overview",
-    "https://rabbitmq-02.prod.yul.ca.oracle.careaware.net/api/overview",
-    "https://rabbitmq-01.prod.syd.ap1.oracle.careaware.com/api/overview",
-    "https://rabbitmq-02.prod.syd.ap1.oracle.careaware.com/api/overview",
-    "https://rabbitmq-01.prod.ord.us.oracle.careaware.net/api/overview",
-    "https://rabbitmq-02.prod.ord.us.oracle.careaware.net/api/overview",
-    "https://rabbitmq-03.prod.ord.us.oracle.careaware.net/api/overview",
-    "https://rabbitmq-04.prod.ord.us.oracle.careaware.net/api/overview",
-    "https://rabbitmq-05.prod.ord.us.oracle.careaware.net/api/overview",
-    "https://rabbitmq-06.prod.ord.us.oracle.careaware.net/api/overview"
+    "<API>"
 ]
 
 
@@ -50,7 +30,7 @@ def fetch_stats(urls):
         base_url = url.split('/api')[0]
         queues_url = f"{base_url}/api/queues"
         try:
-            overview_resp = requests.get(url, auth=HTTPBasicAuth('monitor', 'monitor'), verify=False)
+            overview_resp = requests.get(url, auth=HTTPBasicAuth('<user>', '<password>'), verify=False)
             overview_resp.raise_for_status()
             overview = overview_resp.json()
 
