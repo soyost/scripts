@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # --- Configuration ---
-PRIVATE_KEY=PRIVATE_KEY=~/.ssh/id_rsa
+PRIVATE_KEY=PRIVATE_KEY=<location of public key>
 
 # --- Input validation ---
 if [ -z "$1" ]; then
