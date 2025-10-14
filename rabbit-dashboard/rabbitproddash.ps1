@@ -8,12 +8,7 @@ $Cred = New-Object System.Management.Automation.PSCredential ($User, $SecurePass
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
 $urls = @(
-    "https://rabbitmq-01.prod.ord.us.oracle.careaware.net/api/overview",
-    "https://rabbitmq-02.prod.ord.us.oracle.careaware.net/api/overview",
-    "https://rabbitmq-03.prod.ord.us.oracle.careaware.net/api/overview",
-    "https://rabbitmq-04.prod.ord.us.oracle.careaware.net/api/overview",
-    "https://rabbitmq-05.prod.ord.us.oracle.careaware.net/api/overview",
-    "https://rabbitmq-06.prod.ord.us.oracle.careaware.net/api/overview"
+    "<API>"
 )
 
 # Ignore SSL certificate errors
