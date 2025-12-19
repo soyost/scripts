@@ -43,3 +43,60 @@ sy018616-mac:~ sy018616$ kubectl describe rs ibustempinfusiondatastore-prodcayul
 Controlled By:  Deployment/ibustempinfusiondatastore-prodcayul
 ## Scale deployment
 kubectl scale deployment ibustempinfusiondatastore-prodcayul --replicas=4 -n ibus-cloud-prod
+
+## See desired replica count
+kubectl describe rs <deployment name> -n ibus-cloud-prod | grep Replicas
+  example: kubectl describe rs ibuscode-prodcayul-58bdd69d5b -n ibus-cloud-prod | grep Replicas
+##proof
+sy018616-mac:~ sy018616$ kubectl describe rs ibustempinfusiondatastore-prodcayul-5995c87c6b -n ibus-cloud-prod | grep Deployment
+Controlled By:  Deployment/ibustempinfusiondatastore-prodcayul
+## Scale deployment
+kubectl scale deployment ibustempinfusiondatastore-prodcayul --replicas=4 -n ibus-cloud-prod
+# Cordon cordon
+kubectl cordon <node>
+kubectl uncordon <node>
+kubectl drain <node> --ignore-daemonsets --delete-emptydir-data
+
+## See if a node has a running pod. Search pods and grep for node, also add namespace
+kubectl get pods -A -o wide | grep 170.100.60.122 | grep ibus-cloud-prod
+
+## Print pods in a non-running state
+kubectl get pods -n ibus-cloud-prod | grep -E 'ContainerStatusUnknown|Error|Evicted|ImagePullBackOff|CrashLoopBackOff' | awk '{print $1}' 
+
+## Delete pods in a non running state
+kubectl get pods -n ibus-cloud-prod | grep -E 'ContainerStatusUnknown|Error|Evicted' | awk '{print $1}' | xargs kubectl delete pod -n ibus-cloud-prod
+## get rabbit admin
+kubectl get secret rabbitmq-01-nonprodusord-default-user -o jsonpath='{.data.password}' | base64 --decode
+
+# tunapoke 8181
+sy018616-mac:tunapoke sy018616$ lsof -i :8181
+COMMAND  PID    USER  FD  TYPE            DEVICE SIZE/OFF NODE NAME
+Python 69646 sy018616   3u IPv4 0xb3af473774df7821     0t0 TCP *:8181 (LISTEN)
+sy018616-mac:tunapoke sy018616$ kill -9 69646
+ran ./tunapoke
+
+# cycle rabbit
+kubectl rollout restart statefulset -n ibus-cloud-prod rabbitmq-01-nonprodusord-server
+
+# Find all connect named pods with given status
+kubectl get pods -n ibus-cloud-prod \
+| grep -E '^connect.*(ContainerStatusUnknown|Error|Evicted)' \
+| awk '{print $1}'
+
+
+
+# Find and delete all connect named pods with given status
+kubectl get pods -n ibus-cloud-prod \
+| grep -E '^connect.*(ContainerStatusUnknown|Error|Evicted)' \
+| awk '{print $1}' \
+| xargs kubectl delete pod -n ibus-cloud-prod
+
+
+### PIN back to previous replica set 
+kubectl describe rs reportingcollector-produsord-67f78f486c | grep “deployment.kubernetes.io/revision”
+        deployment.kubernetes.io/revision: 18
+kubectl rollout undo deployment reportingcollector-produsord --to-revision=18
+#### other means to undo deployment 
+kubectl rollout undo deployment reportingcollector-produsord
+kubectl delete rs reportingcollector-produsord-7448f95598
+
