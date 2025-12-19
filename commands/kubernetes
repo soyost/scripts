@@ -1,102 +1,224 @@
-### K8 Kubernetes:
+########################################
+# Kubernetes (kubectl) – Final Cheat Sheet
+########################################
+
+
+########################################
+# Context & Cluster Switching
+########################################
+
+# List all available contexts
+kubectl config get-contexts
+
+# Show current context
+kubectl config current-context
+
+# Show current context details (cluster, user, namespace)
+kubectl config view --minify
+
+# Switch to a different context
+kubectl config use-context <context-name>
+
+# Temporarily override namespace for current context
+kubectl config set-context --current --namespace=<namespace>
+
+
+########################################
+# Pod Discovery & Status
+########################################
+
+# List pods
+kubectl get pods
+kubectl get pods -n <namespace>
+kubectl get pods --all-namespaces
+
+# Sort pods by start time
 kubectl get pods --sort-by=.status.startTime
-# kubectl logs <container> -n ibus-cloud-prod $MID0 | sed 's/\\n/\/g’ > logfile.log
-kubectl logs <container> -n ibus-cloud-prod $MID0 --tail=100
-kubectl describe pod <container> -n ibus-cloud-prod $MID0
-kubectl get deployment -n ibus-cloud-prod $MID0
-kubectl rollout restart deployment <deployment> -n ibus-cloud-prod $MID0 # there is also $PRES0
-kubectl rollout restart deployment <deployment-name> -n <namespace>
-    example:
-        kubectl rollout restart deployment ibustenantconfig -n ibus-cloud-prod
-kubectl delete pod <pod-name> -n <namespace>
-kubectl logs <pod_name> > logs.txt
-kubectl get deployments --all-namespaces -o custom-columns='NAMESPACE:.metadata.namespace,NAME:.metadata.name,PODS:.status.availableReplicas' | grep -v '^[[:space:]]*[^[:space:]]*[[:space:]]*[1-9][0-9]*[[:space:]]*$'
-# if not fed
-kubectl get pods --namespace=ibus-cloud-eng
-# look for specific pods
-kubectl get pods | grep <name> (#if in Fed need the namespace) 
-#look thought pod logs
-kubectl logs <full name>  | vim - # exmaple kubectl logs hopsschedule-cloudqasystem-5777f69bc7-tn4kz | vim -
-kubectl get nodes -o json | jq '.items[] | {addr: .metadata.labels.internal_addr, taints: .spec.taints}'
-WHERE
-kubectl config view --minify 
-kubectl exec -it ibusauthentication-cloudgov-5bb6b6f5d8-6qqjr $MID0 -n ibus-cloud-prod -- bash
-##WATCH
-watch -n <number> "kubectl get pods -n ibus-cloud-prod | grep <name>
+
+# Find non-running pods (API-level)
+kubectl get pods --all-namespaces --field-selector=status.phase!=Running
+
+# Find pods in error states (human-readable)
+kubectl get pods --all-namespaces \
+| grep -E "CrashLoopBackOff|Error|Evicted|Failed|Pending"
+
+# Find pods by name
+kubectl get pods -n <namespace> | grep <name>
+
+
+########################################
+# Pod Logs
+########################################
+
+# View logs
+kubectl logs <pod-name> -n <namespace>
+kubectl logs <pod-name> --tail=100 -n <namespace>
+
+# Logs from specific container
+kubectl logs <pod-name> -c <container> -n <namespace>
+
+# Save logs to file
+kubectl logs <pod-name> -n <namespace> > logs.txt
+
+# View logs in editor
+kubectl logs <pod-name> -n <namespace> | vim -
+
+
+########################################
+# Pod Inspection / Exec
+########################################
+
+# Describe pod
+kubectl describe pod <pod-name> -n <namespace>
+
+# Exec into pod
+kubectl exec -it <pod-name> -n <namespace> -- bash
+
+# Example
+kubectl exec -it ibusauthentication-cloudgov-5bb6b6f5d8-6qqjr \
+  -n ibus-cloud-prod -- bash
+
+
+########################################
+# Watch Pods (Live)
+########################################
+
+watch -n 1 "kubectl get pods -n <namespace> | grep <name>"
+
+# Example
 watch -n 1 "kubectl get pods -n ibus-cloud-prod | grep tenantconfig"
 
-## NOT running
-kubectl get pods --all-namespaces --field-selector=status.phase!=Running
-## Other phases:
-kubectl get pods --all-namespaces | grep -E "CrashLoopBackOff|Error|Evicted|Failed|Pending"
-## LOOK for persistent volume chains
-kubectl get pvc -n <namespace> --field-selector=status.phase=Pending
-## list node labels
-kubectl get nodes -o json | jq -r '.items[].metadata.labels["node-type"]' | sort -u
-## list release from helm
-helm list -A
-#Replica Sets
-kubectl get rs ibustempinfusiondatastore-prodcayul-5995c87c6b -n ibus-cloud-prod
-## Scale replica set, scale deployment
-##proof
-sy018616-mac:~ sy018616$ kubectl describe rs ibustempinfusiondatastore-prodcayul-5995c87c6b -n ibus-cloud-prod | grep Deployment
-Controlled By:  Deployment/ibustempinfusiondatastore-prodcayul
-## Scale deployment
-kubectl scale deployment ibustempinfusiondatastore-prodcayul --replicas=4 -n ibus-cloud-prod
 
-## See desired replica count
-kubectl describe rs <deployment name> -n ibus-cloud-prod | grep Replicas
-  example: kubectl describe rs ibuscode-prodcayul-58bdd69d5b -n ibus-cloud-prod | grep Replicas
-##proof
-sy018616-mac:~ sy018616$ kubectl describe rs ibustempinfusiondatastore-prodcayul-5995c87c6b -n ibus-cloud-prod | grep Deployment
-Controlled By:  Deployment/ibustempinfusiondatastore-prodcayul
-## Scale deployment
-kubectl scale deployment ibustempinfusiondatastore-prodcayul --replicas=4 -n ibus-cloud-prod
-# Cordon cordon
+########################################
+# Deployments
+########################################
+
+# List deployments
+kubectl get deployment -n <namespace>
+kubectl get deployments --all-namespaces
+
+# Restart deployment
+kubectl rollout restart deployment <deployment-name> -n <namespace>
+
+
+########################################
+# ReplicaSets & Scaling
+########################################
+
+# Get ReplicaSet
+kubectl get rs <rs-name> -n <namespace>
+
+# Find owning deployment
+kubectl describe rs <rs-name> -n <namespace> | grep Deployment
+
+# See desired/actual replicas
+kubectl describe rs <rs-name> -n <namespace> | grep Replicas
+
+# Scale deployment
+kubectl scale deployment <deployment-name> --replicas=<count> -n <namespace>
+
+
+########################################
+# Rollbacks
+########################################
+
+# See deployment revision
+kubectl describe rs <rs-name> | grep deployment.kubernetes.io/revision
+
+# Roll back to previous revision
+kubectl rollout undo deployment <deployment-name>
+
+# Roll back to specific revision
+kubectl rollout undo deployment <deployment-name> --to-revision=<number>
+
+# Force cleanup (last resort)
+kubectl delete rs <rs-name>
+
+
+########################################
+# Node Operations
+########################################
+
+# List nodes with taints
+kubectl get nodes -o json \
+| jq '.items[] | {addr: .metadata.labels.internal_addr, taints: .spec.taints}'
+
+# List unique node labels
+kubectl get nodes -o json \
+| jq -r '.items[].metadata.labels["node-type"]' | sort -u
+
+# Find pods running on a node
+kubectl get pods -A -o wide | grep <node-ip> | grep <namespace>
+
+# Cordon / Drain
 kubectl cordon <node>
 kubectl uncordon <node>
 kubectl drain <node> --ignore-daemonsets --delete-emptydir-data
 
-## See if a node has a running pod. Search pods and grep for node, also add namespace
-kubectl get pods -A -o wide | grep 170.100.60.122 | grep ibus-cloud-prod
 
-## Print pods in a non-running state
-kubectl get pods -n ibus-cloud-prod | grep -E 'ContainerStatusUnknown|Error|Evicted|ImagePullBackOff|CrashLoopBackOff' | awk '{print $1}' 
+########################################
+# Bulk Pod Cleanup (Use Carefully)
+########################################
 
-## Delete pods in a non running state
-kubectl get pods -n ibus-cloud-prod | grep -E 'ContainerStatusUnknown|Error|Evicted' | awk '{print $1}' | xargs kubectl delete pod -n ibus-cloud-prod
-## get rabbit admin
-kubectl get secret rabbitmq-01-nonprodusord-default-user -o jsonpath='{.data.password}' | base64 --decode
+# List non-running pods in namespace
+kubectl get pods -n <namespace> \
+| grep -E 'ContainerStatusUnknown|Error|Evicted|ImagePullBackOff|CrashLoopBackOff'
 
-# tunapoke 8181
-sy018616-mac:tunapoke sy018616$ lsof -i :8181
-COMMAND  PID    USER  FD  TYPE            DEVICE SIZE/OFF NODE NAME
-Python 69646 sy018616   3u IPv4 0xb3af473774df7821     0t0 TCP *:8181 (LISTEN)
-sy018616-mac:tunapoke sy018616$ kill -9 69646
-ran ./tunapoke
+# Delete non-running pods
+kubectl get pods -n <namespace> \
+| grep -E 'ContainerStatusUnknown|Error|Evicted' \
+| awk '{print $1}' \
+| xargs kubectl delete pod -n <namespace>
 
-# cycle rabbit
-kubectl rollout restart statefulset -n ibus-cloud-prod rabbitmq-01-nonprodusord-server
 
-# Find all connect named pods with given status
+########################################
+# PVC / Storage
+########################################
+
+kubectl get pvc -n <namespace> --field-selector=status.phase=Pending
+
+
+########################################
+# Helm
+########################################
+
+helm list -A
+
+
+########################################
+# RabbitMQ / StatefulSets
+########################################
+
+# Restart RabbitMQ
+kubectl rollout restart statefulset rabbitmq-01-nonprodusord-server -n ibus-cloud-prod
+
+# Get RabbitMQ admin password
+kubectl get secret rabbitmq-01-nonprodusord-default-user \
+  -o jsonpath='{.data.password}' | base64 --decode
+
+
+########################################
+# Pattern-Based Pod Cleanup (Connect)
+########################################
+
+# Find connect pods in bad states
 kubectl get pods -n ibus-cloud-prod \
 | grep -E '^connect.*(ContainerStatusUnknown|Error|Evicted)' \
 | awk '{print $1}'
 
-
-
-# Find and delete all connect named pods with given status
+# Delete connect pods in bad states
 kubectl get pods -n ibus-cloud-prod \
 | grep -E '^connect.*(ContainerStatusUnknown|Error|Evicted)' \
 | awk '{print $1}' \
 | xargs kubectl delete pod -n ibus-cloud-prod
 
 
-### PIN back to previous replica set 
-kubectl describe rs reportingcollector-produsord-67f78f486c | grep “deployment.kubernetes.io/revision”
-        deployment.kubernetes.io/revision: 18
-kubectl rollout undo deployment reportingcollector-produsord --to-revision=18
-#### other means to undo deployment 
-kubectl rollout undo deployment reportingcollector-produsord
-kubectl delete rs reportingcollector-produsord-7448f95598
+########################################
+# Local Dev / Port Conflicts
+########################################
 
+# Check port usage
+lsof -i :8181
+
+# Kill process
+kill -9 <PID>
