@@ -75,7 +75,7 @@ kubectl describe pod <pod-name> -n <namespace>
 kubectl exec -it <pod-name> -n <namespace> -- bash
 
 # Example
-kubectl exec -it ibusauthentication-cloudgov-5bb6b6f5d8-6qqjr \
+kubectl exec -it ibusauthentication-5bb6b6f5d8-6qqjr \
   -n ibus-cloud-prod -- bash
 
 
@@ -134,7 +134,6 @@ kubectl rollout undo deployment <deployment-name> --to-revision=<number>
 # Force cleanup (last resort)
 kubectl delete rs <rs-name>
 
-
 ########################################
 # Node Operations
 ########################################
@@ -152,12 +151,12 @@ kubectl get pods -A -o wide | grep <node-ip> | grep <namespace>
 
 # Cordon / Drain
 kubectl cordon <node>
-kubectl uncordon <node>
 kubectl drain <node> --ignore-daemonsets --delete-emptydir-data
+kubectl uncordon <node>
 
 
 ########################################
-# Bulk Pod Cleanup (Use Carefully)
+# Bulk Pod Cleanup
 ########################################
 
 # List non-running pods in namespace
@@ -175,15 +174,19 @@ kubectl get pods -n <namespace> \
 # PVC / Storage
 ########################################
 
+kubectl get pvc -n ibus-cloud-prod
 kubectl get pvc -n <namespace> --field-selector=status.phase=Pending
-
+kubectl describe pvc persistence-<pod> -n ibus-cloud-prod
+kubectl get csidrivers
 
 ########################################
 # Helm
 ########################################
 
 helm list -A
-
+helm upgrade --install <name> <location-of-config>
+Example
+  helm upgrade --install rabbitmq-prodpia ./rabbitmq-cluster-oci-helm-chart -n ibus-cloud-prod -f ./environments/template/shared.yaml -f ./environments/template/prod.yaml -f ./environments/produspia.yaml
 
 ########################################
 # RabbitMQ / StatefulSets
