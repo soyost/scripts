@@ -1,56 +1,183 @@
-# Linux commands
+
+########################################
+# Package Management (yum / rpm)
+########################################
+
+# Install netcat
 sudo yum install -y nc
-ls -lSr # sort list by size
-find /ibus/log/<path>/<name>.log -newermt 'Nov 14 00:00' \! -newermt 'Nov 15 00:00' -ls
-watch -n 300 ls -al # performs a ls -al every 5 mins (300 secs)
-find . -type f -name '<file name>' -exec wc -l {} +  #list and print file names that match given prompt
-# count in a given directory
-<whatever search> | wc -l
-# interactive file removal to see which ones before deleting
-rm -vi <file name>
-# chown owner_name file_name
-chmod 777 file_name # this is pretty opem
-chmod 600 /Users/sy018616/Desktop/key.txt # this is really close
-# sort var/log by size
-du -a /var/log/ | sort -n -r | head -n 20 # du or find largest files 
-# sort list by size
-ls -lSr
-# find log files via given path during given date
-find /ibus/log/<path>/<file name or woldcard>.log -newermt 'Nov 14 00:00' \! -newermt 'Nov 15 00:00' -ls
-# append -delete to remove
-# truncate logs within a date
-truncate -s <siez, usually date> postgresql-2024-03-25_*.log postgresql-2024-03-26_*.log
-# obtain checksum of a file
+
+# Verify RPM checksum (with signature info)
 rpm -K <path_to_rpm_file>
-# obtain checksum w/o additional information
+
+# Verify RPM checksum (no signature info)
 rpm -K --nosignature <path_to_rpm_file>
-# list all files for given rpm installed package
-rpm -ql <name>
-# check all installes packages from rom
-rpm --verify -a | grep <name>
-# rpm db commands:
+
+# List all files installed by an RPM package
+rpm -ql <package-name>
+
+# Verify installed packages (filter by name)
+rpm --verify -a | grep <package-name>
+
+# RPM database recovery
 sudo db5_recover -v -h /var/lib/rpm/
 sudo rm -f /var/lib/rpm/__db*
 sudo rpm --rebuilddb
 
-# identify pid of running process
-ps -ef | grep <name>
-# list processes as well
-ps aux | grep <name>
-# stop a pid identified
+# yum command lists
+yum history 
+yum history info <package>
+yum history summary <package>
+yum history info <transaction ID from history commands>
+yum history package-list <package>
+yum history undo <number of transaction>
+yum history redo <number of transaction>
+yum history rollback <number of transaction>
+# list availeable versions for packag (docker-ce in this example)
+yum --enablerepo=careaware-docker list docker-ce --showduplicates | sort -r
+# install specific verion
+sudo yum install docker-ce-24.0.0-1.el7
+# lists dependencies w/o installing
+yum deplist docker-ce
+# verify installed package dependencies
+yum info docker-ce
+
+########################################
+# File Listing & Disk Usage
+########################################
+
+# List files sorted by size (smallest → largest)
+ls -lSr
+
+# Watch directory listing every 5 minutes (300 seconds)
+watch -n 300 ls -al
+
+# Show largest files/directories under /var/log
+du -a /var/log/ | sort -n -r | head -n 20
+
+
+########################################
+# Finding Files
+########################################
+
+# Find files by name (current directory)
+find . -type f -name "<file-name>"
+
+# Find files anywhere (suppress permission errors)
+sudo find / -name "<file-name>" 2>/dev/null
+find / -name "<file-name>" 2>/dev/null
+
+# Find files by wildcard
+find / -type f -name "*<pattern>*"
+
+# Find files modified within a specific date range
+find /ibus/log/<path>/<file-or-wildcard>.log \
+  -newermt 'Nov 14 00:00' ! -newermt 'Nov 15 00:00' -ls
+
+# NOTE: append `-delete` to remove matched files (use with caution)
+
+
+########################################
+# File Content & Line Counts
+########################################
+
+# Find files and print line counts
+find . -type f -name "<file-name>" -exec wc -l {} +
+
+# Count number of matches from a command
+<command> | wc -l
+
+# Search recursively for text (case-sensitive, show line numbers)
+grep -RIn "text" <path>
+
+# Example
+grep -RIn "oke-cluster-pia-0" ~/git/norbert-config/
+
+
+########################################
+# File Ownership & Permissions
+########################################
+
+# Change file ownership
+chown <owner>:<group> <file-name>
+
+# Open permissions (VERY permissive)
+chmod 777 <file-name>
+
+# Secure file permissions (owner read/write only)
+chmod 600 <file-name>
+
+# Interactive file removal (confirm each file)
+rm -vi <file-name>
+
+
+########################################
+# Log Files & Maintenance
+########################################
+
+# Compress .log files older than 7 days
+find /usr/openv/netbackup/logs -type f -name "*.log" -mtime +7 -exec gzip {} \;
+
+# Truncate logs (size-based; often used to clear large logs)
+truncate -s <size> postgresql-2024-03-25_*.log postgresql-2024-03-26_*.log
+# Example sizes: 0, 10M, 1G
+
+
+########################################
+# Processes & System Monitoring
+########################################
+
+# Find process by name
+ps -ef | grep <process-name>
+ps aux | grep <process-name>
+
+# Kill a process (force)
 kill -9 <pid>
-# linux kernel
-uname -srv 
-# syslog
-sudo tail -n 100 /var/log/syslog
-# find
-sudo find / -name <name here> 2>/dev/null
-find / -name '<name here>' 2>/dev/null
-find / -type f -name "*<thing>"
-# user lock locked faillock
-# located in /var/run/faillock
-faillock --user username --reset
-# top TOP show single PID every second
+
+# Monitor a single PID with top (refresh every second)
 top -p <PID> -d 1
-# decode echo command
-echo -e "$(echo "<value>" | base64 --decode)"
+
+
+########################################
+# System Information
+########################################
+
+# Kernel version and system info
+uname -srv
+
+# View last 100 lines of syslog
+sudo tail -n 100 /var/log/syslog
+
+
+########################################
+# User & Security
+########################################
+
+# Reset failed login attempts for a user
+# (faillock data typically in /var/run/faillock)
+faillock --user <username> --reset
+
+
+########################################
+# Encoding / Decoding
+########################################
+
+# Decode base64-encoded value
+echo "<base64-value>" | base64 --decode
+
+# Decode with escaped characters interpreted
+echo -e "$(echo "<base64-value>" | base64 --decode)"
+
+########################################
+# Docker Commands
+########################################
+# exec inside a container
+docker exec -it <container id> /bin/bash
+# list all containers regardless if running
+docker ps -a
+# list all images
+docker images 
+docker restart $(docker ps -q)
+# list logs for given container
+docker logs <container ID>
+## start all in status exited
+docker ps -a -q -f status=exited | xargs docker start
