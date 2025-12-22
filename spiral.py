@@ -22,8 +22,8 @@ def update(frame):
     return line,
 
 ani = FuncAnimation(fig, update, frames=200, interval=50, blit=True)
-plt.title('Evolving Spiral using Matplotlib')
-plt.xlabel('X-axis')
-plt.ylabel('Y-axis')
-plt.grid(True)
+plt.title('Swirly')
+plt.xlabel('Up')
+plt.ylabel('Across')
+plt.grid(False)
 plt.show()
