@@ -1,50 +1,140 @@
-## Git
-# get repo from remote to local
-git checkout -b <local-branch-name> origin/<remote-branch-name>
-git fetch origin
-git checkout <your-branch-name>
-git pull origin branch_name
-git merge origin/<your-branch-name>
+
+########################################
+# Repository Setup / Cloning
+########################################
+
+# Clone a repository
 git clone <repository_url>
-# or
+
+# Fetch everything from all remotes
 git fetch --all
-# fix your forked copy
-git remote add upstream <master repo you forked from>
+
+
+########################################
+# Branch Creation & Checkout
+########################################
+
+# Create a local branch from a remote branch
+git checkout -b <local-branch-name> origin/<remote-branch-name>
+
+# Create and switch to a new branch
+git checkout -b <branch-name>
+
+# Switch to an existing branch
+git checkout <branch-name>
+
+
+########################################
+# Keeping Branches Up to Date
+########################################
+
+# Fetch latest changes
+git fetch origin
+
+# Pull latest changes into current branch
+git pull origin <branch-name>
+
+# Merge remote branch into current branch
+git merge origin/<branch-name>
+
+
+########################################
+# Fork Syncing (Fix Your Fork)
+########################################
+
+# Add upstream (original repo)
+git remote add upstream <upstream-repo-url>
+
+# Fetch upstream changes
 git fetch upstream
+
+# Reset local branch to upstream master/main
 git reset --hard upstream/master
+# or
+git reset --hard upstream/main
+
+# Fetch again (optional sanity)
 git fetch
 
-# I made a change and I want to send it to origin
-git add .  # Stage all changes (replace `.` with specific files/directories if needed)
-git commit -m "Your commit message here"
-git checkout -b <name>
-git push origin <name>
 
-# branch history:
+########################################
+# Making Changes & Pushing to Origin
+########################################
+
+# Stage changes
+git add .
+# (replace `.` with specific files if needed)
+
+# Commit changes
+git commit -m "commit message"
+
+# Push current branch to origin
+git push origin <branch-name>
+
+# Push new branch and set upstream
+git push --set-upstream origin <branch-name>
+
+
+########################################
+# Standard Workflow (New Feature Branch)
+########################################
+
+git checkout -b <branch-name>
+# make changes
+git add .
+git commit -m "commit message"
+git push --set-upstream origin <branch-name>
+
+
+########################################
+# Standard Workflow (Update Existing Branch)
+########################################
+
+git checkout <branch-name>
+git pull
+# make changes
+git add .
+git commit -m "commit message"
+git push origin <branch-name>
+
+
+########################################
+# Branch & Commit History
+########################################
+
+# Visual branch history
 git log --oneline --graph --decorate --all
 
-# git add commit from another branch
-git checkout <target branch adding the commit>
-git cherry-pick <desired commit hash>
-# or cherry-pick remotely
-git cherry-pick <remote>/<branch-name> <commit-hash> #assuming you are on the target branch
-## comparing files across different branches
+
+########################################
+# Cherry-Picking Commits
+########################################
+
+# Cherry-pick a commit into current branch
+git cherry-pick <commit-hash>
+
+# Cherry-pick from another branch
+git cherry-pick <branch-name> <commit-hash>
+
+# Cherry-pick from a remote branch
+git cherry-pick <remote>/<branch-name> <commit-hash>
+
+# Notes:
+# - cherry-pick automatically stages changes
+# - it creates the commit immediately
+# - use git add / git commit ONLY if resolving conflicts
+
+
+########################################
+# Comparing Files Across Branches
+########################################
+
+# Diff a file between two branches
 git diff <branch1>:<path/to/file> <branch2>:<path/to/file>
-### Git make a new branch, make changes, publish branch
-git add .
-git checkout -b "branch-name"
-git commit -m "commit message"
-git push --set-upstream origin branch-name
-#### Git make changes to branch
-git checkout branch-name
-git pull
-<make change>
-git add .
-git commit -m "commit message"
-git push origin
 
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+Add Submodule
 
-
-###git cherry-pick automatically stages the changes, meaning it prepares the changes for commit.
-##It also creates a commit immediately, containing the applied changes from the original commit.
-##You only run git add or git commit if there are manual edits or conflict resolutions that need to be staged or committed.
+git submodule add --force -b <branch> <repo ssh link> <location of submodule>
+# Example
+git submodule add --force -b master ssh://oci.private.devops.scmservice.us-phoenix-1.oci.oracleiaas.com/namespaces/axuxirvibvvo/projects/ARCHCA/repositories/ohai-managed-k8s-shared-modules ./shared_modules/oke-oc3-pia-careaware-prod-0/ohai-managed-k8s/
