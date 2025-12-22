@@ -1,0 +1,70 @@
+#!/bin/bash
+
+cols=$(tput cols)
+lines=$(tput lines)
+
+clear
+tput civis   # hide cursor
+
+# Star symbols
+stars=("." "." "." "·" "+")
+
+# Colors using tput color indexes
+# 7 = white, 6 = cyan, 4 = blue
+colors=(7 6 4)
+
+# Each star: x y char color life
+declare -a field
+max_stars=60
+
+cleanup() {
+  tput cnorm
+  tput sgr0
+  clear
+  exit
+}
+trap cleanup INT TERM
+
+while true; do
+  # Occasionally add a new star
+  if (( RANDOM % 5 == 0 )) && (( ${#field[@]} < max_stars*5 )); then
+    x=$((RANDOM % cols))
+    y=$((RANDOM % lines))
+    star=${stars[$RANDOM % ${#stars[@]}]}
+    color=${colors[$RANDOM % ${#colors[@]}]}
+    life=$((RANDOM % 6 + 6))
+
+    field+=("$x $y $star $color $life")
+  fi
+
+  new_field=()
+
+  for entry in "${field[@]}"; do
+    read x y star color life <<< "$entry"
+
+    tput cup "$y" "$x"
+
+    if (( life > 4 )); then
+      tput setaf "$color"
+      tput bold
+      printf "%s" "$star"
+    elif (( life > 2 )); then
+      tput setaf "$color"
+      tput dim
+      printf "%s" "$star"
+    else
+      printf " "
+    fi
+
+    tput sgr0
+    ((life--))
+
+    if (( life > 0 )); then
+      new_field+=("$x $y $star $color $life")
+    fi
+  done
+
+  field=("${new_field[@]}")
+
+  sleep 0.45 
+done
