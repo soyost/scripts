@@ -1,4 +1,5 @@
 #!/bin/bash
+#adding this as a test
 
 cols=$(tput cols)
 lines=$(tput lines)
