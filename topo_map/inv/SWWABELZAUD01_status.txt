@@ -1,0 +1,59 @@
+Port         Name               Status       Vlan       Duplex  Speed Type
+Gi1/0/1                         disabled     999          auto   auto 10/100/1000BaseTX
+Gi1/0/2      ROUTER CONTROL PAN connected    2200       a-full a-1000 10/100/1000BaseTX
+Gi1/0/3      QL1 MIXER:PWABELTM disabled     251          auto   auto 10/100/1000BaseTX
+Gi1/0/4                         disabled     999          auto   auto 10/100/1000BaseTX
+Gi1/0/5                         disabled     999          auto   auto 10/100/1000BaseTX
+Gi1/0/6                         disabled     999          auto   auto 10/100/1000BaseTX
+Gi1/0/7                         disabled     999          auto   auto 10/100/1000BaseTX
+Gi1/0/8                         disabled     999          auto   auto 10/100/1000BaseTX
+Gi1/0/9                         disabled     999          auto   auto 10/100/1000BaseTX
+Gi1/0/10                        disabled     999          auto   auto 10/100/1000BaseTX
+Gi1/0/11                        disabled     999          auto   auto 10/100/1000BaseTX
+Gi1/0/12                        disabled     999          auto   auto 10/100/1000BaseTX
+Gi1/0/13     USER STATION 1:PWA connected    201        a-full a-1000 10/100/1000BaseTX
+Gi1/0/14     USER STATION 2:PWA connected    201        a-full a-1000 10/100/1000BaseTX
+Gi1/0/15     USER STATION 3:PWA connected    201        a-full a-1000 10/100/1000BaseTX
+Gi1/0/16     USER STATION 4:PWA connected    201        a-full a-1000 10/100/1000BaseTX
+Gi1/0/17                        disabled     999          auto   auto 10/100/1000BaseTX
+Gi1/0/18                        disabled     999          auto   auto 10/100/1000BaseTX
+Gi1/0/19     INTERCOM PANEL (MA connected    202        a-full a-1000 10/100/1000BaseTX
+Gi1/0/20     INTERCOM PANEL 1 ( connected    202        a-full a-1000 10/100/1000BaseTX
+Gi1/0/21     INTERCOM PANEL 2 ( connected    202        a-full a-1000 10/100/1000BaseTX
+Gi1/0/22     INTERCOM PANEL 3 ( connected    202        a-full a-1000 10/100/1000BaseTX
+Gi1/0/23                        disabled     999          auto   auto 10/100/1000BaseTX
+Gi1/0/24                        disabled     999          auto   auto 10/100/1000BaseTX
+Gi1/0/25     QL1 MIXER:PWABELTM connected    203        a-full a-1000 10/100/1000BaseTX
+Gi1/0/26     DANTE-B5-AVIO-DONG connected    203        a-full  a-100 10/100/1000BaseTX
+Gi1/0/27     PANEL DANTE 2:PWAB disabled     203          auto   auto 10/100/1000BaseTX
+Gi1/0/28     PANEL DANTE 3:PWAB disabled     203          auto   auto 10/100/1000BaseTX
+Gi1/0/29     PANEL DANTE 4:PWAB disabled     203          auto   auto 10/100/1000BaseTX
+Gi1/0/30     PANEL DANTE 5:PWAB disabled     203          auto   auto 10/100/1000BaseTX
+Gi1/0/31                        disabled     999          auto   auto 10/100/1000BaseTX
+Gi1/0/32                        disabled     999          auto   auto 10/100/1000BaseTX
+Gi1/0/33                        disabled     999          auto   auto 10/100/1000BaseTX
+Gi1/0/34                        disabled     999          auto   auto 10/100/1000BaseTX
+Gi1/0/35                        disabled     999          auto   auto 10/100/1000BaseTX
+Gi1/0/36                        disabled     999          auto   auto 10/100/1000BaseTX
+Gi1/0/37     QL1 MIXER:PWABELTM connected    2204       a-full a-1000 10/100/1000BaseTX
+Gi1/0/38                        disabled     999          auto   auto 10/100/1000BaseTX
+Gi1/0/39                        disabled     999          auto   auto 10/100/1000BaseTX
+Gi1/0/40                        disabled     999          auto   auto 10/100/1000BaseTX
+Gi1/0/41                        disabled     999          auto   auto 10/100/1000BaseTX
+Gi1/0/42                        disabled     999          auto   auto 10/100/1000BaseTX
+Gi1/0/43     PWABELDACPUACA-AUD notconnect   203          auto   auto 10/100/1000BaseTX
+Gi1/0/44                        disabled     999          auto   auto 10/100/1000BaseTX
+Gi1/0/45                        disabled     999          auto   auto 10/100/1000BaseTX
+Gi1/0/46                        disabled     999          auto   auto 10/100/1000BaseTX
+Gi1/0/47                        disabled     999          auto   auto 10/100/1000BaseTX
+Gi1/0/48                        disabled     999          auto   auto 10/100/1000BaseTX
+Te1/1/1      NXWASEADX01-eth1/2 connected    trunk        full    10G SFP-10GBase-LR
+Te1/1/2                         disabled     999          auto   auto unknown
+Te1/1/3                         disabled     999          auto   auto unknown
+Te1/1/4                         disabled     999          auto   auto unknown
+Te1/1/5                         disabled     999          auto   auto unknown
+Te1/1/6                         disabled     999          auto   auto unknown
+Te1/1/7                         disabled     999          auto   auto unknown
+Te1/1/8      NXWASEADX02-eth1/2 connected    trunk        full    10G SFP-10GBase-LR
+Ap1/0/1                         disabled     999          auto   auto App-hosting port
+Po42         VPC-NXWASEADX01-X0 connected    trunk      a-full  a-10G N/A

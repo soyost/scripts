@@ -1,0 +1,5 @@
+graph topology {
+  graph [fontname="Segoe UI", fontsize=10, overlap=false, splines=true];
+  node  [shape=box, style="rounded,filled", fontname="Segoe UI", fillcolor="#f6f8fa"];
+  edge  [fontname="Consolas", color="#9da0a2"];
+}
