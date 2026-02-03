@@ -1,15 +1,10 @@
+## Usage: python lint_switch_config.py <config.txt>
+
 import re
 import sys
 from ciscoconfparse import CiscoConfParse
 
 PARKING_VLAN = "999"
-
-# Match cameras more reliably (WG-CAM2, WG-CAM4, WG-CAM:..., etc.)
-CAMERA_DESC_PATTERNS = [
-    r"\bCAMERA\b",
-    r"\bCAM\b",           # optional: matches standalone CAM
-    r"WG-CAM",            # matches WG-CAM2 / WG-CAM4 / WG-CAM:
-]
 
 UNUSED_DESC_PATTERNS = [
     r"\bUNUSED\b",
@@ -61,9 +56,6 @@ def is_unused_port(intf_obj):
             break
     return vlan == PARKING_VLAN
 
-def is_camera_port(intf_obj):
-    d = desc_text(intf_obj)
-    return matches_any_pattern(d, CAMERA_DESC_PATTERNS)
 
 def is_auth_controlled(intf_obj):
     # If you're using MAB as your primary auth method, this is a good trigger
@@ -109,16 +101,6 @@ def lint_config(config_path):
                     "suggest": f"interface {name}\n authentication port-control auto\n!"
                 })
 
-        # RULE: Camera ports must have MAB enabled
-        if is_camera_port(intf):
-            if not has_child(intf, r"^\s*mab\s*$"):
-                findings.append({
-                    "interface": name,
-                    "description": d,
-                    "rule": "Camera ports must have MAB enabled",
-                    "missing": "mab",
-                    "suggest": f"interface {name}\n mab\n!"
-                })
 
         # OPTIONAL RULE: If auth-controlled, require MAB (useful in MAB-only environments)
         if is_auth_controlled(intf):
