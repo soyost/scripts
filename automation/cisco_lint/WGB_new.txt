@@ -1,0 +1,408 @@
+Phase 1  - INITIAL
+!! SWKSOPHD1WGB-NEW
+config t
+service timestamps debug datetime msec localtime show-timezone year
+service timestamps log datetime msec localtime show-timezone year
+service password-encryption
+platform punt-keepalive disable-kernel-core
+!
+! hostname SWKSOPHD1WGB-NEW
+!
+!
+vrf definition OAM
+ !
+ address-family ipv4
+ exit-address-family
+exit
+!
+logging buffered 16384
+no logging console
+!
+!
+tacacs server ISKSOPHEX01_T
+ address ipv4 10.79.253.16
+ key 7 13333042532700027D71231C37741A00232C05466D7A475B16530E17575C637D73
+tacacs server ISWABELDX01_T
+ address ipv4 10.79.126.126
+ key 7 03327C5B5E242564185C122A1544020B31052F341C11212D0B5700020F526D7672
+ exit
+
+!
+radius server ISKSOPHEX01_R
+ address ipv4 10.79.253.16 auth-port 1812 acct-port 1813
+ timeout 5
+ retransmit 3
+ key 7 111C4C0111222738013A13081119603507342139325F71507A5A1C571537505F7F
+ exit
+!
+radius server ISWABELDX01_R
+ address ipv4 10.79.126.126 auth-port 1812 acct-port 1813
+ timeout 5
+ retransmit 3
+ key 7 03110E0F003F0D784B1921292E385E1B10191C1E1B3A1D2A3A0904570C77505F7B
+ exit
+!
+aaa group server tacacs+ TS_TACACS
+ server name ISKSOPHEX01_T
+ server name ISWABELDX01_T
+ ip vrf forwarding Mgmt-vrf 
+! ip vrf forwarding OAM
+! ip tacacs source-interface Vlan3007
+exit
+!
+aaa group server radius TS_RADIUS
+ server name ISKSOPHEX01_R
+ server name ISWABELDX01_R
+ ip vrf forwarding Mgmt-vrf 
+! ip vrf forwarding OAM
+! ip radius source-interface Vlan3007
+exit
+!
+!
+aaa session-id common
+clock timezone CST -6 0
+clock summer-time CDT recurring
+
+!
+!
+no ip domain lookup
+!
+!
+!
+ip igmp snooping querier
+ip igmp snooping vlan 1101 immediate-leave
+login on-failure log
+login on-success log
+!
+!
+vtp mode off
+udld enable
+!
+no device-tracking logging theft
+!
+!
+!
+system mtu 9100
+!
+!
+spanning-tree mode rapid-pvst
+spanning-tree portfast bpduguard default
+spanning-tree extend system-id
+spanning-tree pathcost method long
+spanning-tree vlan 1101,3007 priority 16384
+archive
+ log config
+  logging enable
+  logging size 200
+exit
+!
+username perry privilege 15 secret 9 $9$TVMN3I4YFGi53E$v5yRM8L1ULWx4EOxzrBq5WnGKOhLhzkueGLk68xYtx2
+username craig privilege 15 secret 9 $9$jrsZqT.3d.eKeE$AmcH9BA9xyWDKoGJahkcFoqjFmSosJ2/yn8HiX4Yabk
+!
+redundancy
+ mode sso
+exit
+!
+!
+transceiver type all
+ monitoring
+exit
+!         
+!
+!
+vlan 1101
+ name 10.79.156.0/24-WC-CLIENT
+exit
+!
+!
+vlan 3007
+ name 10.78.255.0/24-OAM
+exit
+!
+lldp run
+!
+!
+!
+
+!
+!
+!
+!
+interface TenGigabitEthernet1/1/1
+ description NXKSOPEP01-E1/29
+ switchport trunk native vlan 998
+ switchport trunk allowed vlan 1101,3007
+ switchport mode trunk
+ channel-group 40 mode active
+ no shut
+exit
+!
+interface TenGigabitEthernet1/1/8
+ description NXKSOPEP02-E1/29
+ switchport trunk native vlan 998
+ switchport trunk allowed vlan 1101,3007
+ switchport mode trunk
+ channel-group 40 mode active
+ no shut
+exit
+!
+interface Port-channel40
+ description OVP-UPLINK L2 NXKSOPHEP01_P02_P040-eth1/29
+ switchport trunk native vlan 998
+ switchport trunk allowed vlan 1101,3007
+ switchport mode trunk
+no shut
+exit
+!
+interface GigabitEthernet0/0
+ vrf forwarding Mgmt-vrf
+ ip address 10.78.255.123 255.255.255.0
+ negotiation auto
+no shut
+exit
+!
+interface range te1/0/1-10
+ switchport access vlan 999
+ switchport mode access
+ shutdown
+ authentication host-mode multi-auth
+ authentication port-control auto
+ mab
+exit
+!
+interface te1/0/11
+ description WG-CAM2:PKSOVPDTCAM02A:10.79.156.22
+ switchport access vlan 1101
+ switchport mode access
+ authentication host-mode multi-auth
+ authentication port-control auto
+ mab
+ spanning-tree portfast
+no shut
+exit
+!
+interface range te1/0/12-14
+ switchport access vlan 999
+ switchport mode access
+ shutdown
+ authentication host-mode multi-auth
+ authentication port-control auto
+ mab   
+ spanning-tree portfast
+exit
+!
+interface te1/0/15
+ description WG-CAM4:PKSOVPDTCAM04A:10.79.156.24
+ switchport access vlan 1101
+ switchport mode access
+ authentication host-mode multi-auth
+ authentication port-control auto
+ mab
+ spanning-tree portfast
+no shut
+exit
+!
+interface range te1/0/16-19
+ switchport access vlan 999
+ switchport mode access
+ shutdown
+ authentication host-mode multi-auth
+ authentication port-control auto
+ mab
+ exit
+!
+interface te1/0/20
+ description PKSOVPHTIFCWG1A-10.79.156.78-DANTE-BRDIGE
+ switchport access vlan 1101
+ switchport mode access
+ authentication host-mode multi-auth
+ authentication port-control auto
+ mab
+ spanning-tree portfast
+no shut
+exit
+!
+interface te1/0/21
+ switchport access vlan 999
+ switchport mode access
+ shutdown
+ authentication host-mode multi-auth
+ authentication port-control auto
+ mab
+exit
+!
+!
+interface te1/0/22
+ description PKSOVPZTEXTZZA-10.79.156.197
+ switchport access vlan 1101
+ switchport mode access
+ authentication host-mode multi-auth
+ authentication port-control auto
+ mab
+no shut
+exit
+!
+interface range te1/0/23
+ switchport access vlan 999
+ switchport mode access
+ shutdown
+ authentication host-mode multi-auth
+ authentication port-control auto
+ mab
+ exit
+!
+!         
+interface te1/0/24
+ description SWKSOPHD1WGA-Gi0/0 : 10.78.255.122
+ switchport access vlan 3007
+ switchport mode access
+no shut
+exit
+!
+interface range GigabitEthernet1/1/1-4
+ switchport access vlan 999
+ shutdown
+exit 
+!
+interface range TenGigabitEthernet1/1/2-7
+ switchport access vlan 999
+ shutdown
+exit
+!
+!
+interface FortyGigabitEthernet1/1/1
+shut
+exit
+!
+interface FortyGigabitEthernet1/1/2
+>shut
+exit
+interface TwentyFiveGigE1/1/1
+ shutdown
+exit
+interface TwentyFiveGigE1/1/2
+ shutdown
+exit
+interface AppGigabitEthernet1/0/1
+ switchport access vlan 999
+ shutdown
+exit 
+!
+interface Vlan1
+ no ip address
+exit
+!
+interface Vlan3007
+ description Management VLAN
+ vrf forwarding OAM
+ ip address 10.78.255.121 255.255.255.0
+exit
+!
+
+no ip http server
+ip http authentication local
+no ip http secure-server
+ip http client source-interface GigabitEthernet0/0
+
+!
+!
+
+
+
+
+ip access-list extended VTY-IN
+ 10 permit tcp 10.79.192.0 0.0.0.127 any
+ 20 permit tcp 10.214.151.192 0.0.0.31 any
+ 25 permit tcp 10.77.224.128 0.0.0.31 any
+ 27 permit tcp 10.79.162.0 0.0.0.31 any
+ 30 permit tcp 10.79.63.0 0.0.0.255 any
+ 40 permit tcp 10.79.254.0 0.0.0.255 any
+ 50 permit tcp 10.79.191.192 0.0.0.3 any
+ 60 permit tcp 10.79.127.0 0.0.0.255 any
+ 70 permit tcp 10.79.126.0 0.0.0.255 any
+ 100 deny tcp any any log
+ exit
+!
+logging source-interface Vlan3007 vrf OAM
+logging host 10.79.253.14 vrf OAM
+!
+!
+!!
+!
+snmp-server community S33mYyDatA RO
+snmp-server community M0dMyC0nffig RW
+!
+radius-server attribute 6 on-for-login-auth
+radius-server attribute 8 include-in-access-req
+radius-server attribute 25 access-request include
+radius-server attribute 31 mac format ietf upper-case
+radius-server attribute 31 send nas-port-detail mac-only
+radius-server dead-criteria time 10 tries 3
+!
+!
+!
+
+
+!
+banner login ^
+UNAUTHORIZED ACCESS PROHIBITED
+******************************************************
+Access to this system and associated network, computer
+resource, or data is restricted to those authorized by
+the company. This system and related networks, resources
+or data may only be used for business purposes of the
+company and its customers. Use by unauthorized individuals
+or for an unauthorized purpose is a violation of Federal
+and/or State law. Violators will be prosecuted.
+*******************************************************
+
+^
+!
+banner motd ^
+UNAUTHORIZED ACCESS PROHIBITED****
+| ****************************************************
+| 6220 Sprint Parkway, Overland Park, KS
+| Rack# OVPKKSTD-0001-00X-0XX
+|*****************************************************
+|
+| Normal power levels
+|
+| Te1/1/1 TxPwr -2.6 -> P01:E1/29 RxPwr -7.87
+| Te1/1/1 RxPwr -3.4 <- P01:E1/29 TxPwr -2.51
+| Te1/1/8 TxPwr -2.4 -> P02:E1/29 RxPwr -3.73
+| Te1/1/8 RxPwr -2.8 <- P02:E1/29 TxPwr -2.51
+|*****************************************************
+^
+alias configure sps do show port-security
+alias configure sis do show interface status
+alias configure sll do sh logg last 100 | ex Smart
+alias configure sas do show auth session
+alias configure slsf do show logg last 100 | in %SESSION_MGR-5-FAIL
+alias configure sal do show  archive log config  all
+alias exec sis show interface status
+alias exec sps show port-security
+alias exec sll sh logg last 100 | ex Smart
+alias exec sas show auth session
+alias exec slsf show logg last 100 | in %SESSION_MGR-5-FAIL
+alias exec sal show  archive log config  all
+!
+line con 0
+ stopbits 1
+line vty 0 4
+ !access-class VTY-IN in vrf-also
+ exec-timeout 30 0
+ transport input ssh
+line vty 5 31
+ !access-class VTY-IN in vrf-also
+ exec-timeout 30 0
+ transport input ssh
+exit
+!
+
+ntp server vrf Mgmt-vrf 10.79.156.46 prefer
+ntp server vrf Mgmt-vrf 10.79.156.246
+!
+!
+!
+!
+end

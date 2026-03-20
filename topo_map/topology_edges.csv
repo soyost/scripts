@@ -1,0 +1,7 @@
+local_host,local_port,remote_host,remote_port,source,status_color
+SWWABELZAUD01,TenGigabitEthernet1/1/1,NXWASEADX01,Ethernet1/20,lldp,#ffbf00
+SWWABELZAUD01,TenGigabitEthernet1/1/8,NXWASEADX02,Ethernet1/20,lldp,#ffbf00
+SWWABELZAUD01,GigabitEthernet1/0/19,BACH_MINUET,000e.9806.5b02,lldp,#ffbf00
+SWWABELZAUD01,GigabitEthernet1/0/21,BACH_MINUET,000e.9806.5b04,lldp,#ffbf00
+SWWABELZAUD01,GigabitEthernet1/0/20,BACH_MINUET,000e.9806.5a86,lldp,#ffbf00
+SWWABELZAUD01,GigabitEthernet1/0/22,BACH_MINUET,000e.9806.5a94,lldp,#ffbf00

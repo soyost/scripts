@@ -1,0 +1,4 @@
+host_a,host_b,link_count,source,status_color,links_label
+BACH_MINUET,SWWABELZAUD01,4,lldp,#ffbf00,Gi1/0/20 ↔ 000e.9806.5a86 | Gi1/0/22 ↔ 000e.9806.5a94 | Gi1/0/19 ↔ 000e.9806.5b02 | Gi1/0/21 ↔ 000e.9806.5b04
+NXWASEADX01,SWWABELZAUD01,1,lldp,#ffbf00,Te1/1/1 ↔ Eth1/20
+NXWASEADX02,SWWABELZAUD01,1,lldp,#ffbf00,Te1/1/8 ↔ Eth1/20

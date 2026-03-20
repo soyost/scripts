@@ -1,0 +1,323 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Topology (offline)</title>
+<style>
+  body {
+    margin: 0;
+    font-family: Segoe UI, Arial, sans-serif;
+    background: #0b0f14;
+    color: #e6edf3;
+  }
+  header {
+    padding: 10px 14px;
+    background: #111827;
+    border-bottom: 1px solid #1f2937;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  button {
+    background: #1f2937;
+    color: #e6edf3;
+    border: 1px solid #374151;
+    border-radius: 8px;
+    padding: 7px 10px;
+    cursor: pointer;
+    font-size: 12px;
+  }
+  button:hover {
+    background: #273549;
+  }
+  .hint {
+    margin-left: auto;
+    font-size: 12px;
+    opacity: 0.8;
+  }
+  #wrap {
+    height: calc(100vh - 52px);
+  }
+  canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+</style>
+</head>
+<body>
+<header>
+  <div style="font-weight:600;">Topology (offline)</div>
+  <button id="reset">Reset view</button>
+  <div class="hint">Scroll to zoom • Drag background to pan • Drag nodes to move</div>
+</header>
+
+<div id="wrap"><canvas id="c"></canvas></div>
+
+<script type="text/javascript">
+(function() {
+
+  // Embedded data (no network calls)
+  var DATA = {"title": "Topology (offline)", "nodes": [{"id": "BACH_MINUET", "endpoint": false}, {"id": "NXWASEADX01", "endpoint": false}, {"id": "NXWASEADX02", "endpoint": false}, {"id": "SWWABELZAUD01", "endpoint": false}], "links": [{"source": 0, "target": 3, "label": "Gi1/0/20 \u2194 000e.9806.5a86 | Gi1/0/22 \u2194 000e.9806.5a94 | Gi1/0/19 \u2194 000e.9806.5b02 | Gi1/0/21 \u2194 000e.9806.5b04", "color": "#ffbf00"}, {"source": 1, "target": 3, "label": "Te1/1/1 \u2194 Eth1/20", "color": "#ffbf00"}, {"source": 2, "target": 3, "label": "Te1/1/8 \u2194 Eth1/20", "color": "#ffbf00"}]};
+
+  var canvas = document.getElementById("c");
+  var ctx = canvas.getContext("2d");
+
+  function resize() {
+    var r = canvas.getBoundingClientRect();
+    var dpr = window.devicePixelRatio || 1;
+    canvas.width = Math.floor(r.width * dpr);
+    canvas.height = Math.floor(r.height * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  window.addEventListener("resize", resize);
+  resize();
+
+  // View transform
+  var panX = 0, panY = 0, scale = 1;
+
+  function worldToScreen(x, y) {
+    return [x * scale + panX, y * scale + panY];
+  }
+
+  function screenToWorld(x, y) {
+    return [(x - panX) / scale, (y - panY) / scale];
+  }
+
+  function resetView() {
+    // center view
+    var r = canvas.getBoundingClientRect();
+    panX = r.width / 2;
+    panY = r.height / 2;
+    scale = 1;
+  }
+
+  document.getElementById("reset").onclick = function() {
+    resetView();
+  };
+
+  resetView();
+
+  // Build nodes (ES5, no spread)
+  var nodes = [];
+  var i;
+  for (i = 0; i < DATA.nodes.length; i++) {
+    var dn = DATA.nodes[i];
+    nodes.push({
+      id: dn.id,
+      endpoint: !!dn.endpoint,
+      x: (Math.random() * 2 - 1) * 220,
+      y: (Math.random() * 2 - 1) * 140,
+      vx: 0,
+      vy: 0,
+      fx: null,
+      fy: null
+    });
+  }
+
+  // Build links
+  var links = [];
+  for (i = 0; i < DATA.links.length; i++) {
+    var dl = DATA.links[i];
+    links.push({
+      source: nodes[dl.source],
+      target: nodes[dl.target],
+      label: dl.label,
+      color: dl.color
+    });
+  }
+
+  // Interaction
+  var dragNode = null;
+  var dragPan = false;
+  var lastX = 0, lastY = 0;
+
+  function hitTestNode(wx, wy) {
+    // iterate backwards so topmost-ish nodes win
+    for (var k = nodes.length - 1; k >= 0; k--) {
+      var n = nodes[k];
+      var r = n.endpoint ? 16 : 22;
+      var dx = wx - n.x;
+      var dy = wy - n.y;
+      if ((dx * dx + dy * dy) <= (r * r)) {
+        return n;
+      }
+    }
+    return null;
+  }
+
+  canvas.addEventListener("mousedown", function(e) {
+    var pt = screenToWorld(e.offsetX, e.offsetY);
+    var wx = pt[0], wy = pt[1];
+    var n = hitTestNode(wx, wy);
+    if (n) {
+      dragNode = n;
+      n.fx = n.x;
+      n.fy = n.y;
+    } else {
+      dragPan = true;
+    }
+    lastX = e.offsetX;
+    lastY = e.offsetY;
+  });
+
+  canvas.addEventListener("mousemove", function(e) {
+    if (dragNode) {
+      var pt = screenToWorld(e.offsetX, e.offsetY);
+      dragNode.fx = pt[0];
+      dragNode.fy = pt[1];
+    } else if (dragPan) {
+      panX += (e.offsetX - lastX);
+      panY += (e.offsetY - lastY);
+      lastX = e.offsetX;
+      lastY = e.offsetY;
+    }
+  });
+
+  window.addEventListener("mouseup", function() {
+    if (dragNode) {
+      dragNode.fx = null;
+      dragNode.fy = null;
+    }
+    dragNode = null;
+    dragPan = false;
+  });
+
+  canvas.addEventListener("wheel", function(e) {
+    e.preventDefault();
+    var zoom = Math.exp(-e.deltaY * 0.001);
+    var mx = e.offsetX, my = e.offsetY;
+
+    var pt = screenToWorld(mx, my);
+    var wx = pt[0], wy = pt[1];
+
+    scale *= zoom;
+
+    var sp = worldToScreen(wx, wy);
+    panX += mx - sp[0];
+    panY += my - sp[1];
+  }, { passive: false });
+
+  // Force simulation
+  function step() {
+    var charge = -1600;
+    var linkDist = 150;
+    var linkStrength = 0.018;
+
+    // repulsion (O(n^2))
+    for (var a = 0; a < nodes.length; a++) {
+      for (var b = a + 1; b < nodes.length; b++) {
+        var na = nodes[a], nb = nodes[b];
+        var dx = na.x - nb.x;
+        var dy = na.y - nb.y;
+        var d2 = dx * dx + dy * dy + 0.01;
+        var f = charge / d2;
+        var invd = 1 / Math.sqrt(d2);
+        dx *= invd;
+        dy *= invd;
+        na.vx += dx * f;
+        na.vy += dy * f;
+        nb.vx -= dx * f;
+        nb.vy -= dy * f;
+      }
+    }
+
+    // springs
+    for (var li = 0; li < links.length; li++) {
+      var l = links[li];
+      var s = l.source;
+      var t = l.target;
+      var dx2 = t.x - s.x;
+      var dy2 = t.y - s.y;
+      var d = Math.sqrt(dx2 * dx2 + dy2 * dy2) + 1e-6;
+      var diff = d - linkDist;
+      var f2 = linkStrength * diff;
+      dx2 /= d;
+      dy2 /= d;
+      s.vx += dx2 * f2;
+      s.vy += dy2 * f2;
+      t.vx -= dx2 * f2;
+      t.vy -= dy2 * f2;
+    }
+
+    // integrate
+    var damping = 0.85;
+    for (var ni = 0; ni < nodes.length; ni++) {
+      var n = nodes[ni];
+
+      if (n.fx !== null && n.fy !== null) {
+        n.x = n.fx;
+        n.y = n.fy;
+        n.vx = 0;
+        n.vy = 0;
+        continue;
+      }
+
+      n.vx *= damping;
+      n.vy *= damping;
+
+      n.x += n.vx * 0.01;
+      n.y += n.vy * 0.01;
+    }
+  }
+
+  function draw() {
+    var r = canvas.getBoundingClientRect();
+    ctx.clearRect(0, 0, r.width, r.height);
+
+    // links
+    for (var li = 0; li < links.length; li++) {
+      var l = links[li];
+      var p1 = worldToScreen(l.source.x, l.source.y);
+      var p2 = worldToScreen(l.target.x, l.target.y);
+
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = l.color || "#9da0a2";
+      ctx.beginPath();
+      ctx.moveTo(p1[0], p1[1]);
+      ctx.lineTo(p2[0], p2[1]);
+      ctx.stroke();
+
+      // label
+      var mx = (p1[0] + p2[0]) / 2;
+      var my = (p1[1] + p2[1]) / 2;
+      ctx.fillStyle = "rgba(0,0,0,0.6)";
+      ctx.font = "11px Consolas, monospace";
+      ctx.fillText(l.label, mx + 6, my - 6);
+    }
+
+    // nodes
+    for (var ni = 0; ni < nodes.length; ni++) {
+      var n = nodes[ni];
+      var p = worldToScreen(n.x, n.y);
+      var rr = n.endpoint ? 16 : 22;
+
+      ctx.beginPath();
+      ctx.fillStyle = n.endpoint ? "#fff5cc" : "#f6f8fa";
+      ctx.strokeStyle = "#111827";
+      ctx.lineWidth = 2;
+      ctx.arc(p[0], p[1], rr, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.fillStyle = "#111827";
+      ctx.font = "12px Segoe UI, Arial, sans-serif";
+      ctx.textAlign = "center";
+      ctx.fillText(n.id, p[0], p[1] + rr + 14);
+    }
+  }
+
+  function tick() {
+    step();
+    draw();
+    window.requestAnimationFrame(tick);
+  }
+
+  tick();
+
+})();
+</script>
+</body>
+</html>

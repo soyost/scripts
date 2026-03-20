@@ -1,0 +1,16 @@
+graph topology {
+  graph [fontname="Segoe UI", fontsize=10, overlap=false, splines=polyline, rankdir=LR, concentrate=true, nodesep=0.7, ranksep=1.1, pad=0.2];
+  node  [shape=box, style="rounded,filled", fontname="Segoe UI", fillcolor="#f6f8fa"];
+  edge  [fontname="Consolas", fontsize=9, color="#9da0a2"];
+  label="Topology\ngreen: both connected | amber: mixed | orange: missing/unknown | red: err-disabled";
+  labelloc="t";
+  fontsize=12;
+  "BACH_MINUET";
+  "NXWASEADX01";
+  "NXWASEADX02";
+  "SWWABELZAUD01";
+  { rank=same; "BACH_MINUET" "NXWASEADX01" "NXWASEADX02" "SWWABELZAUD01" }
+  "BACH_MINUET" -- "SWWABELZAUD01" [label="Gi1/0/20 ↔ 000e.9806.5a86\nGi1/0/22 ↔ 000e.9806.5a94\nGi1/0/19 ↔ 000e.9806.5b02\nGi1/0/21 ↔ 000e.9806.5b04", color="#ffbf00"];
+  "NXWASEADX01" -- "SWWABELZAUD01" [label="Te1/1/1 ↔ Eth1/20", color="#ffbf00"];
+  "NXWASEADX02" -- "SWWABELZAUD01" [label="Te1/1/8 ↔ Eth1/20", color="#ffbf00"];
+}

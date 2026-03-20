@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Topology</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Segoe UI, system-ui, -apple-system, sans-serif;
+      background: #0b0f14;
+      color: #e6edf3;
+    }
+    header {
+      padding: 12px 16px;
+      background: #111827;
+      border-bottom: 1px solid #1f2937;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    header h1 {
+      font-size: 14px;
+      margin: 0;
+      font-weight: 600;
+      opacity: 0.95;
+    }
+    header button {
+      background: #1f2937;
+      color: #e6edf3;
+      border: 1px solid #374151;
+      border-radius: 8px;
+      padding: 8px 10px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+    header button:hover {
+      background: #273549;
+    }
+    #wrap {
+      padding: 12px;
+    }
+    #graph {
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 12px;
+      overflow: auto;
+      max-height: calc(100vh - 70px);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Topology</h1>
+    <button id="btnSvg">Download SVG</button>
+    <button id="btnDot">Download DOT</button>
+  </header>
+
+  <div id="wrap">
+    <div id="graph">Rendering…</div>
+  </div>
+
+  <script type="module">
+    import Viz from "https://cdn.jsdelivr.net/npm/viz.js@2.1.2/dist/viz.es.js";
+    import { Module, render } from "https://cdn.jsdelivr.net/npm/viz.js@2.1.2/dist/full.render.js";
+
+    const dot = `graph topology {
+  graph [fontname="Segoe UI", fontsize=10, overlap=false, splines=polyline, rankdir=LR, concentrate=true, nodesep=0.7, ranksep=1.1, pad=0.2];
+  node  [shape=box, style="rounded,filled", fontname="Segoe UI", fillcolor="#f6f8fa"];
+  edge  [fontname="Consolas", fontsize=9, color="#9da0a2"];
+  label="Topology\\ngreen: both connected | amber: mixed | orange: missing/unknown | red: err-disabled";
+  labelloc="t";
+  fontsize=12;
+  "BACH_MINUET";
+  "NXWASEADX01";
+  "NXWASEADX02";
+  "SWWABELZAUD01";
+  { rank=same; "BACH_MINUET" "NXWASEADX01" "NXWASEADX02" "SWWABELZAUD01" }
+  "BACH_MINUET" -- "SWWABELZAUD01" [label="Gi1/0/20 ↔ 000e.9806.5a86\\nGi1/0/22 ↔ 000e.9806.5a94\\nGi1/0/19 ↔ 000e.9806.5b02\\nGi1/0/21 ↔ 000e.9806.5b04", color="#ffbf00"];
+  "NXWASEADX01" -- "SWWABELZAUD01" [label="Te1/1/1 ↔ Eth1/20", color="#ffbf00"];
+  "NXWASEADX02" -- "SWWABELZAUD01" [label="Te1/1/8 ↔ Eth1/20", color="#ffbf00"];
+}`;
+
+    const viz = new Viz({ Module, render });
+    const graphDiv = document.getElementById("graph");
+
+    function download(filename, content, mime) {
+      const blob = new Blob([content], { type: mime });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    async function main() {
+      try {
+        const svg = await viz.renderString(dot, { format: "svg", engine: "dot" });
+        graphDiv.innerHTML = svg;
+
+        document.getElementById("btnSvg").onclick = () =>
+          download("topology.svg", svg, "image/svg+xml");
+        document.getElementById("btnDot").onclick = () =>
+          download("topology.dot", dot, "text/vnd.graphviz");
+      } catch (e) {
+        graphDiv.innerHTML =
+          "<pre style='white-space:pre-wrap'>" + (e?.stack || e) + "</pre>";
+      }
+    }
+
+    main();
+  </script>
+</body>
+</html>

@@ -1,0 +1,120 @@
+Local Intf: Te1/1/1
+Chassis id: 502f.a85c.4325
+Port id: Ethernet1/20
+Port Description: SWWABELZAUD01-Te1/1/1 - Po42-SEA-UPLINK(-3.59)
+System Name: NXWASEADX01
+
+System Description: 
+Cisco Nexus Operating System (NX-OS) Software 9.3(11)
+TAC support: http://www.cisco.com/tac
+Copyright (c) 2002-2023, Cisco Systems, Inc. All rights reserved.
+
+Time remaining: 93 seconds
+System Capabilities: B,R
+Enabled Capabilities: B,R
+Management Addresses:
+    IP: 10.79.126.16
+    Other: 50 2F FF 5C 43 25 00
+Auto Negotiation - not supported
+Physical media capabilities - not advertised
+Media Attachment Unit type - not advertised
+Vlan ID: 998
+
+------------------------------------------------
+Local Intf: Te1/1/8
+Chassis id: 502f.a85c.0e05
+Port id: Ethernet1/20
+Port Description: SWWABELZAUD01-Te1/1/8 - Po42-SEA-UPLINK (-4.62)
+System Name: NXWASEADX02
+
+System Description: 
+Cisco Nexus Operating System (NX-OS) Software 9.3(11)
+TAC support: http://www.cisco.com/tac
+Copyright (c) 2002-2023, Cisco Systems, Inc. All rights reserved.
+
+Time remaining: 104 seconds
+System Capabilities: B,R
+Enabled Capabilities: B,R
+Management Addresses:
+    IP: 10.79.126.17
+    Other: 50 2F FF 5C 0E 05 00
+Auto Negotiation - not supported
+Physical media capabilities - not advertised
+Media Attachment Unit type - not advertised
+Vlan ID: 998
+
+------------------------------------------------
+Local Intf: Gi1/0/19
+Chassis id: 000e.9806.5b02
+Port id: 000e.9806.5b02
+Port Description: Interface eth0
+System Name: BACH_MINUET
+
+System Description: 
+BACH_MINUET Board model. Fw version: v.2.3.5-b100-UN-ENCRYPTED
+
+Time remaining: 86 seconds
+System Capabilities - not advertised
+Enabled Capabilities - not advertised
+Management Addresses - not advertised
+Auto Negotiation - not supported
+Physical media capabilities - not advertised
+Media Attachment Unit type - not advertised
+Vlan ID: - not advertised
+
+------------------------------------------------
+Local Intf: Gi1/0/21
+Chassis id: 000e.9806.5b04
+Port id: 000e.9806.5b04
+Port Description: Interface eth0
+System Name: BACH_MINUET
+
+System Description: 
+BACH_MINUET Board model. Fw version: v.2.3.5-b100-UN-ENCRYPTED
+
+Time remaining: 75 seconds
+System Capabilities - not advertised
+Enabled Capabilities - not advertised
+Management Addresses - not advertised
+Auto Negotiation - not supported
+Physical media capabilities - not advertised
+Media Attachment Unit type - not advertised
+Vlan ID: - not advertised
+
+------------------------------------------------
+Local Intf: Gi1/0/20
+Chassis id: 000e.9806.5a86
+Port id: 000e.9806.5a86
+Port Description: Interface eth0
+System Name: BACH_MINUET
+
+System Description: 
+BACH_MINUET Board model. Fw version: v.2.3.5-b100-UN-ENCRYPTED
+
+Time remaining: 77 seconds
+System Capabilities - not advertised
+Enabled Capabilities - not advertised
+Management Addresses - not advertised
+Auto Negotiation - not supported
+Physical media capabilities - not advertised
+Media Attachment Unit type - not advertised
+Vlan ID: - not advertised
+
+------------------------------------------------
+Local Intf: Gi1/0/22
+Chassis id: 000e.9806.5a94
+Port id: 000e.9806.5a94
+Port Description: Interface eth0
+System Name: BACH_MINUET
+
+System Description: 
+BACH_MINUET Board model. Fw version: v.2.3.5-b100-UN-ENCRYPTED
+
+Time remaining: 81 seconds
+System Capabilities - not advertised
+Enabled Capabilities - not advertised
+Management Addresses - not advertised
+Auto Negotiation - not supported
+Physical media capabilities - not advertised
+Media Attachment Unit type - not advertised
+Vlan ID: - not advertised

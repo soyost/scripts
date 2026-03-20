@@ -1,86 +1,223 @@
-show fex
-    # Lists all FEX units connected to the Nexus switch
-    # DevOps analogy: ls /sys/class/net (list network devices)
+# -------------------------------
+# INTERFACES (PHYSICAL & LOGICAL)
+# -------------------------------
 
-show fex <fex number> detail
-    # Shows detailed info about a specific FEX (model, serial, uplinks, state)
-    # DevOps analogy: cat /proc/net/bonding/bond0 (bond details)
-
-show interface ethernet <port, e.g., 103/1/46>
-    # Displays interface details: status, beacon state, errors, transceiver info
-    # DevOps analogy: ip link show eth0 OR ethtool eth0
-
-show mac address-table interface ethernet <port, e.g., 103/1/46>
-    # Confirms VLAN, MAC address learned on that interface
-    # DevOps analogy: arp -n OR bridge fdb show
-
-show vlan id <id>
-    # Shows VLAN name, status, and ports assigned to that VLAN
-    # DevOps analogy: bridge vlan show
-
-show ip arp vlan <id>
-    # Displays ARP table for the VLAN (may be empty if IP forwarding is disabled)
-    # DevOps analogy: ip neigh show
-
-show vpc
-    # Global list of all vPCs and their status
-    # DevOps analogy: cat /proc/net/bonding/* (bond summary)
-
-show vpc | include <port, e.g., Eth103/1/46>
-    # Filters vPC output for a specific interface
-    # DevOps analogy: grep eth0 /proc/net/bonding/bond0
-
-show logging last 20
-    # Shows the last 20 log messages
-    # DevOps analogy: tail -n 20 /var/log/syslog
-
+# Summary of all interfaces (status, speed, access VLAN)
+# NOTE: VLAN column is misleading for trunks
 show interface status
-    # Displays VLAN number, link status, and connected device info
-    # DevOps analogy: ip -s link OR ifconfig
 
+# Interface descriptions (what/where connected)
 show interfaces description
-    # Lists all interfaces with their descriptions (often used for identifying connected devices)
-    # DevOps analogy: Comments in /etc/network/interfaces
 
-####HEALTH CHECKS####
+# Detailed interface information (errors, counters, speed, duplex)
+# Think: ethtool + ip -s link
+show interface ethernet <value>
 
-show interface ethernet <port> transceiver details
-    # Shows TX/RX power, thresholds, and optic health
-    # DevOps analogy: ethtool eth0 (but with optical DOM info)
+# Interface error and packet counters
+show interface ethernet <value> counters
 
-show interface ethernet <port> counters
-    # Displays packet counters, errors, drops
-    # DevOps analogy: ip -s link OR ifconfig eth0
+# Optical / copper transceiver details (TX/RX power, vendor)
+show interface ethernet <value> transceiver details
 
-######BASIC CONFIG####
-configure terminal
-    # Enter global config mode
-    # DevOps analogy: sudo vim /etc/network/interfaces
+# Which interfaces belong to which port-channel?
+show port-channel summary
+show etherchannel summary   # Catalyst
 
-interface ethernet <port>
-    # Enter interface config mode
-    # DevOps analogy: Edit eth0 section in config file
+# Port-channel interface details
+show interface port-channel <value>
 
-shutdown
-    # Disable interface
-    # DevOps analogy: ip link set eth0 down
 
-no shutdown
-    # Enable interface
-    # DevOps analogy: ip link set eth0 up
+# -------------------------------
+# NEIGHBORS / DISCOVERY
+# -------------------------------
 
-description <text>
-    # Add description to interface
-    # DevOps analogy: Add comment in config file
+# List all LLDP-detected neighbors (vendor neutral)
+# Think: CDP but standards-based
+show lldp neighbors
 
-switchport access vlan <id>
-    # Assign VLAN to access port
-    # DevOps analogy: bridge vlan add dev eth0 vid <id>
+# LLDP details for a specific interface
+show lldp neighbors interface ethernet <value>
 
-show running-config
-    # Show active config
-    # DevOps analogy: cat /etc/network/interfaces
 
-copy running-config startup-config
-    # Save config to persistent storage
-    # DevOps analogy: systemctl daemon-reload OR git commit
+# -------------------------------
+# LAYER 2 / MAC ADDRESSING
+# -------------------------------
+
+# Display MAC address table (learned devices)
+# NOTE: STATIC often means authenticated (MAB/802.1X), not manually configured
+show mac address-table
+
+# MAC addresses learned on a specific interface
+show mac address-table interface ethernet <value>
+
+# MAC addresses learned in a specific VLAN
+show mac address-table vlan <value>
+
+
+# -------------------------------
+# VLANS
+# -------------------------------
+
+# List VLANs, status, and member ports
+show vlan brief
+
+# Detailed VLAN information
+show vlan id <value>
+
+# Ports assigned to a VLAN
+show vlan id <value> port
+
+
+# -------------------------------
+# PORT-CHANNELS / LACP
+# -------------------------------
+
+# Port-channel summary (members, status)
+# (SU) = up, (P) = properly bundled
+show port-channel summary
+show etherchannel summary
+
+# Detailed port-channel information
+show port-channel <value>
+
+# LACP status for a specific interface
+show lacp interface ethernet <value>
+
+
+# -------------------------------
+# SPANNING TREE
+# -------------------------------
+
+# Spanning Tree status for all VLANs
+show spanning-tree
+
+# Spanning Tree details for a specific interface
+show spanning-tree interface ethernet <value> detail
+
+# Root bridge information
+show spanning-tree root
+
+
+# -------------------------------
+# LAYER 3 / IP
+# -------------------------------
+
+# IP interface status summary
+# Includes SVIs and mgmt interface
+show ip interface brief
+
+# Routing table (default VRF)
+# Think: ip route
+show ip route
+
+# ARP table
+show ip arp
+
+
+# -------------------------------
+# MANAGEMENT VRF (CATALYST)
+# -------------------------------
+
+# Management IP and interface state
+show ip interface brief vrf Mgmt-vrf
+
+# Management routing table (VERY IMPORTANT for TACACS/ISE)
+show ip route vrf Mgmt-vrf
+
+# Static routes (default gateway, etc.)
+show run | include ^ip route
+
+
+# -------------------------------
+# SYSTEM / HEALTH
+# -------------------------------
+
+# Software version and uptime
+# Think: uname -a + OS version
+show version
+
+# Hardware inventory (PSUs, fans, modules)
+show inventory
+
+# CPU and memory usage
+show system resources
+
+# Environmental status (fans, temps, power)
+show environment
+
+# Recent system logs
+show logging
+
+
+# -------------------------------
+# AUTHENTICATION / AAA (NEW)
+# -------------------------------
+
+# Show AAA configuration and authentication order
+# Order matters (TACACS first, local only if TACACS unavailable)
+show running-config | section aaa
+
+# TACACS / RADIUS server reachability
+# If servers are UP, local auth will NOT be used
+show aaa servers
+
+# Show all authenticated endpoints (MAB / 802.1X)
+show authentication sessions
+
+# Detailed authentication state for a specific port
+# This is the SOURCE OF TRUTH for MAB vs sticky-mac
+show authentication sessions interface ethernet <value> details
+
+# Force reauthentication on a port
+# Think: restarting a service / pod
+clear authentication sessions interface ethernet <value>
+
+
+# -------------------------------
+# PORT SECURITY (LEGACY / CLEANUP)
+# -------------------------------
+
+# Port-security status (should be DISABLED when using MAB)
+show port-security interface ethernet <value>
+
+# Clear lingering sticky MACs
+clear port-security sticky interface ethernet <value>
+
+
+# -------------------------------
+# TROUBLESHOOTING / OPERATIONS
+# -------------------------------
+
+# Last interface state change
+show interface ethernet <value> | include last
+
+# Clear interface counters (use cautiously)
+clear counters interface ethernet <value>
+
+# Verify enabled features (Nexus only)
+show feature
+
+
+# -------------------------------
+# CONFIG SHORTCUTS / NOTES
+# -------------------------------
+
+# Access port baseline
+switchport mode access
+switchport access vlan <value>
+spanning-tree portfast
+
+# MAB baseline (what replaces sticky-mac)
+authentication host-mode multi-auth
+authentication port-control auto
+mab
+
+# Trunk baseline
+switchport mode trunk
+switchport trunk native vlan <unused-vlan>
+switchport trunk allowed vlan <list>
+
+# Shortcut (FYI)
+# Access + portfast + bpduguard
+# Usually NOT used on MAB/ISE ports
+switchport host
