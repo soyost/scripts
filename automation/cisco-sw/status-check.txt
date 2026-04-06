@@ -1,0 +1,53 @@
+###############
+Button configuration for SecureCRT for consistant and repeatable current state check for given OS
+###############
+###Catalyst
+!
+terminal length 0\r
+\w300
+sh clock\r
+sh version\r
+\w
+\r
+\r
+show lldp neighbors\r
+sh interface status | exclude disabled|xcvrAbsen\r
+sh interface trunk\r
+sh vlan brief\r
+sh spanning-tree root\r
+sh spanning-tree summary\r
+sh etherchannel summary\r
+sh mac address-table count\r
+sh vrf\r
+sh hsrp brief\r
+sh ip bgp summary\r
+sh ip route vrf PROD\r
+sh ip route vrf OAM\r
+sh ip route vrf vPC-KeepAlive\r
+sh ip route vrf WEAKFE\r
+
+
+###Nexus
+!
+terminal length 0\r
+sh clock\r
+sh version\r
+\w
+\r
+sh lldp neighbors\r
+sh interface status | exclude disabled|xcvrAbsen\r
+\p
+sh interface trunk\r
+sh vlan brief\r
+sh spanning-tree root\r
+sh spanning-tree summary\r
+sh port-channel summary\r
+sh mac address-table count\r
+sh vrf\r
+sh hsrp brief\r
+sh vpc brief\r
+sh ip bgp summary\r
+sh ip route vrf PROD\r
+sh ip route vrf OAM\r
+sh ip route vrf vPC-KeepAlive\r
+sh ip route vrf WEAKFE\r
