@@ -1,0 +1,5 @@
+host,os,platform,version,uptime
+SWKSOPHF1B120A,cisco_xe,C9300-48P,17.03.04,2 years, 40 weeks, 5 days, 19 hours, 30 minutes
+SWKSOPHF1B120B,cisco_xe,C9300-48P,17.03.04,2 years, 40 weeks, 5 days, 19 hours, 30 minutes
+NXKSOPHEW191,cisco_nxos,Nexus9000 C93108TC-FX,10.5(4),19 day(s), 20 hour(s), 29 minute(s), 58 second(s)
+NXKSOPHEW181,cisco_nxos,Nexus9000 C93108TC-FX,10.5(4),19 day(s), 21 hour(s), 43 minute(s), 54 second(s)
