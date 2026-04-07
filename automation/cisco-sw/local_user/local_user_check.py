@@ -15,7 +15,7 @@ LOG_FILE = "user_check.log"
 
 DEVICE_TYPE = "cisco_ios"   # Change if needed
 TARGET_USER = "steven"
-
+RESULTS_FILE = "results.txt"
 
 def setup_logging():
     logging.basicConfig(
@@ -27,6 +27,10 @@ def setup_logging():
         ]
     )
 
+
+def write_result(line):
+    with open(RESULTS_FILE, "a") as f:
+        f.write(line + "\n")
 
 def load_inventory(filename):
     path = Path(filename)
@@ -61,15 +65,18 @@ def check_user(conn, host):
     ]
 
     if matches:
-        logging.info(f"{host}: user '{TARGET_USER}' EXISTS")
-        for line in matches:
-            logging.info(f"{host}:   {line}")
+        result = f"{host},EXISTS"
+        logging.info(f"{host}: user '{TARGET_USER}' PRESENT")
     else:
-        logging.info(f"{host}: user '{TARGET_USER}' NOT found")
+        result = f"{host},NOT_FOUND"
+        logging.info(f"{host}: user '{TARGET_USER}' MISSING")
+
+    write_result(result)
 
 
 def main():
     setup_logging()
+    open(RESULTS_FILE, "w").close()
 
     try:
         devices = load_inventory(INVENTORY_FILE)
