@@ -1,3 +1,4 @@
+!! EXAMPLE OUTPUT
 host,os,chassis,version,uptime,free_space
 SWKSOPHF1B120A,cisco_xe,C9300-48P,17.03.04,"2 years, 40 weeks, 5 days, 19 hours, 45 minutes",7.55 GiB
 SWKSOPHF1B120B,cisco_xe,C9300-48P,17.03.04,"2 years, 40 weeks, 5 days, 19 hours, 45 minutes",7.55 GiB
