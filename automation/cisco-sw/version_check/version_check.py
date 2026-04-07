@@ -12,7 +12,6 @@ from netmiko.exceptions import (
 INVENTORY_FILE = "inventory.txt"
 RESULTS_FILE = "versions.csv"
 
-# Try Nexus first, then IOS-XE / IOS
 DEVICE_TYPES = ["cisco_nxos", "cisco_xe", "cisco_ios"]
 
 
@@ -52,7 +51,6 @@ def parse_version(output, device_type):
         ):
             data["version"] = match.group(1)
 
-        # ✅ Chassis parsed directly from show version
         if match := re.search(
             r"cisco\s+(Nexus\d+\s+\S+)\s+chassis",
             output,
@@ -112,7 +110,6 @@ def main():
                 version_output = conn.send_command("show version")
                 data = parse_version(version_output, device_type)
 
-                # If we successfully parsed a version, it's the right OS
                 if data["version"] != "UNKNOWN":
                     free_space = parse_free_space(conn)
 
@@ -132,7 +129,6 @@ def main():
                 conn.disconnect()
 
             except (NetmikoTimeoutException, NetmikoAuthenticationException):
-                # Try next device_type
                 continue
             except Exception as e:
                 print(f"{host}: ERROR - {e}")
