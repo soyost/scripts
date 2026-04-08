@@ -3,18 +3,22 @@
 set -euo pipefail
 
 WARN_DAYS=10
+HOST_FILE="${1:-hosts.txt}"
 
-HOSTS=(
-  "isksophex01.studios.t-mobile.net:443"
-  "faksophex01.studios.t-mobile.net:443"
-  "faksophex02.studios.t-mobile.net:443"
-  "google.com:443"
-)
+if [[ ! -f "$HOST_FILE" ]]; then
+  echo "Host file not found: $HOST_FILE" >&2
+  exit 1
+fi
 
 printf "%-40s %-12s %-8s %-25s %-30s %-25s\n" \
   "HOST:PORT" "STATUS" "DAYS" "EXPIRES" "ISSUER" "VERIFY"
 
-for entry in "${HOSTS[@]}"; do
+while IFS= read -r entry || [[ -n "$entry" ]]; do
+  entry="${entry%$'\r'}"
+  
+  [[ -z "$entry" ]] && continue
+  [[ "$entry" =~ ^[[:space:]]*# ]] && continue
+
   HOST="${entry%%:*}"
   PORT="${entry##*:}"
 
@@ -42,7 +46,9 @@ for entry in "${HOSTS[@]}"; do
     STATUS="WARN"
   fi
 
-  if [[ "$SUBJECT" == "$ISSUER" ]]; then
+  if printf '%s' "$ISSUER" | grep -qi 'zscaler'; then
+    STATUS="INSPECTED"
+  elif [[ "$SUBJECT" == "$ISSUER" ]]; then
     STATUS="SELF-SIGNED"
   elif [[ "${VERIFY:-}" != "0 (ok)" && "$STATUS" == "OK" ]]; then
     STATUS="VERIFY-FAIL"
@@ -53,4 +59,5 @@ for entry in "${HOSTS[@]}"; do
 
   printf "%-40s %-12s %-8s %-25.25s %-30.30s %-25.25s\n" \
     "$HOST:$PORT" "$STATUS" "$DAYS_LEFT" "$ENDDATE" "$SHORT_ISSUER" "${VERIFY:-unknown}"
-done
+
+done < "$HOST_FILE"
