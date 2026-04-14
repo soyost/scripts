@@ -29,13 +29,13 @@ def parse_version(output, device_type):
     data = {
         "os": device_type,
         "platform": "UNKNOWN",
-        "version": "UNKNOWN",
+        "current_os": "UNKNOWN",
         "uptime": "UNKNOWN",
     }
 
     if device_type in ("cisco_ios", "cisco_xe"):
         if match := re.search(r"Version\s+([\w\.\(\)]+)", output):
-            data["version"] = match.group(1)
+            data["current_os"] = match.group(1)
 
         if match := re.search(r"Model Number\s+:\s+(\S+)", output):
             data["platform"] = match.group(1)
@@ -49,7 +49,7 @@ def parse_version(output, device_type):
             output,
             re.IGNORECASE,
         ):
-            data["version"] = match.group(1)
+            data["current_os"] = match.group(1)
 
         if match := re.search(
             r"cisco\s+(Nexus\d+\s+\S+)\s+chassis",
@@ -66,17 +66,30 @@ def parse_version(output, device_type):
     return data
 
 
-def parse_free_space(conn):
-    """Run 'dir' and extract free bytes"""
+def parse_dir_info(conn):
+    """Run 'dir' and extract free space + all staged SPA.bin versions"""
     dir_output = conn.send_command("dir")
-    if match := re.search(
-        r"(\d+)\s+bytes\s+free",
+
+    free_space = "UNKNOWN"
+    staged_versions = "NOT_FOUND"
+
+    # Free space
+    if match := re.search(r"(\d+)\s+bytes\s+free", dir_output, re.IGNORECASE):
+        bytes_free = int(match.group(1))
+        free_space = human_readable_bytes(bytes_free)
+
+    # Find all SPA.bin versions
+    matches = re.findall(
+        r"\.(\d+(?:\.\d+)+)\.SPA\.bin",
         dir_output,
         re.IGNORECASE,
-    ):
-        bytes_free = int(match.group(1))
-        return human_readable_bytes(bytes_free)
-    return "UNKNOWN"
+    )
+
+    if matches:
+        unique_versions = sorted(set(matches))
+        staged_versions = "|".join(unique_versions)
+
+    return free_space, staged_versions
 
 
 def main():
@@ -88,7 +101,7 @@ def main():
 
     # Write CSV header (overwrite file)
     Path(RESULTS_FILE).write_text(
-        "host,os,chassis,version,uptime,free_space\n",
+        "host,os,chassis,current_os,uptime,free_space,staged_versions\n",
         encoding="utf-8",
     )
 
@@ -110,20 +123,24 @@ def main():
                 version_output = conn.send_command("show version")
                 data = parse_version(version_output, device_type)
 
-                if data["version"] != "UNKNOWN":
-                    free_space = parse_free_space(conn)
+                if data["current_os"] != "UNKNOWN":
+                    free_space, staged_versions = parse_dir_info(conn)
 
                     with open(RESULTS_FILE, "a", encoding="utf-8") as f:
                         f.write(
                             f"{host},{device_type},"
                             f"{data['platform']},"
-                            f"{data['version']},"
+                            f"{data['current_os']},"
                             f"\"{data['uptime']}\","
-                            f"{free_space}\n"
+                            f"{free_space},"
+                            f"{staged_versions}\n"
                         )
 
                     conn.disconnect()
-                    print(f"{host}: detected as {device_type}")
+                    print(
+                        f"{host}: detected as {device_type}, "
+                        f"staged versions: {staged_versions}"
+                    )
                     break
 
                 conn.disconnect()
