@@ -1,11 +1,3 @@
 host,os,chassis,current_os,uptime,free_space,staged_versions
-SWWABELB6I01,cisco_xe,C9300-48P,17.03.04,"1 year, 20 weeks, 1 day, 23 hours, 54 minutes",7.96 GiB,17.15.04
-SWWABELB6X01,cisco_xe,C9300-48P,17.03.04,"1 year, 20 weeks, 1 day, 23 hours, 54 minutes",7.96 GiB,17.15.04
-SWWABELDTI01,cisco_xe,C9300-48P,17.03.04,"1 year, 27 weeks, 3 days, 6 hours, 44 minutes",7.96 GiB,17.15.04
-SWWABELDTM01,cisco_xe,C9300-48P,17.03.04,"2 years, 23 weeks, 1 day, 18 hours, 36 minutes",7.96 GiB,17.15.04
-SWWABELDTX01,cisco_xe,C9300-48P,17.03.04,"1 year, 25 weeks, 5 days, 8 hours, 34 minutes",7.96 GiB,17.15.04
-SWWABELE1I01,cisco_xe,C9300-48P,17.06.05,"1 year, 43 weeks, 5 days, 2 hours, 26 minutes",7.67 GiB,17.15.04
-SWWABELE1X01,cisco_xe,C9300-48P,17.06.05,"1 year, 43 weeks, 5 days, 2 hours, 25 minutes",7.67 GiB,17.15.04
-SWWABELZAUD01,cisco_xe,C9300-48P,17.06.05,"20 weeks, 2 hours, 50 minutes",7.67 GiB,17.15.04
-SWWABELZAUD02,cisco_xe,C9300-48P,17.06.05,"35 weeks, 4 days, 23 hours, 39 minutes",7.67 GiB,17.15.04
-SWWABELZVID01,cisco_xe,C9300-48P,17.06.05,"35 weeks, 3 days, 5 hours, 21 minutes",7.67 GiB,17.15.04
+SWITCHNAME01,cisco_xe,C9300-48P,17.03.04,"1 year, 20 weeks, 1 day, 23 hours, 54 minutes",7.96 GiB,17.15.04
+
