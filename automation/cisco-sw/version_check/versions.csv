@@ -1,3 +1,0 @@
-host,os,chassis,current_os,uptime,free_space,staged_versions
-SWITCHNAME01,cisco_xe,C9300-48P,17.03.04,"1 year, 20 weeks, 1 day, 23 hours, 54 minutes",7.96 GiB,17.15.04
-
