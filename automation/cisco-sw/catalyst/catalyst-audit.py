@@ -12,7 +12,7 @@ from netmiko.exceptions import (
 from paramiko.ssh_exception import SSHException
 
 INVENTORY_FILE = "inventory.txt"
-RESULTS_FILE = "versions.csv"
+RESULTS_FILE = "audit-results.csv"
 
 DEVICE_TYPES = ["cisco_xe", "cisco_ios", "cisco_nxos"]
 

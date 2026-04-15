@@ -1,4 +1,0 @@
-host,os,chassis,current_os,free_space,staged_versions
-SWKSOPHF1B120A,cisco_xe,C9300-48P,17.03.04,6.36 GiB,17.03.04|17.15.04
-SWKSOPHF1B120B,cisco_xe,C9300-48P,17.03.04,6.36 GiB,17.03.04|17.15.04
-SWKSOPHZAUD02,cisco_xe,C9300-48P,17.03.04,5.16 GiB,17.03.04|17.15.04
