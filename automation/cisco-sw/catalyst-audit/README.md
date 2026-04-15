@@ -1,4 +1,9 @@
-## USAGE
+## PURPOSE
+This script will connect to the listed hosts to collect data based on 3 variables.
+1. Uptime
+2. Storage including installed SPA.bin files
+3. Interfaces showing connected status with port and description
+### USAGE
 1. Poplulate inventory.txt with the target clients
 1. Run
 ```bash
