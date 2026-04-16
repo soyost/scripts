@@ -1,0 +1,3 @@
+host,status,timestamp,device_hostname,device_clock,proof,error
+NX93180L01,SUCCESS,2026-04-16T10:45:06,NX93180L01,10:45:11.838 CDT Thu Apr 16 2026 Time source is NTP,"Copy complete, now saving to disk (please wait)...",
+NX93180L02,SUCCESS,2026-04-16T10:45:22,NX93180L02,10:45:27.345 CDT Thu Apr 16 2026 Time source is NTP,"Copy complete, now saving to disk (please wait)...",

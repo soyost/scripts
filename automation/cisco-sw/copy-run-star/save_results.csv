@@ -1,5 +1,0 @@
-host,status,timestamp,device_hostname,device_clock,proof,error
-SWITCHGA,SUCCESS,2026-04-15T10:42:06,SWITCHGA,10:42:11.242 CDT Wed Apr 15 2026,Destination filename [startup-config]? | Building configuration... | [OK],
-SWITCHGB,SUCCESS,2026-04-15T10:42:22,SWITCHGB,10:42:26.804 CDT Wed Apr 15 2026,Destination filename [startup-config]? | Building configuration... | [OK],
-SWITCHTP02,TIMEOUT,2026-04-15T10:43:54,,,,TCP connection to device failed. Common causes of this problem are: 1. Incorrect hostname or IP address. 2. Wrong TCP port. 3. Intermediate firewall blocking access. Device settings: cisco_ios SWITCHTP02:22
-
