@@ -10,7 +10,7 @@ from netmiko import ConnectHandler
 from netmiko.exceptions import NetmikoTimeoutException, NetmikoAuthenticationException
 
 
-INVENTORY_FILE = "inventory-nxos.txt"
+INVENTORY_FILE = "nxos-inventory.txt"
 OUTPUT_FILE = "nxos_results.csv"
 DEVICE_TYPE = "cisco_nxos"
 
