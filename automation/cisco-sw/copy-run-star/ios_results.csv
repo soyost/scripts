@@ -1,0 +1,3 @@
+host,status,timestamp,device_hostname,device_clock,proof,error
+SW9300L01,SUCCESS,2026-04-16T10:47:56,SW9300L01,10:48:02.280 CDT Thu Apr 16 2026,Destination filename [startup-config]? | Building configuration... | [OK],
+SW9300L02,SUCCESS,2026-04-16T10:48:12,SW9300L02,10:48:17.753 CDT Thu Apr 16 2026,Destination filename [startup-config]? | Building configuration... | [OK],

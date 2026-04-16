@@ -1,5 +1,8 @@
 host,status,timestamp,device_hostname,device_clock,proof,error
+NX93180L01,SUCCESS,2026-04-16T10:10:10,NX93180L01,10:10:16.090 CDT Thu Apr 16 2026 Time source is NTP,[########################################] 100%,
+NX93180L02,SUCCESS,2026-04-16T10:10:23,NX93180L02,10:10:28.468 CDT Thu Apr 16 2026 Time source is NTP,[########################################] 100%,
+SW9300L01,SUCCESS,2026-04-16T09:58:17,SW9300L01,09:58:23.219 CDT Thu Apr 16 2026,Destination filename [startup-config]? | Building configuration... | [OK],
+SW9300L02,SUCCESS,2026-04-16T09:58:33,SW9300L02,09:58:38.801 CDT Thu Apr 16 2026,Destination filename [startup-config]? | Building configuration... | [OK],
 SWITCHGA,SUCCESS,2026-04-15T10:42:06,SWITCHGA,10:42:11.242 CDT Wed Apr 15 2026,Destination filename [startup-config]? | Building configuration... | [OK],
 SWITCHGB,SUCCESS,2026-04-15T10:42:22,SWITCHGB,10:42:26.804 CDT Wed Apr 15 2026,Destination filename [startup-config]? | Building configuration... | [OK],
 SWITCHTP02,TIMEOUT,2026-04-15T10:43:54,,,,TCP connection to device failed. Common causes of this problem are: 1. Incorrect hostname or IP address. 2. Wrong TCP port. 3. Intermediate firewall blocking access. Device settings: cisco_ios SWITCHTP02:22
-

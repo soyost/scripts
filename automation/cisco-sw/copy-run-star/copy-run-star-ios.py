@@ -10,8 +10,8 @@ from netmiko import ConnectHandler
 from netmiko.exceptions import NetmikoTimeoutException, NetmikoAuthenticationException
 
 
-INVENTORY_FILE = "inventory.txt"
-OUTPUT_FILE = "save_results.csv"
+INVENTORY_FILE = "ios-inventory.txt"
+OUTPUT_FILE = "ios_results.csv"
 DEVICE_TYPE = "cisco_ios"
 
 CSV_COLUMNS = [
@@ -104,6 +104,7 @@ def run_save_config(connection):
         strip_prompt=False,
         strip_command=False,
         cmd_verify=False,
+        delay_factor=2,
     )
     full_output += output1
 
