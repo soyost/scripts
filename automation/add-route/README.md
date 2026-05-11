@@ -1,5 +1,5 @@
 ## Usage
-1. Inventory.txt with the target endpoints
+Inventory.txt with the target endpoints
 
 ```bash
 python add-route<site>.py
