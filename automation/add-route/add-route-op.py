@@ -1,22 +1,25 @@
 from getpass import getpass
 import argparse
 import logging
+import re
 from netmiko import ConnectHandler
 
 
 INVENTORY_FILE = "inventory.txt"
 LOG_FILE = "mac_route_update.log"
 
+NEXT_HOP = "192.168.5.1"
+
 ROUTES = [
     {
         "dest_net": "10.79.172.0/24",
         "test_ip": "10.79.172.10",
-        "gateway": "192.168.5.1",
+        "gateway": NEXT_HOP,
     },
     {
         "dest_net": "10.79.69.0/24",
         "test_ip": "10.79.69.10",
-        "gateway": "192.168.5.1",
+        "gateway": NEXT_HOP,
     },
 ]
 
@@ -67,6 +70,24 @@ def run_sudo(conn, sudo_password, command):
     return output
 
 
+def detect_gateway_interface(conn, gateway):
+    cmd = f"route -n get {gateway}"
+
+    output = conn.send_command_timing(
+        cmd,
+        strip_prompt=False,
+        strip_command=False,
+        read_timeout=20,
+    )
+
+    match = re.search(r"interface:\s+(\S+)", output)
+
+    if not match:
+        raise RuntimeError(f"Could not detect interface for gateway {gateway}\n{output}")
+
+    return match.group(1), output
+
+
 def route_present(conn, route):
     cmd = f"route -n get {route['test_ip']}"
 
@@ -77,8 +98,9 @@ def route_present(conn, route):
         read_timeout=20,
     )
 
-    expected = f"gateway: {route['gateway']}"
-    return expected in output, output
+    expected_gateway = f"gateway: {route['gateway']}"
+    return expected_gateway in output, output
+
 
 def check_routes(conn, host):
     results = []
@@ -101,14 +123,27 @@ def check_routes(conn, host):
 
 
 def add_missing_routes(conn, host, sudo_password):
+    interface, iface_output = detect_gateway_interface(conn, NEXT_HOP)
+
+    msg = f"{host} gateway {NEXT_HOP} resolves through {interface}"
+    print(msg)
+    logging.info(f"{msg}\n{iface_output}")
+
     results = check_routes(conn, host)
 
     for route, present, _ in results:
         if present:
             continue
 
-        cmd = f"route -n add -net {route['dest_net']} {route['gateway']}"
-        msg = f"{host} ADDING {route['dest_net']} via {route['gateway']}"
+        cmd = (
+            f"/sbin/route -n add -net {route['dest_net']} "
+            f"{route['gateway']} -ifscope {interface} 2>&1"
+        )
+
+        msg = (
+            f"{host} ADDING {route['dest_net']} "
+            f"via {route['gateway']} scoped to {interface}"
+        )
         print(msg)
         logging.info(msg)
 
@@ -121,6 +156,14 @@ def add_missing_routes(conn, host, sudo_password):
 
 def install_persistence(conn, host, sudo_password):
     route_script = """#!/bin/bash
+
+GATEWAY="192.168.5.1"
+
+INTERFACE=$(/sbin/route -n get "$GATEWAY" 2>/dev/null | /usr/bin/awk '/interface:/ {print $2}')
+
+if [ -z "$INTERFACE" ]; then
+  exit 1
+fi
 
 ROUTES=(
 "10.79.172.0/24 10.79.172.10 192.168.5.1"
@@ -136,7 +179,7 @@ for item in "${ROUTES[@]}"; do
     continue
   fi
 
-  /sbin/route -n add -net "$DEST_NET" "$GATEWAY"
+  /sbin/route -n add -net "$DEST_NET" "$GATEWAY" -ifscope "$INTERFACE" 2>&1
 done
 
 exit 0
@@ -178,7 +221,6 @@ exit 0
     run_sudo(conn, sudo_password, f"chown root:wheel {REMOTE_PLIST}")
     run_sudo(conn, sudo_password, f"chmod 644 {REMOTE_PLIST}")
 
-    # If already loaded, bootout may error. That's okay.
     run_sudo(conn, sudo_password, f"launchctl bootout system {REMOTE_PLIST}")
     run_sudo(conn, sudo_password, f"launchctl bootstrap system {REMOTE_PLIST}")
     run_sudo(conn, sudo_password, f"launchctl kickstart -k system/{LAUNCHD_LABEL}")
@@ -216,6 +258,8 @@ def main():
             "auth_timeout": 15,
         }
 
+        conn = None
+
         try:
             conn = ConnectHandler(**device)
 
@@ -228,12 +272,14 @@ def main():
                 install_persistence(conn, host, sudo_password)
                 check_routes(conn, host)
 
-            conn.disconnect()
-
         except Exception as e:
             msg = f"{host} CONNECTION_FAILED {e}"
             print(msg)
             logging.exception(msg)
+
+        finally:
+            if conn:
+                conn.disconnect()
 
 
 if __name__ == "__main__":
