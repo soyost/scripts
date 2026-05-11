@@ -46,6 +46,7 @@ def run_sudo(conn, sudo_password, command):
         f"sudo -S {command}",
         strip_prompt=False,
         strip_command=False,
+        read_timeout=20,
     )
 
     if "password" in output.lower():
@@ -53,18 +54,31 @@ def run_sudo(conn, sudo_password, command):
             sudo_password,
             strip_prompt=False,
             strip_command=False,
+            read_timeout=20,
         )
+
+    output += conn.send_command_timing(
+        "",
+        strip_prompt=False,
+        strip_command=False,
+        read_timeout=5,
+    )
 
     return output
 
 
 def route_present(conn, route):
     cmd = f"route -n get {route['test_ip']}"
-    output = conn.send_command(cmd)
+
+    output = conn.send_command_timing(
+        cmd,
+        strip_prompt=False,
+        strip_command=False,
+        read_timeout=20,
+    )
 
     expected = f"gateway: {route['gateway']}"
     return expected in output, output
-
 
 def check_routes(conn, host):
     results = []
