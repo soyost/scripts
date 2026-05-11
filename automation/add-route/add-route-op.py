@@ -1,25 +1,22 @@
 from getpass import getpass
 import argparse
 import logging
-import re
 from netmiko import ConnectHandler
 
 
 INVENTORY_FILE = "inventory.txt"
 LOG_FILE = "mac_route_update.log"
 
-NEXT_HOP = "192.168.5.1"
-
 ROUTES = [
     {
         "dest_net": "10.79.172.0/24",
         "test_ip": "10.79.172.10",
-        "gateway": NEXT_HOP,
+        "gateway": "192.168.5.1",
     },
     {
         "dest_net": "10.79.69.0/24",
         "test_ip": "10.79.69.10",
-        "gateway": NEXT_HOP,
+        "gateway": "192.168.5.1",
     },
 ]
 
@@ -44,62 +41,31 @@ def load_inventory(file_path):
         ]
 
 
-def run_sudo(conn, sudo_password, command):
-    output = conn.send_command_timing(
-        f"sudo -S {command}",
+def send_timing(conn, command, read_timeout=20):
+    return conn.send_command_timing(
+        command,
         strip_prompt=False,
         strip_command=False,
-        read_timeout=20,
+        read_timeout=read_timeout,
     )
+
+
+def run_sudo(conn, sudo_password, command):
+    output = send_timing(conn, f"sudo -S {command}", read_timeout=20)
 
     if "password" in output.lower():
-        output += conn.send_command_timing(
-            sudo_password,
-            strip_prompt=False,
-            strip_command=False,
-            read_timeout=20,
-        )
+        output += send_timing(conn, sudo_password, read_timeout=20)
 
-    output += conn.send_command_timing(
-        "",
-        strip_prompt=False,
-        strip_command=False,
-        read_timeout=5,
-    )
-
+    output += send_timing(conn, "", read_timeout=5)
     return output
-
-
-def detect_gateway_interface(conn, gateway):
-    cmd = f"route -n get {gateway}"
-
-    output = conn.send_command_timing(
-        cmd,
-        strip_prompt=False,
-        strip_command=False,
-        read_timeout=20,
-    )
-
-    match = re.search(r"interface:\s+(\S+)", output)
-
-    if not match:
-        raise RuntimeError(f"Could not detect interface for gateway {gateway}\n{output}")
-
-    return match.group(1), output
 
 
 def route_present(conn, route):
     cmd = f"route -n get {route['test_ip']}"
+    output = send_timing(conn, cmd, read_timeout=20)
 
-    output = conn.send_command_timing(
-        cmd,
-        strip_prompt=False,
-        strip_command=False,
-        read_timeout=20,
-    )
-
-    expected_gateway = f"gateway: {route['gateway']}"
-    return expected_gateway in output, output
+    expected = f"gateway: {route['gateway']}"
+    return expected in output, output
 
 
 def check_routes(conn, host):
@@ -123,27 +89,15 @@ def check_routes(conn, host):
 
 
 def add_missing_routes(conn, host, sudo_password):
-    interface, iface_output = detect_gateway_interface(conn, NEXT_HOP)
-
-    msg = f"{host} gateway {NEXT_HOP} resolves through {interface}"
-    print(msg)
-    logging.info(f"{msg}\n{iface_output}")
-
     results = check_routes(conn, host)
 
     for route, present, _ in results:
         if present:
             continue
 
-        cmd = (
-            f"/sbin/route -n add -net {route['dest_net']} "
-            f"{route['gateway']} -ifscope {interface} 2>&1"
-        )
+        cmd = f"/sbin/route -n add -net {route['dest_net']} {route['gateway']} 2>&1"
 
-        msg = (
-            f"{host} ADDING {route['dest_net']} "
-            f"via {route['gateway']} scoped to {interface}"
-        )
+        msg = f"{host} ADDING {route['dest_net']} via {route['gateway']}"
         print(msg)
         logging.info(msg)
 
@@ -156,14 +110,6 @@ def add_missing_routes(conn, host, sudo_password):
 
 def install_persistence(conn, host, sudo_password):
     route_script = """#!/bin/bash
-
-GATEWAY="192.168.5.1"
-
-INTERFACE=$(/sbin/route -n get "$GATEWAY" 2>/dev/null | /usr/bin/awk '/interface:/ {print $2}')
-
-if [ -z "$INTERFACE" ]; then
-  exit 1
-fi
 
 ROUTES=(
 "10.79.172.0/24 10.79.172.10 192.168.5.1"
@@ -179,7 +125,7 @@ for item in "${ROUTES[@]}"; do
     continue
   fi
 
-  /sbin/route -n add -net "$DEST_NET" "$GATEWAY" -ifscope "$INTERFACE" 2>&1
+  /sbin/route -n add -net "$DEST_NET" "$GATEWAY" 2>&1
 done
 
 exit 0
@@ -209,8 +155,8 @@ exit 0
 
     run_sudo(conn, sudo_password, "mkdir -p /usr/local/sbin")
 
-    conn.send_command_timing(f"cat > /tmp/add-evo-routes.sh <<'EOF'\n{route_script}\nEOF")
-    conn.send_command_timing(f"cat > /tmp/com.company.evo-routes.plist <<'EOF'\n{plist}\nEOF")
+    send_timing(conn, f"cat > /tmp/add-evo-routes.sh <<'EOF'\n{route_script}\nEOF", 20)
+    send_timing(conn, f"cat > /tmp/com.company.evo-routes.plist <<'EOF'\n{plist}\nEOF", 20)
 
     run_sudo(conn, sudo_password, f"mv /tmp/add-evo-routes.sh {REMOTE_SCRIPT}")
     run_sudo(conn, sudo_password, f"mv /tmp/com.company.evo-routes.plist {REMOTE_PLIST}")
@@ -221,6 +167,7 @@ exit 0
     run_sudo(conn, sudo_password, f"chown root:wheel {REMOTE_PLIST}")
     run_sudo(conn, sudo_password, f"chmod 644 {REMOTE_PLIST}")
 
+    # May error if not already loaded; okay for first-time install.
     run_sudo(conn, sudo_password, f"launchctl bootout system {REMOTE_PLIST}")
     run_sudo(conn, sudo_password, f"launchctl bootstrap system {REMOTE_PLIST}")
     run_sudo(conn, sudo_password, f"launchctl kickstart -k system/{LAUNCHD_LABEL}")
