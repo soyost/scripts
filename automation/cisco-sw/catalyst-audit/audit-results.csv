@@ -1,2 +1,29 @@
-host,os,chassis,current_os,uptime,free_space,staged_versions,connected_count,connected_interfaces
-SWITCHNAME01,cisco_xe,C9300-48P,17.15.04,"20 hours, 16 minutes",8.80 GiB,NOT_FOUND,7,"Gi1/0/40:ANTENNA_TRANCEIVER | Gi1/0/43:WIRELESS RX-01 CAR | Gi1/0/44:WIRELESS RX-02 CAR | Gi1/0/45:WCKSAUDIOCART1-10. | Te1/1/1:NXKSOPEP01-E1/23 | Te1/1/8:NXKSOPEP02-E1/23 | Po37:OVP-UPLINK L2 NXKS"
+host,os,chassis,current_os,uptime,free_space,staged_versions
+SWKSOPHD1WGA,cisco_xe,C9300-24UX,17.15.04,"12 hours, 58 minutes",8.77 GiB,NOT_FOUND
+SWKSOPHD1WGB,cisco_xe,C9300-24UX,17.15.04,"12 hours, 59 minutes",8.77 GiB,NOT_FOUND
+SWKSOPHE1B131A,cisco_xe,C9300-48P,17.15.04,"3 weeks, 6 days, 23 hours, 14 minutes",8.78 GiB,NOT_FOUND
+SWKSOPHE1B131B,cisco_xe,C9300-48P,17.15.04,"3 weeks, 6 days, 22 hours, 40 minutes",8.80 GiB,NOT_FOUND
+SWKSOPHE4B131,cisco_xe,C9300-48P,17.15.04,"2 weeks, 4 days, 18 hours, 45 minutes",5.16 GiB,17.03.04|17.15.04
+SWKSOPHETM01,cisco_xe,C9300-48P,17.03.04,"4 years, 6 weeks, 5 days, 16 hours, 24 minutes",6.36 GiB,17.03.04|17.15.04
+SWKSOPHETP01,cisco_xe,C9300-48P,17.03.04,"2 years, 44 weeks, 4 days, 17 hours, 2 minutes",6.36 GiB,17.03.04|17.15.04
+SWKSOPHETP02,cisco_xe,C9300-48P,17.03.04,"2 years, 44 weeks, 4 days, 17 hours, 1 minute",6.36 GiB,17.03.04|17.15.04
+SWKSOPHETX01,cisco_xe,C9300-48P,17.03.04,"3 years, 45 weeks, 5 days, 23 hours, 8 minutes",6.36 GiB,17.03.04|17.15.04
+SWKSOPHF1B120A,cisco_xe,C9300-48P,17.03.04,"2 years, 44 weeks, 4 days, 18 hours, 53 minutes",6.36 GiB,17.03.04|17.15.04
+SWKSOPHF1B120B,cisco_xe,C9300-48P,17.03.04,"2 years, 44 weeks, 4 days, 18 hours, 53 minutes",6.36 GiB,17.03.04|17.15.04
+SWKSOPHZAUD01,cisco_xe,C9300-48P,17.15.04,"2 weeks, 5 days, 18 hours, 35 minutes",8.80 GiB,NOT_FOUND
+SWTXFRSB1X01,cisco_xe,C9300-48P,17.09.05,"1 year, 23 weeks, 1 day, 22 hours, 34 minutes",7.51 GiB,17.15.04
+SWTXFRSB1X02,cisco_xe,C9300-48P,17.09.05,"1 year, 23 weeks, 1 day, 22 hours, 43 minutes",7.51 GiB,17.15.04
+SWWABELB1X01,cisco_xe,C9300-48P,17.06.05,"19 weeks, 2 days, 20 hours, 50 minutes",7.67 GiB,17.15.04
+SWWABELB5I01,cisco_xe,C9300-48P,17.03.04,"1 year, 23 weeks, 1 day, 16 hours, 5 minutes",7.96 GiB,17.15.04
+SWWABELB5X01,cisco_xe,C9300-48P,17.03.04,"1 year, 23 weeks, 1 day, 16 hours, 4 minutes",7.96 GiB,17.15.04
+SWWABELB6I01,cisco_xe,C9300-48P,17.03.04,"1 year, 23 weeks, 1 day, 15 hours, 59 minutes",7.96 GiB,17.15.04
+SWWABELB6X01,cisco_xe,C9300-48P,17.03.04,"1 year, 23 weeks, 1 day, 15 hours, 59 minutes",7.96 GiB,17.15.04
+SWWABELDTI01,cisco_xe,C9300-48P,17.03.04,"1 year, 30 weeks, 2 days, 22 hours, 50 minutes",7.96 GiB,17.15.04
+SWWABELDTM01,cisco_xe,C9300-48P,17.03.04,"2 years, 26 weeks, 1 day, 10 hours, 41 minutes",7.96 GiB,17.15.04
+SWWABELDTX01,cisco_xe,C9300-48P,17.03.04,"1 year, 28 weeks, 5 days, 39 minutes",7.96 GiB,17.15.04
+SWWABELE1I01,cisco_xe,C9300-48P,17.06.05,"1 year, 46 weeks, 4 days, 18 hours, 31 minutes",7.67 GiB,17.15.04
+SWWABELE1X01,cisco_xe,C9300-48P,17.06.05,"1 year, 46 weeks, 4 days, 18 hours, 30 minutes",7.67 GiB,17.15.04
+SWWABELZAUD01,cisco_ios,C9300-48P,17.06.05,"22 weeks, 6 days, 18 hours, 55 minutes",7.67 GiB,17.15.04
+SWWABELZAUD02,cisco_xe,C9300-48P,17.06.05,"38 weeks, 4 days, 15 hours, 44 minutes",7.67 GiB,17.15.04
+SWWABELZVID01,cisco_xe,C9300-48P,17.06.05,"38 weeks, 2 days, 21 hours, 26 minutes",7.67 GiB,17.15.04
+SWWABEL5GX01,cisco_xe,C9300-48P,17.03.04,"1 week, 2 days, 18 hours, 53 minutes",7.55 GiB,17.03.04
