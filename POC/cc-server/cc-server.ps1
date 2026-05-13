@@ -146,14 +146,30 @@ $html = @"
 
 body {
     background: black;
-    color: white;
-    font-size: 28px;
+    color: magenta;
     font-family: Arial;
     padding: 20px;
     overflow-x: hidden;
 }
 
+#toolbar {
+    background: #222;
+    color: white;
+    padding: 10px;
+    margin-bottom: 20px;
+    font-size: 16px;
+    font-family: Arial;
+}
+
+#toolbar select,
+#toolbar input {
+    margin-right: 20px;
+}
+
 #caption {
+    color: magenta;
+    font-size: 32px;
+    font-family: Arial;
     white-space: pre-wrap;
     overflow-wrap: break-word;
     line-height: 1.3;
@@ -165,9 +181,62 @@ body {
 
 <body>
 
+<div id="toolbar">
+
+    Color:
+    <select onchange="setColor(this.value)">
+        <option value="magenta" selected>Magenta</option>
+        <option value="white">White</option>
+        <option value="yellow">Yellow</option>
+        <option value="lime">Green</option>
+        <option value="cyan">Cyan</option>
+    </select>
+
+    Font size:
+    <input type="range" min="20" max="60" value="32" oninput="setFontSize(this.value)">
+    <span id="fontSizeLabel">32px</span>
+
+    Font:
+    <select onchange="setFont(this.value)">
+        <option value="Arial" selected>Arial</option>
+        <option value="Verdana">Verdana</option>
+        <option value="Courier New">Courier New</option>
+        <option value="Tahoma">Tahoma</option>
+    </select>
+
+    Line spacing:
+    <input type="range" min="1.0" max="2.0" step="0.1" value="1.3" oninput="setLineHeight(this.value)">
+    <span id="lineHeightLabel">1.3</span>
+
+    <button onclick="toggleToolbar()">Hide Toolbar</button>
+
+</div>
+
 <div id="caption">Waiting for captions...</div>
 
 <script>
+
+function setColor(value) {
+    document.getElementById('caption').style.color = value;
+}
+
+function setFontSize(value) {
+    document.getElementById('caption').style.fontSize = value + 'px';
+    document.getElementById('fontSizeLabel').innerText = value + 'px';
+}
+
+function setFont(value) {
+    document.getElementById('caption').style.fontFamily = value;
+}
+
+function setLineHeight(value) {
+    document.getElementById('caption').style.lineHeight = value;
+    document.getElementById('lineHeightLabel').innerText = value;
+}
+
+function toggleToolbar() {
+    document.getElementById('toolbar').style.display = 'none';
+}
 
 async function updateCaption() {
 
@@ -178,7 +247,7 @@ async function updateCaption() {
     document.getElementById('caption').innerText = text;
 }
 
-setInterval(updateCaption, 300);
+setInterval(updateCaption, 500);
 
 updateCaption();
 

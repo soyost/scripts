@@ -19,6 +19,16 @@ powershell.exe -ExecutionPolicy Bypass -File .\cc-server.ps1
 http://<IP>:8080
 ```
 
+5. Toolbar
+
+```bash
+(text) color
+font size
+font family
+line spacing
+hide toolbar
+```
+
 ## Fine Tuning
 1. Character length
 
