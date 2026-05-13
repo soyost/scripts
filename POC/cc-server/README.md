@@ -9,7 +9,7 @@ powershell.exe -ExecutionPolicy Bypass -File .\cc-server.ps1
 
 3. Firewall policies need to be added
 
-``bash
+```bash
 ./fire-w.ps1
 ```
 
