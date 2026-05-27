@@ -5,17 +5,12 @@ Wants=network-online.target
 
 [Service]
 Type=simple
-
 User=captionviewer
 Group=captionviewer
-
-WorkingDirectory=/opt/caption-viewer
-
-ExecStart=/usr/bin/python3 /opt/caption-viewer/caption_viewer.py
-
+WorkingDirectory=/##UPDATE
+ExecStart=/usr/libexec/platform-python /opt/caption-viewer/caption_viewer.py
 Restart=always
 RestartSec=5
-
 StandardOutput=journal
 StandardError=journal
 

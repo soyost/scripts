@@ -4,7 +4,7 @@ import re
 import socket
 import threading
 from http.server import BaseHTTPRequestHandler, HTTPServer
-from urllib.parse import urlparse
+from urllib.parse import urlparse, parse_qs
 from typing import List
 
 TCP_HOST = "0.0.0.0"
@@ -13,8 +13,11 @@ TCP_PORT = 5000
 WEB_HOST = "0.0.0.0"
 WEB_PORT = 8080
 
-MAX_LINES = 10
-MAX_LINE_LENGTH = 70
+# Live-tunable config — adjust from the toolbar without restarting
+config = {
+    "max_lines": 10,
+    "max_line_length": 70,
+}
 
 caption_buffer = ["Waiting for captions..."]
 buffer_lock = threading.Lock()
@@ -74,6 +77,24 @@ def add_caption_line(line: str):
     if not line:
         return
 
+    max_line_length = config["max_line_length"]
+    max_lines = config["max_lines"]
+
+    # Word-wrap long individual lines before processing
+    if len(line) > max_line_length and line != "♪":
+        words = line.split()
+        current = ""
+        for word in words:
+            if len(current) + len(word) + 1 <= max_line_length:
+                current = f"{current} {word}".strip()
+            else:
+                if current:
+                    add_caption_line(current)
+                current = word
+        if current:
+            add_caption_line(current)
+        return
+
     with buffer_lock:
         if line == "♪":
             caption_buffer.append(line)
@@ -87,12 +108,12 @@ def add_caption_line(line: str):
             else:
                 combined = f"{last} {line}".strip()
 
-                if len(combined) < MAX_LINE_LENGTH:
+                if len(combined) < max_line_length:
                     caption_buffer[-1] = combined
                 else:
                     caption_buffer.append(line)
 
-        caption_buffer = caption_buffer[-MAX_LINES:]
+        caption_buffer = caption_buffer[-max_lines:]
 
 
 def tcp_listener():
@@ -130,7 +151,7 @@ def tcp_listener():
 
             with buffer_lock:
                 caption_buffer.append("CC device disconnected")
-                caption_buffer = caption_buffer[-MAX_LINES:]
+                caption_buffer = caption_buffer[-config["max_lines"]:]
 
             print("CC device disconnected")
 
@@ -160,11 +181,15 @@ body {
     margin-bottom: 20px;
     font-size: 16px;
     font-family: Arial;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: center;
 }
 
 #toolbar select,
-#toolbar input {
-    margin-right: 20px;
+#toolbar input[type=range] {
+    vertical-align: middle;
 }
 
 #caption {
@@ -184,30 +209,50 @@ body {
 
 <div id="toolbar">
 
-    Color:
-    <select onchange="setColor(this.value)">
-        <option value="magenta" selected>Magenta</option>
-        <option value="white">White</option>
-        <option value="yellow">Yellow</option>
-        <option value="lime">Green</option>
-        <option value="cyan">Cyan</option>
-    </select>
+    <label>
+        Color:
+        <select onchange="setColor(this.value)">
+            <option value="magenta" selected>Magenta</option>
+            <option value="white">White</option>
+            <option value="yellow">Yellow</option>
+            <option value="lime">Green</option>
+            <option value="cyan">Cyan</option>
+        </select>
+    </label>
 
-    Font size:
-    <input type="range" min="20" max="60" value="32" oninput="setFontSize(this.value)">
-    <span id="fontSizeLabel">32px</span>
+    <label>
+        Font size:
+        <input type="range" min="20" max="60" value="32" oninput="setFontSize(this.value)">
+        <span id="fontSizeLabel">32px</span>
+    </label>
 
-    Font:
-    <select onchange="setFont(this.value)">
-        <option value="Arial" selected>Arial</option>
-        <option value="Verdana">Verdana</option>
-        <option value="Courier New">Courier New</option>
-        <option value="Tahoma">Tahoma</option>
-    </select>
+    <label>
+        Font:
+        <select onchange="setFont(this.value)">
+            <option value="Arial" selected>Arial</option>
+            <option value="Verdana">Verdana</option>
+            <option value="Courier New">Courier New</option>
+            <option value="Tahoma">Tahoma</option>
+        </select>
+    </label>
 
-    Line spacing:
-    <input type="range" min="1.0" max="2.0" step="0.1" value="1.3" oninput="setLineHeight(this.value)">
-    <span id="lineHeightLabel">1.3</span>
+    <label>
+        Line spacing:
+        <input type="range" min="1.0" max="2.0" step="0.1" value="1.3" oninput="setLineHeight(this.value)">
+        <span id="lineHeightLabel">1.3</span>
+    </label>
+
+    <label>
+        Max lines:
+        <input type="range" min="2" max="15" value="10" oninput="setMaxLines(this.value)">
+        <span id="maxLinesLabel">10</span>
+    </label>
+
+    <label>
+        Line length:
+        <input type="range" min="20" max="120" value="70" oninput="setMaxLineLength(this.value)">
+        <span id="maxLineLengthLabel">70</span>
+    </label>
 
     <button onclick="toggleToolbar()">Hide Toolbar</button>
 
@@ -233,6 +278,16 @@ function setFont(value) {
 function setLineHeight(value) {
     document.getElementById('caption').style.lineHeight = value;
     document.getElementById('lineHeightLabel').innerText = value;
+}
+
+function setMaxLines(value) {
+    document.getElementById('maxLinesLabel').innerText = value;
+    fetch('/config?max_lines=' + value);
+}
+
+function setMaxLineLength(value) {
+    document.getElementById('maxLineLengthLabel').innerText = value;
+    fetch('/config?max_line_length=' + value);
 }
 
 function toggleToolbar() {
@@ -268,6 +323,19 @@ class CaptionWebHandler(BaseHTTPRequestHandler):
             self.send_header("Content-Type", "text/plain; charset=utf-8")
             self.end_headers()
             self.wfile.write(content.encode("utf-8"))
+
+        elif path == "/config":
+            params = parse_qs(urlparse(self.path).query)
+            if "max_lines" in params:
+                config["max_lines"] = max(1, int(params["max_lines"][0]))
+            if "max_line_length" in params:
+                config["max_line_length"] = max(10, int(params["max_line_length"][0]))
+            print(f"Config updated: {config}")
+
+            self.send_response(200)
+            self.send_header("Content-Type", "text/plain; charset=utf-8")
+            self.end_headers()
+            self.wfile.write(b"ok")
 
         else:
             self.send_response(200)
