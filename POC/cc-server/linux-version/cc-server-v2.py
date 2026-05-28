@@ -13,10 +13,11 @@ TCP_PORT = 5000
 WEB_HOST = "0.0.0.0"
 WEB_PORT = 8080
 
+# v1.3 defaults hardcoded matching standard placement
 # Live-tunable config — adjust from the toolbar without restarting
 config = {
-    "max_lines": 10,
-    "max_line_length": 70,
+    "max_lines": 11,
+    "max_line_length": 41,
 }
 
 caption_buffer = ["Waiting for captions..."]
@@ -193,12 +194,12 @@ body {
 }
 
 #caption {
-    color: magenta;
-    font-size: 32px;
+    color: white;
+    font-size: 39px;
     font-family: Arial;
     white-space: pre-wrap;
     overflow-wrap: break-word;
-    line-height: 1.3;
+    line-height: 1.4;
 }
 
 </style>
@@ -212,8 +213,8 @@ body {
     <label>
         Color:
         <select onchange="setColor(this.value)">
-            <option value="magenta" selected>Magenta</option>
-            <option value="white">White</option>
+            <option value="magenta">Magenta</option>
+            <option value="white" selected>White</option>
             <option value="yellow">Yellow</option>
             <option value="lime">Green</option>
             <option value="cyan">Cyan</option>
@@ -222,8 +223,8 @@ body {
 
     <label>
         Font size:
-        <input type="range" min="20" max="60" value="32" oninput="setFontSize(this.value)">
-        <span id="fontSizeLabel">32px</span>
+        <input type="range" min="20" max="60" value="39" oninput="setFontSize(this.value)">
+        <span id="fontSizeLabel">39px</span>
     </label>
 
     <label>
@@ -238,34 +239,43 @@ body {
 
     <label>
         Line spacing:
-        <input type="range" min="1.0" max="2.0" step="0.1" value="1.3" oninput="setLineHeight(this.value)">
-        <span id="lineHeightLabel">1.3</span>
+        <input type="range" min="1.0" max="2.0" step="0.1" value="1.4" oninput="setLineHeight(this.value)">
+        <span id="lineHeightLabel">1.4</span>
+
     </label>
 
     <label>
         Max lines:
-        <input type="range" min="2" max="15" value="10" oninput="setMaxLines(this.value)">
-        <span id="maxLinesLabel">10</span>
+        <input type="range" min="2" max="15" value="11" oninput="setMaxLines(this.value)">
+        <span id="maxLinesLabel">11</span>
     </label>
 
     <label>
         Line length:
-        <input type="range" min="20" max="120" value="70" oninput="setMaxLineLength(this.value)">
-        <span id="maxLineLengthLabel">70</span>
-    </label>
-
-    <label>
-        Alignment:
-        <select onchange="setAlignment(this.value)">
-            <option value="left" selected>Left</option>
-            <option value="center">Center</option>
-            <option value="right">Right</option>
-        </select>
+        <input type="range" min="20" max="120" value="41" oninput="setMaxLineLength(this.value)">
+        <span id="maxLineLengthLabel">41</span>
     </label>
 
     <button onclick="toggleToolbar()">Hide Toolbar</button>
 
 </div>
+
+<button id="showToolbarBtn" onclick="toggleToolbar()" style="
+    display: none;
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    background: #333;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    font-size: 18px;
+    cursor: pointer;
+    opacity: 0.6;
+    z-index: 999;
+">⚙</button>
 
 <div id="caption">Waiting for captions...</div>
 
@@ -294,17 +304,17 @@ function setMaxLines(value) {
     fetch('/config?max_lines=' + value);
 }
 
-function setAlignment(value) {
-    document.getElementById('caption').style.textAlign = value;
-}
-
 function setMaxLineLength(value) {
     document.getElementById('maxLineLengthLabel').innerText = value;
     fetch('/config?max_line_length=' + value);
 }
 
 function toggleToolbar() {
-    document.getElementById('toolbar').style.display = 'none';
+    const toolbar = document.getElementById('toolbar');
+    const btn = document.getElementById('showToolbarBtn');
+    const isHidden = toolbar.style.display === 'none';
+    toolbar.style.display = isHidden ? 'flex' : 'none';
+    btn.style.display = isHidden ? 'none' : 'block';
 }
 
 async function updateCaption() {
