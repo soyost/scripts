@@ -254,6 +254,15 @@ body {
         <span id="maxLineLengthLabel">70</span>
     </label>
 
+    <label>
+        Alignment:
+        <select onchange="setAlignment(this.value)">
+            <option value="left" selected>Left</option>
+            <option value="center">Center</option>
+            <option value="right">Right</option>
+        </select>
+    </label>
+
     <button onclick="toggleToolbar()">Hide Toolbar</button>
 
 </div>
@@ -283,6 +292,10 @@ function setLineHeight(value) {
 function setMaxLines(value) {
     document.getElementById('maxLinesLabel').innerText = value;
     fetch('/config?max_lines=' + value);
+}
+
+function setAlignment(value) {
+    document.getElementById('caption').style.textAlign = value;
 }
 
 function setMaxLineLength(value) {
