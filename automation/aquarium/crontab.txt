@@ -1,0 +1,2 @@
+0 6 * * * /home/steven/aquarium/day.sh
+0 17 * * * /home/steven/aquarium/night.sh
