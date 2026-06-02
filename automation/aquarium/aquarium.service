@@ -1,0 +1,15 @@
+!cat /etc/systemd/system/aquarium.service
+
+[Unit]
+Description=Ambient Aquarium Flask Server
+After=network.target
+
+[Service]
+User=steven
+WorkingDirectory=/home/steven/aquarium
+ExecStart=/usr/bin/python3 /home/steven/aquarium/ambient.py
+Restart=always
+Environment=DISPLAY=:0
+
+[Install]
+WantedBy=multi-user.target
