@@ -79,11 +79,10 @@ Automatically changes aquarium modes based on time of day.
 Current schedule:
 
 06:00 AM -> Day Mode
+
 05:00 PM -> Night Mode
 
-Configured via:
-
-crontab -e
+Configured via cron
 
 Current entries:
 
