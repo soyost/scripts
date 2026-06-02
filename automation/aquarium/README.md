@@ -95,17 +95,26 @@ Current entries:
 
 # Directory Structure
 
-(`/home/steven/aquarium/`)
+### (`/home/steven/aquarium/`)
 
 ambient.py
+
 mode.py
+
 day.sh
+
 night.sh
+
 fish-tank.mp4
+
 beta-fish.mp4
+
 particles.py
+
 jellyfish.py
+
 tank.py # legacy prototype
+
 ---
 
 # Web Interface
