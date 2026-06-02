@@ -1,0 +1,18 @@
+Rocky Linux commands for firewall:
+
+sudo firewall-cmd --state
+
+sudo firewall-cmd --permanent --add-port=5000/tcp
+sudo firewall-cmd --permanent --add-port=8080/tcp
+
+sudo firewall-cmd --reload
+
+
+sudo firewall-cmd --list-ports
+
+After python script running:
+
+sudo ss -lntp | grep -E '5000|8080'
+# Expected
+LISTEN 0 5 0.0.0.0:5000
+LISTEN 0 5 0.0.0.0:8080
