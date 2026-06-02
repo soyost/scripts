@@ -121,7 +121,9 @@ tank.py # legacy prototype
 
 Phone connects to:
 
+```bash
 http://<raspberrypi-ip>:5000
+```
 
 Available actions:
 
