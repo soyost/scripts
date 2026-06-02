@@ -50,7 +50,7 @@ Current implementation:
 
 Launches:
 
-fish-tank.mp4
+(`fish-tank.mp4`)
 
 using mpv fullscreen looping playback.
 
@@ -58,7 +58,7 @@ using mpv fullscreen looping playback.
 
 Launches:
 
-particles.py
+(`particles.py`)
 
 using pygame.
 
@@ -66,7 +66,7 @@ using pygame.
 
 Launches:
 
-jellyfish.py
+(`jellyfish.py`)
 
 using pygame.
 
@@ -96,60 +96,17 @@ Current entries:
 
 # Directory Structure
 
-/home/steven/aquarium/
+(`/home/steven/aquarium/`)
 
 ambient.py
 mode.py
-
 day.sh
 night.sh
-
 fish-tank.mp4
 beta-fish.mp4
-
 particles.py
 jellyfish.py
-
-tank.py (legacy prototype)
-
----
-
-# Systemd Service
-
-Service file:
-
-/etc/systemd/system/aquarium.service
-
-Purpose:
-
-Automatically start Flask server at boot.
-
-Commands:
-
-Check status:
-
-sudo systemctl status aquarium.service
-
-Start:
-
-sudo systemctl start aquarium.service
-
-Stop:
-
-sudo systemctl stop aquarium.service
-
-Restart:
-
-sudo systemctl restart aquarium.service
-
-Enable at boot:
-
-sudo systemctl enable aquarium.service
-
-Reload service definitions:
-
-sudo systemctl daemon-reload
-
+tank.py # legacy prototype
 ---
 
 # Web Interface
@@ -183,29 +140,9 @@ Launch jellyfish mode:
 
 python3 /home/steven/aquarium/mode.py jellyfish
 
----
-
-# Timezone Configuration
-
-System timezone:
-
-America/Chicago
-
-Check:
-
-timedatectl
-
-Set:
-
-sudo timedatectl set-timezone America/Chicago
-
-Cron schedules depend on correct timezone configuration.
-
----
-
 # Design Decisions
 
-## Pi Remains On Continuously
+## Notes
 
 The Raspberry Pi is never powered off automatically.
 
@@ -216,38 +153,8 @@ Reasons:
 * Simpler architecture
 * No SD card wear concerns from repeated shutdowns
 
----
 
-## Display Is Not Powered Off
-
-The display remains powered.
-
-Instead of turning the monitor off:
-
-* Day Mode = active visuals
-* Night Mode = low-activity ambient visuals
-
-This approach avoids:
-
-* HDMI power management issues
-* Relay hardware
-* Display compatibility problems
-
----
-
-## Separation of Responsibilities
-
-### Flask
-
-Persistent service.
-
-Handles:
-
-* User interface
-* Phone control
-* Requests
-
-### mode.py
+(`mode.py`)
 
 Transient display controller.
 
@@ -256,44 +163,3 @@ Handles:
 * Launching visuals
 * Switching display modes
 
-### cron
-
-Time-based automation.
-
-Handles:
-
-* Day/night scheduling
-
-This separation keeps the architecture simple and maintainable.
-
----
-
-# Useful Commands
-
-Check IP address:
-
-hostname -I
-
-Check Flask service:
-
-systemctl status aquarium.service
-
-View cron configuration:
-
-crontab -l
-
-Edit cron configuration:
-
-crontab -e
-
-Reboot:
-
-sudo reboot
-
-Current date/time:
-
-date
-
-Current timezone:
-
-timedatectl
