@@ -65,11 +65,7 @@ def parse_version(output, device_type):
         ):
             data["platform"] = match.group(1)
 
-        if match := re.search(
-            r"uptime is (.+)",
-            output,
-            re.IGNORECASE,
-        ):
+        if match := re.search(r"uptime is (.+)", output, re.IGNORECASE):
             data["uptime"] = match.group(1)
 
     return data
@@ -82,11 +78,7 @@ def parse_dir_info(conn):
     free_space = "UNKNOWN"
     staged_versions = "NOT_FOUND"
 
-    if match := re.search(
-        r"(\d+)\s+bytes\s+free",
-        dir_output,
-        re.IGNORECASE,
-    ):
+    if match := re.search(r"(\d+)\s+bytes\s+free", dir_output, re.IGNORECASE):
         bytes_free = int(match.group(1))
         free_space = human_readable_bytes(bytes_free)
 
@@ -138,6 +130,47 @@ def parse_connected_interfaces(conn):
     return connected_count, connected_interfaces
 
 
+def parse_stack_info(conn):
+    """Get stack count, mode, and state from show switch stack-mode"""
+    output = conn.send_command("show switch stack-mode")
+
+    switch_count = 0
+    modes = []
+    states = []
+
+    for line in output.splitlines():
+        line = line.strip()
+
+        if (
+            not line
+            or line.startswith("Switch#")
+            or line.startswith("---")
+            or line.lower().startswith("switch#")
+        ):
+            continue
+
+        match = re.match(
+            r"^\*?\s*(\d+)\s+\S+\s+\S+\s+\S+\s+(\S+)\s+\S+\s+(\S+)",
+            line,
+        )
+
+        if match:
+            switch_count += 1
+            modes.append(match.group(2))
+            states.append(match.group(3))
+
+    if switch_count == 0:
+        return 1, "Standalone", "Ready"
+
+    unique_modes = sorted(set(modes))
+    unique_states = sorted(set(states))
+
+    stack_mode = "|".join(unique_modes) if unique_modes else "UNKNOWN"
+    stack_state = "|".join(unique_states) if unique_states else "UNKNOWN"
+
+    return switch_count, stack_mode, stack_state
+
+
 def main():
     hosts = [
         h.strip()
@@ -155,6 +188,9 @@ def main():
     check_connected_ports = (
         input("Include connected ports? (y/n): ").strip().lower() == "y"
     )
+    check_stack = (
+        input("Return stack status? (y/n): ").strip().lower() == "y"
+    )
 
     headers = ["host", "os", "chassis", "current_os"]
 
@@ -164,6 +200,8 @@ def main():
         headers.extend(["free_space", "staged_versions"])
     if check_connected_ports:
         headers.extend(["connected_count", "connected_interfaces"])
+    if check_stack:
+        headers.extend(["stack_members", "stack_mode", "stack_state"])
 
     Path(RESULTS_FILE).write_text(
         ",".join(headers) + "\n",
@@ -175,6 +213,7 @@ def main():
 
         for device_type in DEVICE_TYPES:
             conn = None
+
             try:
                 conn = ConnectHandler(
                     host=host,
@@ -191,6 +230,9 @@ def main():
                     staged_versions = "SKIPPED"
                     connected_count = "SKIPPED"
                     connected_interfaces = "SKIPPED"
+                    stack_members = "SKIPPED"
+                    stack_mode = "SKIPPED"
+                    stack_state = "SKIPPED"
 
                     if check_storage:
                         free_space, staged_versions = parse_dir_info(conn)
@@ -198,6 +240,11 @@ def main():
                     if check_connected_ports:
                         connected_count, connected_interfaces = (
                             parse_connected_interfaces(conn)
+                        )
+
+                    if check_stack:
+                        stack_members, stack_mode, stack_state = (
+                            parse_stack_info(conn)
                         )
 
                     row = [
@@ -209,12 +256,19 @@ def main():
 
                     if check_uptime:
                         row.append(f"\"{csv_escape(data['uptime'])}\"")
+
                     if check_storage:
                         row.append(free_space)
                         row.append(staged_versions)
+
                     if check_connected_ports:
                         row.append(str(connected_count))
                         row.append(f"\"{csv_escape(connected_interfaces)}\"")
+
+                    if check_stack:
+                        row.append(str(stack_members))
+                        row.append(stack_mode)
+                        row.append(stack_state)
 
                     with open(RESULTS_FILE, "a", encoding="utf-8") as f:
                         f.write(",".join(row) + "\n")
