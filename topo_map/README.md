@@ -8,6 +8,8 @@ python switch_mapper.py
 ```
 
 Example:
+
+```bash
 Switch hostname or IP: Switchname
 Username: user
 Password: 
@@ -16,6 +18,7 @@ Collecting LLDP neighbors...
 Collecting interface status...
 Wrote mapping\Switchname.html
 Wrote mapping\Switchname.csv
+```
 
 * Rendering will open in browser
 
