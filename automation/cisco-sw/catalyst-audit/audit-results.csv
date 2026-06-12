@@ -1,2 +1,1 @@
-host,os,chassis,current_os,uptime,free_space,staged_versions
-
+host,os,chassis,current_os,uptime,free_space,staged_versions,stack_members,stack_mode,stack_state
