@@ -1,0 +1,8 @@
+switch,port,name,status,vlan,neighbor,neighbor_port,capability,role,speed,duplex,type
+SWKSOPHF1B120A,Gi1/0/1,CAMERA ELEVATOR :,connected,1101,,,,connected-no-lldp,a-100,a-full,10/100/1000BaseTX
+SWKSOPHF1B120A,Gi1/0/23,62C-CAM1:PKSOVPFTC,connected,1101,4c36.4e27.e5a9,4c36.4e27.e5a9,,access,a-100,a-full,10/100/1000BaseTX
+SWKSOPHF1B120A,Gi1/0/25,62C-CAM3:PKSOVPFTC,connected,1101,4c36.4e27.e5b2,4c36.4e27.e5b2,,access,a-100,a-full,10/100/1000BaseTX
+SWKSOPHF1B120A,Gi1/0/46,PKSOVPFTTMP1B120A-,connected,1101,,,,connected-no-lldp,a-100,a-full,10/100/1000BaseTX
+SWKSOPHF1B120A,Po34,OVP-UPLINK L2 NXKS,connected,trunk,,,,port-channel,a-10G,a-full,N/A
+SWKSOPHF1B120A,Te1/1/1,NXKSOPHEP01-E1/17,connected,trunk,NXKSOPHEP01,Ethernet1/17,"B,R",uplink,10G,full,SFP-10GBase-LR
+SWKSOPHF1B120A,Te1/1/8,NXKSOPHEP02-E1/17,connected,trunk,NXKSOPHEP02,Ethernet1/17,"B,R",uplink,10G,full,SFP-10GBase-LR

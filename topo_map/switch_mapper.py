@@ -7,7 +7,6 @@ import re
 import webbrowser
 from pathlib import Path
 from getpass import getpass
-
 from netmiko import ConnectHandler
 from netmiko.exceptions import (
     NetmikoTimeoutException,
@@ -242,7 +241,13 @@ def write_html(hostname: str, rows: list[dict], path: Path):
     width = 1600
     row_gap = 95
     top_y = 220
-    switch_x = 700
+
+    # Keep the switch position dynamic. If one side has many more connections,
+    # nudge the switch away from the crowded side while keeping it on-canvas.
+    left_count = len(endpoints)
+    right_count = len(uplinks)
+    switch_x = max(650, min(850, 700 + ((left_count - right_count) * 20)))
+
     switch_w = 280
     switch_h = 160
 
@@ -306,6 +311,12 @@ def write_html(hostname: str, rows: list[dict], path: Path):
         end_y = switch_y + 35 + (i + 1) * (switch_h - 70) / max(1, len(endpoints))
         mid_x = switch_x - 80
 
+        # Anchor the local port/VLAN label near the endpoint box.
+        # This scales better than floating labels in the middle of the link bundle.
+        label_x = left_x + left_w + 10
+        label_y = start_y - 8
+        vlan_y = start_y + 18
+
         svg_parts.append(f"""
   <rect x="{left_x}" y="{y}" width="{left_w}" height="{box_h}" rx="7"
         fill="#f4fff6" stroke="{color}" stroke-width="2"/>
@@ -316,11 +327,13 @@ def write_html(hostname: str, rows: list[dict], path: Path):
 
   <polyline points="{start_x},{start_y} {mid_x},{start_y} {end_x},{end_y}"
             fill="none" stroke="{color}" stroke-width="2.5"/>
-  <rect x="{mid_x - 102}" y="{start_y - 30}" width="110" height="58"
-        fill="white" opacity="0.92"/>
-  <text x="{mid_x - 95}" y="{start_y - 12}" font-size="18" font-weight="700"
+
+  <rect x="{label_x - 2}" y="{label_y - 13}" width="105" height="48"
+        fill="white" opacity="0.80"/>
+
+  <text x="{label_x}" y="{label_y}" font-size="18" font-weight="700"
         font-family="Consolas, monospace">{esc(r["port"])}</text>
-  <text x="{mid_x - 95}" y="{start_y + 22}" font-size="16"
+  <text x="{label_x}" y="{vlan_y}" font-size="16"
         fill="{color}" font-family="Segoe UI, Arial">VLAN {esc(vlan)}</text>
 """)
 
@@ -342,9 +355,9 @@ def write_html(hostname: str, rows: list[dict], path: Path):
         end_y = y + box_h / 2
         mid_x = switch_x + switch_w + 120
 
-        label_y = start_y - 10 if i % 2 == 0 else start_y + 24
-        vlan_y = label_y + 20
-
+        label_x = right_x - 150
+        label_y = end_y - 8
+        vlan_y = end_y + 14
         if is_po:
             remote_text = f"Port-Channel {r['port']}"
         else:
@@ -361,12 +374,12 @@ def write_html(hostname: str, rows: list[dict], path: Path):
   <polyline points="{start_x},{start_y} {mid_x},{start_y} {end_x},{end_y}"
             fill="none" stroke="{color}" stroke-width="2.5" {dash}/>
 
-  <rect x="{mid_x + 4}" y="{label_y - 18}" width="115" height="45"
-        fill="white" opacity="0.92"/>
+  <rect x="{label_x - 2}" y="{label_y - 13}" width="75" height="24"
+        fill="white" opacity="0.80"/>
 
-  <text x="{mid_x + 10}" y="{label_y}" font-size="18" font-weight="700"
+  <text x="{label_x}" y="{label_y}" font-size="18" font-weight="700"
         font-family="Consolas, monospace">{esc(r["port"])}</text>
-  <text x="{mid_x + 10}" y="{vlan_y}" font-size="16"
+  <text x="{label_x}" y="{vlan_y}" font-size="16"
         fill="{color}" font-family="Segoe UI, Arial">{esc(vlan)}</text>
 """)
 
@@ -452,7 +465,6 @@ body {{
 
     path.write_text(doc, encoding="utf-8")
 
-
 def main():
     ap = argparse.ArgumentParser(
         description="SSH to one Cisco switch, collect LLDP/interface status, and generate a switch port map."
@@ -484,7 +496,6 @@ def main():
     print(f"Wrote {csv_file}")
 
     webbrowser.open(html_file.resolve().as_uri())
-
 
 if __name__ == "__main__":
     main()
