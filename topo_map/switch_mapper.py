@@ -12,6 +12,7 @@ from netmiko.exceptions import (
     NetmikoTimeoutException,
     NetmikoAuthenticationException,
 )
+from netmiko.ssh_autodetect import SSHDetect
 
 RE_LLDP_ROW = re.compile(
     r"^(?P<device>\S+)\s+"
@@ -48,16 +49,34 @@ def collect_from_switch():
     username = input("Username: ").strip()
     password = getpass("Password: ")
 
-    device = {
-        "device_type": "cisco_ios",
+    base_device = {
+        "device_type": "autodetect",
         "host": host,
         "username": username,
         "password": password,
     }
 
     try:
+        print("Detecting device type...")
+        guesser = SSHDetect(**base_device)
+        device_type = guesser.autodetect()
+
+        if not device_type:
+            raise SystemExit("Could not detect device type.")
+
+        print(f"Detected device type: {device_type}")
+
+        device = {
+            "device_type": device_type,
+            "host": host,
+            "username": username,
+            "password": password,
+        }
+
         conn = ConnectHandler(**device)
-        conn.send_command("terminal length 0")
+
+        conn.send_command_timing("terminal length 0")
+        conn.send_command_timing("terminal width 511")
 
         prompt = conn.find_prompt()
         hostname = prompt.replace("#", "").replace(">", "").strip()
@@ -68,7 +87,8 @@ def collect_from_switch():
 
         print("Collecting interface status...")
         int_status_output = conn.send_command(
-            "show interface status | exclude disabled"
+            "show interface status | exclude disabled",
+            read_timeout=60,
         )
 
         conn.disconnect()
