@@ -3,5 +3,4 @@ automation/add-route/mac_route_update.log
 automation/add-route/inventory.txt
 topo_map/data/SWKSOPHD1WGA_lldp.txt
 topo_map/data/SWKSOPHD1WGA_int_status.txt
-topo_map/mapping/SWWABELB5I01.html
-topo_map/mapping/SWWABELB5I01.csv
+topo_map/mapping/
