@@ -4,3 +4,6 @@ automation/add-route/inventory.txt
 topo_map/data/SWKSOPHD1WGA_lldp.txt
 topo_map/data/SWKSOPHD1WGA_int_status.txt
 topo_map/mapping/
+automation/certificate-checker/cert-checker-README.md
+# Added by ggshield
+.cache_ggshield
