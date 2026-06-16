@@ -1,19 +1,18 @@
 ## Instructions
 
-Save 
+Save Service configuration:
 ```bash
 /etc/systemd/system/caption-viewer.service
 ```
 
 
-
-Create service account
+Create service account:
 
 ```bash
 sudo useradd -r -s /sbin/nologin captionviewer
 ```
 
-Create app directory
+Create app directory:
 
 ```bash
 sudo mkdir -p /opt/caption-viewer
