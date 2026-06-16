@@ -1,0 +1,2 @@
+host,status,timestamp,os,chassis,current_os,backup_status,backup_filename,backup_proof,error
+SWKSOPHZAUD01,SUCCESS,2026-06-16T07:52:56,cisco_xe,C9300-48P,17.15.04,SUCCESS,SWKSOPHZAUD01_2026_06_16.txt,copy running-config scp://steven@10.79.253.15/SWKSOPHZAUD01_2026_06_16.txt vrf OAM Address or name of remote host [10.79.253.15]? Destination username [steven]? Destination filename [SWKSOPHZAUD01_2026_06_16.txt]? Writing SWKSOPHZAUD01_2026_06_16.txt Password: ! 24606 bytes copied in 4.336 secs (5675 bytes/sec) SWKSOPHZAUD01#,
