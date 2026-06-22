@@ -6,3 +6,8 @@ automation/certificate-checker/cert-checker-README.md
 automation/cisco-switches/topo_map/mapping/
 # Added by ggshield
 .cache_ggshield
+automation/cisco-switches/catalyst-audit/aaa-audit-results-v2.csv
+.gitignore
+automation/cisco-switches/catalyst-audit/inventory.txt
+automation/cisco-switches/catalyst-audit/aaa-audit-results.csv
+automation/cisco-switches/catalyst-audit/inventory.txt
