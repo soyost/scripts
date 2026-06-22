@@ -1,0 +1,14 @@
+---
+- name: Test connectivity
+  hosts: switches
+  gather_facts: false
+
+  tasks:
+    - name: Show clock
+      ansible.netcommon.cli_command:
+        command: show clock
+      register: result
+
+    - name: Print output
+      debug:
+        var: result.stdout

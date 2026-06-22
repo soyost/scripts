@@ -1,0 +1,43 @@
+---
+- name: Backup running configs to SCP
+  hosts: switches
+  gather_facts: no
+
+  vars:
+    scp_server: "10.79.253.15"
+    scp_user: "{{ lookup('env', 'SCP_BACKUP_USER') }}"
+    scp_password: "{{ lookup('env', 'SCP_BACKUP_PASSWORD') }}"
+    backup_vrf: "OAM"
+    backup_filename: "{{ inventory_hostname }}_{{ lookup('pipe', 'date +%Y_%m_%d') }}.txt"
+
+  tasks:
+    - name: Copy running config to SCP server
+      ansible.netcommon.cli_command:
+        command: "copy running-config scp://{{ scp_user }}@{{ scp_server }}/{{ backup_filename }} vrf {{ backup_vrf }}"
+        prompt:
+          - "Address or name of remote host"
+          - "Destination username"
+          - "Destination filename"
+          - "Password"
+        answer:
+          - ""
+          - ""
+          - ""
+          - "{{ scp_password }}"
+      register: backup_result
+      ignore_errors: yes
+
+    - name: Report backup success
+      ansible.builtin.debug:
+        msg: "SUCCESS: {{ inventory_hostname }} copied running-config to {{ scp_server }} as {{ backup_filename }}"
+      when:
+        - backup_result is succeeded
+        - "'bytes copied' in backup_result.stdout"
+
+    - name: Report backup failure
+      ansible.builtin.debug:
+        msg: |
+          FAILED: {{ inventory_hostname }} backup did not complete cleanly.
+          Output:
+          {{ backup_result.stdout | default(backup_result.msg) }}
+      when: backup_result is failed or "'bytes copied' not in backup_result.stdout"

@@ -1,0 +1,2 @@
+host,os,chassis,current_os,uptime,free_space,staged_versions
+SWKSOPHZAUD01,cisco_xe,C9300-48P,17.15.04,"8 weeks, 6 days, 18 hours, 12 minutes",8.80 GiB,NOT_FOUND

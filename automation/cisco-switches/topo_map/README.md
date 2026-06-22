@@ -26,4 +26,4 @@ Wrote mapping\Switchname.csv
 
 Example:
 
-<img src="../images/switch-map-2.png" width="800" alt="Rendering In Browser">
+<img src="../../../images/switch-map-2.png" width="800" alt="Rendering In Browser">

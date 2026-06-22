@@ -3,7 +3,7 @@
 import re
 from pathlib import Path
 from getpass import getpass
-
+from datetime import datetime
 from netmiko import ConnectHandler
 from netmiko.exceptions import (
     NetmikoTimeoutException,
@@ -170,6 +170,60 @@ def parse_stack_info(conn):
 
     return switch_count, stack_mode, stack_state
 
+def backup_running_config(conn, host, scp_user, scp_password):
+    scp_server = "10.79.253.15"
+    vrf = "OAM"
+    date_stamp = datetime.now().strftime("%Y_%m_%d")
+    filename = f"{host}_{date_stamp}.txt"
+
+    prompt_timeout = 5
+    copy_timeout = 30
+
+    command = (
+        f"copy running-config "
+        f"scp://{scp_user}@{scp_server}/{filename} "
+        f"vrf {vrf}"
+    )
+
+    output = ""
+    response = conn.send_command_timing(
+        command,
+        strip_prompt=False,
+        strip_command=False,
+        read_timeout=prompt_timeout,
+    )
+    output += response
+
+    for _ in range(10):
+        if "Address or name of remote host" in response:
+            response = conn.send_command_timing("", strip_prompt=False, strip_command=False, read_timeout=prompt_timeout)
+
+        elif "Destination username" in response:
+            response = conn.send_command_timing("", strip_prompt=False, strip_command=False, read_timeout=prompt_timeout)
+
+        elif "Destination filename" in response:
+            response = conn.send_command_timing("", strip_prompt=False, strip_command=False, read_timeout=prompt_timeout)
+
+        elif "Password:" in response:
+            print(f"{host}: sending SCP password")
+            response = conn.send_command_timing(
+                scp_password,
+                strip_prompt=False,
+                strip_command=False,
+                read_timeout=copy_timeout,
+            )
+
+        elif "bytes copied" in response:
+            break
+
+        else:
+            response = conn.send_command_timing("", strip_prompt=False, strip_command=False, read_timeout=prompt_timeout)
+
+        output += response
+
+        if "bytes copied" in output:
+            break
+
 
 def main():
     hosts = [
@@ -192,16 +246,33 @@ def main():
         input("Return stack status? (y/n): ").strip().lower() == "y"
     )
 
+    run_backup = (
+        input("Backup running-config to SCP? (y/n): ").strip().lower() == "y"
+    )
+
+    scp_user = None
+    scp_password = None
+
+    if run_backup:
+        scp_user = input("SCP username: ").strip()
+        scp_password = getpass("SCP password: ")
+
     headers = ["host", "os", "chassis", "current_os"]
 
     if check_uptime:
         headers.append("uptime")
+
     if check_storage:
         headers.extend(["free_space", "staged_versions"])
+
     if check_connected_ports:
         headers.extend(["connected_count", "connected_interfaces"])
+
     if check_stack:
         headers.extend(["stack_members", "stack_mode", "stack_state"])
+
+    if run_backup:
+        headers.extend(["backup_status", "backup_filename"])
 
     Path(RESULTS_FILE).write_text(
         ",".join(headers) + "\n",
@@ -226,6 +297,7 @@ def main():
                 data = parse_version(version_output, device_type)
 
                 if data["current_os"] != "UNKNOWN":
+
                     free_space = "SKIPPED"
                     staged_versions = "SKIPPED"
                     connected_count = "SKIPPED"
@@ -233,6 +305,8 @@ def main():
                     stack_members = "SKIPPED"
                     stack_mode = "SKIPPED"
                     stack_state = "SKIPPED"
+                    backup_status = "SKIPPED"
+                    backup_filename = "SKIPPED"
 
                     if check_storage:
                         free_space, staged_versions = parse_dir_info(conn)
@@ -247,6 +321,16 @@ def main():
                             parse_stack_info(conn)
                         )
 
+                    if run_backup:
+                        backup_status, backup_filename, _ = (
+                            backup_running_config(
+                                conn,
+                                host,
+                                scp_user,
+                                scp_password,
+                            )
+                        )
+
                     row = [
                         host,
                         device_type,
@@ -255,7 +339,9 @@ def main():
                     ]
 
                     if check_uptime:
-                        row.append(f"\"{csv_escape(data['uptime'])}\"")
+                        row.append(
+                            f"\"{csv_escape(data['uptime'])}\""
+                        )
 
                     if check_storage:
                         row.append(free_space)
@@ -263,17 +349,28 @@ def main():
 
                     if check_connected_ports:
                         row.append(str(connected_count))
-                        row.append(f"\"{csv_escape(connected_interfaces)}\"")
+                        row.append(
+                            f"\"{csv_escape(connected_interfaces)}\""
+                        )
 
                     if check_stack:
                         row.append(str(stack_members))
                         row.append(stack_mode)
                         row.append(stack_state)
 
-                    with open(RESULTS_FILE, "a", encoding="utf-8") as f:
+                    if run_backup:
+                        row.append(backup_status)
+                        row.append(backup_filename)
+
+                    with open(
+                        RESULTS_FILE,
+                        "a",
+                        encoding="utf-8",
+                    ) as f:
                         f.write(",".join(row) + "\n")
 
                     print(f"{host}: detected as {device_type}")
+
                     conn.disconnect()
                     break
 
@@ -294,11 +391,13 @@ def main():
 
             except Exception as e:
                 print(f"{host}: ERROR - {e}")
+
                 if conn:
                     try:
                         conn.disconnect()
                     except Exception:
                         pass
+
                 break
 
         else:
