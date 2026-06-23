@@ -32,7 +32,9 @@ Include uptime? (y/n):
 Include storage info (free space + staged images)? (y/n): 
 Include connected ports? (y/n): 
 Copy running-config to startup-config? (y/n): 
-Backup running-config to SCP? (y/n): 
+Backup running-config to SCP? (y/n): y
+SCP username: <username>
+SCP password: 
 ```
 
 5. Output will be documented in audit-results.csv with the following columns.
