@@ -1,13 +1,15 @@
-automation/cisco-sw/catalyst-audit/audit-results.csv
-automation/add-route/mac_route_update.log
-automation/add-route/inventory.txt
-topo_map/mapping/
-automation/certificate-checker/cert-checker-README.md
-automation/cisco-switches/topo_map/mapping/
 # Added by ggshield
 .cache_ggshield
-automation/cisco-switches/catalyst-audit/aaa-audit-results*.*
+
 .gitignore
+automation/add-route/inventory.txt
+automation/add-route/mac_route_update.log
+automation/certificate-checker/cert-checker-README.md
+automation/cisco-sw/catalyst-audit/audit-results.csv
+automation/cisco-switches/catalyst-audit/aaa-audit-results*.*
+automation/cisco-switches/catalyst-audit/audit-results.csv
 automation/cisco-switches/catalyst-audit/inventory.txt
 automation/cisco-switches/copy-run-star/ios-inventory.txt
 automation/cisco-switches/copy-run-star/nxos-inventory.txt
+automation/cisco-switches/topo_map/mapping/
+topo_map/mapping/
