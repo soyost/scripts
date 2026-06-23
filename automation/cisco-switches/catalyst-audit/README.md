@@ -18,12 +18,12 @@ This script will connect to the listed hosts to collect data or issue command(s)
 2. Run
 
 ```bash
-python catalyst-audit.py
+python catalyst-master.py
 ```
 
 3. You will be prompted for TACAS/ssh user and password.
 
-4. You will be asked for some variables to tune the output.
+4. You will be asked for some variables to tune the desired workflow.
 
 ```bash
 SSH username: <username>
