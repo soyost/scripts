@@ -6,6 +6,7 @@ automation/add-route/inventory.txt
 automation/add-route/mac_route_update.log
 automation/certificate-checker/cert-checker-README.md
 automation/cisco-sw/catalyst-audit/audit-results.csv
+automation/cisco-switches/catalyst-audit/versions.csv 
 automation/cisco-switches/catalyst-audit/aaa-audit-results*.*
 automation/cisco-switches/catalyst-audit/audit-results.csv
 automation/cisco-switches/catalyst-audit/inventory.txt
