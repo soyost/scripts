@@ -12,5 +12,9 @@ automation/cisco-switches/catalyst-audit/audit-results.csv
 automation/cisco-switches/catalyst-audit/inventory.txt
 automation/cisco-switches/copy-run-star/ios-inventory.txt
 automation/cisco-switches/copy-run-star/nxos-inventory.txt
+automation/cisco-switches/copy-run-star/ios_results.csv
+automation/cisco-switches/copy-run-star/nxos_results.csv
 automation/cisco-switches/topo_map/mapping/
+automation/macos-add-route/mac_route_update.log
+
 topo_map/mapping/
