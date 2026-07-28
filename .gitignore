@@ -21,3 +21,4 @@ topo_map/mapping/
 automation/bgp-check/circuits.csv
 automation/bgp-check/T-Studios-Circuit List.xlsx
 automation/bgp-check/bgp-verification-results.csv
+automation/bgp-check/circuits.xlsx
