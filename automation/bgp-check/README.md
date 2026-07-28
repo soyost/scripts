@@ -91,7 +91,7 @@ Commands:
 show ip interface brief vrf OAM
 show ip interface brief vrf PROD
 ```
-## Purpose:
+Purpose:
 
 Finds Layer 3 subinterfaces associated with the documented parent interface.
 Identifies the local IP address.
@@ -106,7 +106,7 @@ Command:
 show running-config interface Ethernet1/XX.XX
 ```
 
-## Purpose:
+Purpose:
 
 Retrieves the configured IP address and prefix length.
 Confirms the VRF assignment.
@@ -126,7 +126,7 @@ Command:
 show bgp ipv4 unicast summary vrf <vrf>
 ```
 
-## Purpose:
+Purpose:
 
 Verifies:
 
