@@ -144,12 +144,13 @@ Example:
 Neighbor        AS      Up/Down    State/PfxRcd
 
 10.77.31.193    65079   06:14:27   30
+```
 
 The script interprets:
 
 Numeric State/PfxRcd = BGP Established
 Text (Idle, Active, Connect, etc.) = BGP not established
-```
+
 
 6. Endpoint Correlation
 
