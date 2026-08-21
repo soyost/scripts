@@ -22,3 +22,7 @@ automation/bgp-check/circuits.csv
 automation/bgp-check/T-Studios-Circuit List.xlsx
 automation/bgp-check/bgp-verification-results.csv
 automation/bgp-check/circuits.xlsx
+automation/cisco-switches/bgp-check/T-Studios-Circuit List.xlsx
+automation/cisco-switches/bgp-check/circuits.xlsx
+automation/cisco-switches/bgp-check/circuits.csv
+automation/cisco-switches/bgp-check/bgp-verification-results.csv
