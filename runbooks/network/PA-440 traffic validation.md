@@ -46,4 +46,11 @@
 6. Re-check later
    - Confirm packet and byte counts are increasing
 
-   
+## Overall Commands
+
+```bash
+show counter global filter delta yes | match drop
+
+show counter global filter delta yes | match tunnel
+
+```
