@@ -8,7 +8,7 @@
    - Note encoder hostname if available
 
    Example:
-   **<img src="../../../images/dhcp-allocation.png" width="800" alt="DHCP Allocation">**
+   **<img src="../../images/dhcp-allocation.png" width="800" alt="DHCP Allocation">**
 
 2. Monitor > Session Browser
    - Filter:
@@ -17,7 +17,7 @@
    - Expand session details
 
    Example:
-   <img src="../../../images/session-id-browser.png" width="800" alt="Session Browser">
+   <img src="../../images/session-id-browser.png" width="800" alt="Session Browser">
 
 3. Verify in Session Browser
    - State = ACTIVE
@@ -32,7 +32,7 @@
    show session id <number>
 
    Example:
-   <img src="../../../images/show-session-id.png" width="800" alt="CLI">
+   <img src="../../images/show-session-id.png" width="800" alt="CLI">
 
 5. Verify
    - Start Time
