@@ -168,8 +168,82 @@ Reasons:
 
 Transient display controller.
 
-Handles:
+## Troubleshooting
 
-* Launching visuals
-* Switching display modes
+Webserver not responding.
+2. Reboot the pi
+3. ssh to the pi
+   
+```bash
+Stevens-MacBook-Air:~ user$ ssh steven@raspberrypi.local
+steven@raspberrypi.local's password:
+```
+
+4. Check services
+   
+```bash
+systemctl status aquarium
+```
+Test Flask
+
+```bash
+curl http://127.0.0.1:5000
+```
+Flask Listening?
+
+```bash
+sudo ss -tlnp | grep :5000
+```
+
+5. Find current IP
+
+```bash
+hostname -I
+```
+
+or if via ssh
+
+```bash
+ip addr
+```
+
+6. Logging
+
+```bash
+journalctl -u aquarium.service -f
+```
+
+
+##
+## Logging
+
+### Flask / systemd
+
+View recent Flask logs:
+
+    journalctl -u aquarium.service -n 50
+
+Follow Flask logs live:
+
+    journalctl -u aquarium.service -f
+
+View logs from the current boot:
+
+    journalctl -u aquarium.service -b
+
+### Cron
+
+Cron output is logged to:
+
+    /home/steven/aquarium/cron.log
+
+View:
+
+    cat ~/aquarium/cron.log
+
+Last 50 lines:
+
+    tail -50 ~/aquarium/cron.log
+
+
 
