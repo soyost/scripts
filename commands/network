@@ -221,3 +221,121 @@ switchport trunk allowed vlan <list>
 # Access + portfast + bpduguard
 # Usually NOT used on MAB/ISE ports
 switchport host
+
+
+
+# -------------------------------
+# Palo Alto Firewall 
+# -------------------------------
+
+show system info | match sw-version
+# Shows the currently running PAN-OS version.
+
+show jobs all
+# Shows active jobs such as software installs, content updates, and commits.
+
+request system software info
+# Lists PAN-OS versions available on the firewall and whether they are downloaded.
+
+debug swm status
+# Shows the boot partitions and which PAN-OS version is active, staged, or revertable.
+
+show system disk-space
+# Displays filesystem utilization and available storage.
+
+show interface all
+# Verifies interface status after an upgrade.
+
+show advanced-routing route
+# Displays the routing table when Advanced Routing Mode is enabled.
+
+show high-availability state
+# Checks HA status.
+
+delete software version <version>
+# Removes an old PAN-OS software image from the repository to free space.
+
+request system software check
+# Refreshes the available software list from Palo Alto update servers.
+
+######## System Health
+
+show system info
+# Displays model, serial number, PAN-OS version, uptime, and management info.
+
+show system resources
+# Displays CPU, memory, and process utilization.
+
+show system disk-space
+# Displays filesystem utilization and available storage.
+
+show clock
+# Displays the current system time.
+
+show jobs all
+# Shows active and completed system jobs.
+
+show jobs processed
+# Shows recently completed jobs.
+
+
+############ Software and Upgrade
+
+request system software info
+# Lists available and downloaded PAN-OS versions.
+
+request system software check
+# Refreshes available software versions from update servers.
+
+debug swm status
+# Shows active, revertable, and staged PAN-OS partitions.
+
+show system info | match sw-version
+# Displays the currently running PAN-OS version.
+
+############ Interfaces
+
+show interface all
+# Displays status of all interfaces.
+
+show interface ethernet1/1
+# Displays detailed status for a specific interface.
+
+show interface management
+# Displays management interface status and IP information.
+
+show counter interface
+# Displays interface packet counters and errors.
+
+######### ARP and Neighbors
+
+show arp all
+# Displays ARP table entries.
+
+show neighbor all
+# Displays discovered L2 neighbors.
+
+show mac all
+# Displays learned MAC addresses.
+
+########### Sessions
+
+show session info
+# Displays firewall session statistics.
+
+show session all
+# Displays active sessions.
+
+show session id <id>
+# Displays details of a specific session.
+
+clear session all
+# Clears all sessions (use carefully).
+
+############# Policies 
+
+test security-policy-match
+# Tests which security rule traffic matches.
+
+show running security-policy
+# Displays active security policies.

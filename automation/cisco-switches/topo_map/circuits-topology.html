@@ -1,0 +1,192 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+                <link href="lib/tom-select/tom-select.css" rel="stylesheet">
+                <script src="lib/tom-select/tom-select.complete.min.js"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 900px;
+                 background-color: #ffffff;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+                <div id="select-menu" class="card-header">
+                    <div class="row no-gutters">
+                        <div class="col-10 pb-2">
+                            <select
+                            class="form-select"
+                            aria-label="Default select example"
+                            onchange="selectNode([value]);"
+                            id="select-node"
+                            placeholder="Select node..."
+                            >
+                                <option selected>Select a Node by ID</option>
+                                
+                                    <option value="NXKSOPHEW01">NXKSOPHEW01</option>
+                                
+                                    <option value="NXKSOPHEW02">NXKSOPHEW02</option>
+                                
+                                    <option value="NXKSOPHEX01">NXKSOPHEX01</option>
+                                
+                                    <option value="NXKSOPHEX02">NXKSOPHEX02</option>
+                                
+                                    <option value="NXTXFRSBX01">NXTXFRSBX01</option>
+                                
+                                    <option value="NXTXFRSBX02">NXTXFRSBX02</option>
+                                
+                                    <option value="NXWASEADW01">NXWASEADW01</option>
+                                
+                                    <option value="NXWASEADW02">NXWASEADW02</option>
+                                
+                                    <option value="NXWASEADX01">NXWASEADX01</option>
+                                
+                                    <option value="NXWASEADX02">NXWASEADX02</option>
+                                
+                                    <option value="lag-32-3890-99.ear2.Seattle1.Level3.net">lag-32-3890-99.ear2.Seattle1.Level3.net</option>
+                                
+                                    <option value="xe-5-0-2.edge2.Seattle3.Level3.net">xe-5-0-2.edge2.Seattle3.Level3.net</option>
+                                
+                                    <option value="xe-9-0-1.edge1.Seattle3.Level3.net">xe-9-0-1.edge1.Seattle3.Level3.net</option>
+                                
+                                    <option value="Unknown-Z-444994222">Unknown-Z-444994222</option>
+                                
+                                    <option value="Unknown-Z-444972052">Unknown-Z-444972052</option>
+                                
+                                    <option value="Unknown-Z-443807996">Unknown-Z-443807996</option>
+                                
+                            </select>
+                        </div>
+                        <div class="col-2 pb-2">
+                            <button type="button" class="btn btn-primary btn-block" onclick="neighbourhoodHighlight({nodes: []});">Reset Selection</button>
+                        </div>
+                    </div>
+                </div>
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+                  new TomSelect("#select-node",{
+                      create: false,
+                      sortField: {
+                          field: "text",
+                          direction: "asc"
+                      }
+                  });
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#97c2fc", "font": {"color": "#000000"}, "id": "NXKSOPHEW01", "label": "NXKSOPHEW01", "margin": 12, "shape": "box", "title": "Nexus switch\u003cbr\u003eNXKSOPHEW01"}, {"color": "#97c2fc", "font": {"color": "#000000"}, "id": "NXKSOPHEW02", "label": "NXKSOPHEW02", "margin": 12, "shape": "box", "title": "Nexus switch\u003cbr\u003eNXKSOPHEW02"}, {"color": "#97c2fc", "font": {"color": "#000000"}, "id": "NXKSOPHEX01", "label": "NXKSOPHEX01", "margin": 12, "shape": "box", "title": "Nexus switch\u003cbr\u003eNXKSOPHEX01"}, {"color": "#97c2fc", "font": {"color": "#000000"}, "id": "NXKSOPHEX02", "label": "NXKSOPHEX02", "margin": 12, "shape": "box", "title": "Nexus switch\u003cbr\u003eNXKSOPHEX02"}, {"color": "#97c2fc", "font": {"color": "#000000"}, "id": "NXTXFRSBX01", "label": "NXTXFRSBX01", "margin": 12, "shape": "box", "title": "Nexus switch\u003cbr\u003eNXTXFRSBX01"}, {"color": "#97c2fc", "font": {"color": "#000000"}, "id": "NXTXFRSBX02", "label": "NXTXFRSBX02", "margin": 12, "shape": "box", "title": "Nexus switch\u003cbr\u003eNXTXFRSBX02"}, {"color": "#97c2fc", "font": {"color": "#000000"}, "id": "NXWASEADW01", "label": "NXWASEADW01", "margin": 12, "shape": "box", "title": "Nexus switch\u003cbr\u003eNXWASEADW01"}, {"color": "#97c2fc", "font": {"color": "#000000"}, "id": "NXWASEADW02", "label": "NXWASEADW02", "margin": 12, "shape": "box", "title": "Nexus switch\u003cbr\u003eNXWASEADW02"}, {"color": "#97c2fc", "font": {"color": "#000000"}, "id": "NXWASEADX01", "label": "NXWASEADX01", "margin": 12, "shape": "box", "title": "Nexus switch\u003cbr\u003eNXWASEADX01"}, {"color": "#97c2fc", "font": {"color": "#000000"}, "id": "NXWASEADX02", "label": "NXWASEADX02", "margin": 12, "shape": "box", "title": "Nexus switch\u003cbr\u003eNXWASEADX02"}, {"color": "#97c2fc", "font": {"color": "#000000"}, "id": "lag-32-3890-99.ear2.Seattle1.Level3.net", "label": "lag-32-3890-99.ear2.Seattle1.Level3.net", "shape": "ellipse", "title": "External endpoint\u003cbr\u003elag-32-3890-99.ear2.Seattle1.Level3.net"}, {"color": "#97c2fc", "font": {"color": "#000000"}, "id": "xe-5-0-2.edge2.Seattle3.Level3.net", "label": "xe-5-0-2.edge2.Seattle3.Level3.net", "shape": "ellipse", "title": "External endpoint\u003cbr\u003exe-5-0-2.edge2.Seattle3.Level3.net"}, {"color": "#97c2fc", "font": {"color": "#000000"}, "id": "xe-9-0-1.edge1.Seattle3.Level3.net", "label": "xe-9-0-1.edge1.Seattle3.Level3.net", "shape": "ellipse", "title": "External endpoint\u003cbr\u003exe-9-0-1.edge1.Seattle3.Level3.net"}, {"color": "#97c2fc", "font": {"color": "#000000"}, "id": "Unknown-Z-444994222", "label": "Unknown Z-End", "shape": "ellipse", "title": "External endpoint\u003cbr\u003eUnknown-Z-444994222"}, {"color": "#97c2fc", "font": {"color": "#000000"}, "id": "Unknown-Z-444972052", "label": "Unknown Z-End", "shape": "ellipse", "title": "External endpoint\u003cbr\u003eUnknown-Z-444972052"}, {"color": "#97c2fc", "font": {"color": "#000000"}, "id": "Unknown-Z-443807996", "label": "Unknown Z-End", "shape": "ellipse", "title": "External endpoint\u003cbr\u003eUnknown-Z-443807996"}]);
+                  edges = new vis.DataSet([{"from": "NXKSOPHEX01", "label": "442981119 | WAVE", "smooth": {"enabled": true, "roundness": 0.2, "type": "dynamic"}, "title": "\u003cb\u003eCircuit:\u003c/b\u003e 442981119\u003cbr\u003e\u003cb\u003eService Component:\u003c/b\u003e 339221759; 339221760; 339221761\u003cbr\u003e\u003cb\u003eType:\u003c/b\u003e WAVE\u003cbr\u003e\u003cb\u003eA End:\u003c/b\u003e NXKSOPHEX01 - eth1/52\u003cbr\u003e\u003cb\u003eZ End:\u003c/b\u003e NXWASEADX01 - eth1/52\u003cbr\u003e\u003cb\u003eA-End Site:\u003c/b\u003e Overland Park, KS\u003cbr\u003e\u003cb\u003eNotes:\u003c/b\u003e PTP-100G Between Studio\u003cbr\u003e\u003cb\u003eA Interface:\u003c/b\u003e eth1/52\u003cbr\u003e\u003cb\u003eZ Interface:\u003c/b\u003e eth1/52", "to": "NXWASEADX01", "width": 2}, {"from": "NXWASEADX01", "label": "448911617 | WAVE", "smooth": {"enabled": true, "roundness": 0.2, "type": "dynamic"}, "title": "\u003cb\u003eCircuit:\u003c/b\u003e 448911617\u003cbr\u003e\u003cb\u003eService Component:\u003c/b\u003e 355765448; 355765480; 355765481\u003cbr\u003e\u003cb\u003eType:\u003c/b\u003e WAVE\u003cbr\u003e\u003cb\u003eA End:\u003c/b\u003e NXWASEADX01 - eth1/46\u003cbr\u003e\u003cb\u003eZ End:\u003c/b\u003e NXWASEADX01 - eth1/46 (per lldp)\u003cbr\u003e\u003cb\u003eA-End Site:\u003c/b\u003e Bellevue, WA\u003cbr\u003e\u003cb\u003eNotes:\u003c/b\u003e 10G WA-\u003e 5G-Uplink (Lldp to itself)\u003cbr\u003e\u003cb\u003eA Interface:\u003c/b\u003e eth1/46\u003cbr\u003e\u003cb\u003eZ Interface:\u003c/b\u003e eth1/46", "to": "NXWASEADX01", "width": 2}, {"from": "NXTXFRSBX01", "label": "447550103 | WAVE", "smooth": {"enabled": true, "roundness": 0.2, "type": "dynamic"}, "title": "\u003cb\u003eCircuit:\u003c/b\u003e 447550103\u003cbr\u003e\u003cb\u003eService Component:\u003c/b\u003e 351599400; 351599405; 351599406\u003cbr\u003e\u003cb\u003eType:\u003c/b\u003e WAVE\u003cbr\u003e\u003cb\u003eA End:\u003c/b\u003e NXTXFRSBX01 - eth1/46\u003cbr\u003e\u003cb\u003eZ End:\u003c/b\u003e NXKSOPHEX01 - eth1/46\u003cbr\u003e\u003cb\u003eA-End Site:\u003c/b\u003e Frisco, TX\u003cbr\u003e\u003cb\u003eNotes:\u003c/b\u003e 10GIG TX-KS\u003cbr\u003e\u003cb\u003eA Interface:\u003c/b\u003e eth1/46\u003cbr\u003e\u003cb\u003eZ Interface:\u003c/b\u003e eth1/46", "to": "NXKSOPHEX01", "width": 2}, {"from": "NXWASEADW01", "label": "441511950 | DIA", "smooth": {"enabled": true, "roundness": 0.2, "type": "dynamic"}, "title": "\u003cb\u003eCircuit:\u003c/b\u003e 441511950\u003cbr\u003e\u003cb\u003eService Component:\u003c/b\u003e 334795237; 334795238; 334795239; 334795240\u003cbr\u003e\u003cb\u003eType:\u003c/b\u003e DIA\u003cbr\u003e\u003cb\u003eA End:\u003c/b\u003e NXWASEADW01 - eth1/46\u003cbr\u003e\u003cb\u003eZ End:\u003c/b\u003e lag-32-3890-99.ear2.Seattle1.Level3.net\u003cbr\u003e\u003cb\u003eA-End Site:\u003c/b\u003e Bellevue, WA\u003cbr\u003e\u003cb\u003eNotes:\u003c/b\u003e 1G WA internet\u003cbr\u003e\u003cb\u003eA Interface:\u003c/b\u003e eth1/46", "to": "lag-32-3890-99.ear2.Seattle1.Level3.net", "width": 2}, {"from": "NXWASEADW01", "label": "444994235 | HS IP", "smooth": {"enabled": true, "roundness": 0.2, "type": "dynamic"}, "title": "\u003cb\u003eCircuit:\u003c/b\u003e 444994235\u003cbr\u003e\u003cb\u003eService Component:\u003c/b\u003e 345139736\u003cbr\u003e\u003cb\u003eType:\u003c/b\u003e HS IP\u003cbr\u003e\u003cb\u003eA End:\u003c/b\u003e NXWASEADW01 -eth1/47\u003cbr\u003e\u003cb\u003eZ End:\u003c/b\u003e xe-5-0-2.edge2.Seattle3.Level3.net\u003cbr\u003e\u003cb\u003eA-End Site:\u003c/b\u003e Bellevue, WA\u003cbr\u003e\u003cb\u003eNotes:\u003c/b\u003e 10G - Desc on inter needs updating w/ cir #\u003cbr\u003e\u003cb\u003eA Interface:\u003c/b\u003e eth1/47", "to": "xe-5-0-2.edge2.Seattle3.Level3.net", "width": 2}, {"from": "NXKSOPHEW01", "label": "444994222 | WAVE", "smooth": {"enabled": true, "roundness": 0.2, "type": "dynamic"}, "title": "\u003cb\u003eCircuit:\u003c/b\u003e 444994222\u003cbr\u003e\u003cb\u003eService Component:\u003c/b\u003e 345139691; 345139692; 345139693; 345139694\u003cbr\u003e\u003cb\u003eType:\u003c/b\u003e WAVE\u003cbr\u003e\u003cb\u003eA End:\u003c/b\u003e NXKSOPHEW01 - eth1/47\u003cbr\u003e\u003cb\u003eZ End:\u003c/b\u003e Unknown\u003cbr\u003e\u003cb\u003eA-End Site:\u003c/b\u003e Overland Park, KS\u003cbr\u003e\u003cb\u003eNotes:\u003c/b\u003e 10G KS Internet\u003cbr\u003e\u003cb\u003eA Interface:\u003c/b\u003e eth1/47", "to": "Unknown-Z-444994222", "width": 2}, {"from": "NXKSOPHEW02", "label": "444972052 | WAVE", "smooth": {"enabled": true, "roundness": 0.2, "type": "dynamic"}, "title": "\u003cb\u003eCircuit:\u003c/b\u003e 444972052\u003cbr\u003e\u003cb\u003eService Component:\u003c/b\u003e 345071371; 345071372; 345071373; 345071374\u003cbr\u003e\u003cb\u003eType:\u003c/b\u003e WAVE\u003cbr\u003e\u003cb\u003eA End:\u003c/b\u003e NXKSOPHEW02 - eth1/47\u003cbr\u003e\u003cb\u003eZ End:\u003c/b\u003e Unknown\u003cbr\u003e\u003cb\u003eA-End Site:\u003c/b\u003e Overland Park, KS\u003cbr\u003e\u003cb\u003eNotes:\u003c/b\u003e 10G KS Internet\u003cbr\u003e\u003cb\u003eA Interface:\u003c/b\u003e eth1/47", "to": "Unknown-Z-444972052", "width": 2}, {"from": "NXWASEADW02", "label": "444972117 | HS IP", "smooth": {"enabled": true, "roundness": 0.2, "type": "dynamic"}, "title": "\u003cb\u003eCircuit:\u003c/b\u003e 444972117\u003cbr\u003e\u003cb\u003eService Component:\u003c/b\u003e 345071573\u003cbr\u003e\u003cb\u003eType:\u003c/b\u003e HS IP\u003cbr\u003e\u003cb\u003eA End:\u003c/b\u003e NXWASEADW02 - eth1/47\u003cbr\u003e\u003cb\u003eZ End:\u003c/b\u003e xe-9-0-1.edge1.Seattle3.Level3.net\u003cbr\u003e\u003cb\u003eA-End Site:\u003c/b\u003e Bellevue, WA\u003cbr\u003e\u003cb\u003eNotes:\u003c/b\u003e 10G WA internet\u003cbr\u003e\u003cb\u003eA Interface:\u003c/b\u003e eth1/47", "to": "xe-9-0-1.edge1.Seattle3.Level3.net", "width": 2}, {"from": "NXWASEADW02", "label": "443807996 | DIA", "smooth": {"enabled": true, "roundness": 0.2, "type": "dynamic"}, "title": "\u003cb\u003eCircuit:\u003c/b\u003e 443807996\u003cbr\u003e\u003cb\u003eService Component:\u003c/b\u003e 341680871; 341680872; 341680873; 341680874\u003cbr\u003e\u003cb\u003eType:\u003c/b\u003e DIA\u003cbr\u003e\u003cb\u003eA End:\u003c/b\u003e NXWASEADW02 - eth1/46\u003cbr\u003e\u003cb\u003eZ End:\u003c/b\u003e Unknown\u003cbr\u003e\u003cb\u003eA-End Site:\u003c/b\u003e Bellevue, WA\u003cbr\u003e\u003cb\u003eNotes:\u003c/b\u003e 1G WA internet\u003cbr\u003e\u003cb\u003eA Interface:\u003c/b\u003e eth1/46", "to": "Unknown-Z-443807996", "width": 2}, {"from": "NXWASEADX02", "label": "447550116 | WAVE", "smooth": {"enabled": true, "roundness": 0.2, "type": "dynamic"}, "title": "\u003cb\u003eCircuit:\u003c/b\u003e 447550116\u003cbr\u003e\u003cb\u003eService Component:\u003c/b\u003e 351599447; 351599470;351599471\u003cbr\u003e\u003cb\u003eType:\u003c/b\u003e WAVE\u003cbr\u003e\u003cb\u003eA End:\u003c/b\u003e NXWASEADX02 - eth1/46\u003cbr\u003e\u003cb\u003eZ End:\u003c/b\u003e NXTXFRSBX02 - eth1/46\u003cbr\u003e\u003cb\u003eA-End Site:\u003c/b\u003e Bellevue, WA\u003cbr\u003e\u003cb\u003eNotes:\u003c/b\u003e 100G WA-TX\u003cbr\u003e\u003cb\u003eA Interface:\u003c/b\u003e eth1/46\u003cbr\u003e\u003cb\u003eZ Interface:\u003c/b\u003e eth1/46", "to": "NXTXFRSBX02", "width": 2}, {"from": "NXWASEADX02", "label": "442981120 | WAVE", "smooth": {"enabled": true, "roundness": 0.2, "type": "dynamic"}, "title": "\u003cb\u003eCircuit:\u003c/b\u003e 442981120\u003cbr\u003e\u003cb\u003eService Component:\u003c/b\u003e 339221762; 339221763; 339221764\u003cbr\u003e\u003cb\u003eType:\u003c/b\u003e WAVE\u003cbr\u003e\u003cb\u003eA End:\u003c/b\u003e NXWASEADX02 - eth1/52\u003cbr\u003e\u003cb\u003eZ End:\u003c/b\u003e NXKSOPHEX02 - eth1/52\u003cbr\u003e\u003cb\u003eA-End Site:\u003c/b\u003e Bellevue, WA\u003cbr\u003e\u003cb\u003eNotes:\u003c/b\u003e 100G WA-KS\u003cbr\u003e\u003cb\u003eA Interface:\u003c/b\u003e eth1/52\u003cbr\u003e\u003cb\u003eZ Interface:\u003c/b\u003e eth1/52", "to": "NXKSOPHEX02", "width": 2}, {"from": "NXKSOPHEX02", "label": "448911603 | WAVE", "smooth": {"enabled": true, "roundness": 0.2, "type": "dynamic"}, "title": "\u003cb\u003eCircuit:\u003c/b\u003e 448911603\u003cbr\u003e\u003cb\u003eService Component:\u003c/b\u003e 355765405; 355765409; 355765410; 355765411\u003cbr\u003e\u003cb\u003eType:\u003c/b\u003e WAVE\u003cbr\u003e\u003cb\u003eA End:\u003c/b\u003e NXKSOPHEX02 - eth1/46\u003cbr\u003e\u003cb\u003eZ End:\u003c/b\u003e NXKSOPHEX02 - eth1/46 (per lldp)\u003cbr\u003e\u003cb\u003eA-End Site:\u003c/b\u003e Overland Park, KS\u003cbr\u003e\u003cb\u003eNotes:\u003c/b\u003e 10G KS-\u003e 5GUplink? Lldp to itself\u003cbr\u003e\u003cb\u003eA Interface:\u003c/b\u003e eth1/46\u003cbr\u003e\u003cb\u003eZ Interface:\u003c/b\u003e eth1/46", "to": "NXKSOPHEX02", "width": 2}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {"interaction": {"hover": true, "navigationButtons": true, "keyboard": true, "multiselect": true}, "edges": {"font": {"size": 11, "align": "middle"}, "smooth": {"enabled": true, "type": "dynamic"}}, "nodes": {"borderWidth": 2}, "physics": {"enabled": true, "solver": "barnesHut", "barnesHut": {"gravitationalConstant": -18000, "centralGravity": 0.2, "springLength": 220, "springConstant": 0.03, "damping": 0.09, "avoidOverlap": 0.5}, "stabilization": {"enabled": true, "iterations": 1500, "updateInterval": 50}}};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+                    network.on("selectNode", neighbourhoodHighlight);
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>
