@@ -133,6 +133,39 @@ def parse_connected_interfaces(conn):
     return len(results), " | ".join(results) if results else "NONE"
 
 
+def check_vlan(conn, vlan_id):
+    """
+    Check whether a VLAN exists on the device.
+
+    Returns:
+        YES / NO
+    """
+    output = conn.send_command(f"show vlan id {vlan_id}")
+
+    # Common Cisco responses when the VLAN does not exist
+    not_found_patterns = [
+        r"VLAN id .* not found",
+        r"VLAN .* does not exist",
+        r"Invalid VLAN",
+        r"% Invalid",
+        r"% VLAN",
+    ]
+
+    for pattern in not_found_patterns:
+        if re.search(pattern, output, re.IGNORECASE):
+            return "NO"
+
+    # Look for the VLAN ID at the beginning of a VLAN table row.
+    if re.search(
+        rf"^\s*{re.escape(str(vlan_id))}\s+",
+        output,
+        re.MULTILINE,
+    ):
+        return "YES"
+
+    return "NO"
+
+
 def save_running_config(conn):
     """
     Known-good copy run start logic.
@@ -200,6 +233,7 @@ def save_running_config(conn):
     )
 
     proof = " | ".join(proof_lines)
+
     if not proof:
         proof = clean_text(full_output)
 
@@ -314,6 +348,19 @@ def main():
         input("Include connected ports? (y/n): ").strip().lower() == "y"
     )
 
+    check_vlan_id = (
+        input("Search for VLAN ID? (y/n): ").strip().lower() == "y"
+    )
+
+    vlan_id = ""
+
+    if check_vlan_id:
+        vlan_id = input("VLAN ID to search for: ").strip()
+
+        if not vlan_id.isdigit():
+            print("VLAN ID must be a number.")
+            return
+
     save_config = (
         input("Copy running-config to startup-config? (y/n): ")
         .strip()
@@ -349,6 +396,9 @@ def main():
 
     if check_connected_ports:
         headers.extend(["connected_count", "connected_interfaces"])
+
+    if check_vlan_id:
+        headers.extend(["vlan_id", "vlan_present"])
 
     if save_config:
         headers.extend(["save_status", "save_proof"])
@@ -423,6 +473,16 @@ def main():
                         )
                         row["connected_count"] = connected_count
                         row["connected_interfaces"] = connected_interfaces
+
+                    if check_vlan_id:
+                        vlan_present = check_vlan(conn, vlan_id)
+                        row["vlan_id"] = vlan_id
+                        row["vlan_present"] = vlan_present
+
+                        print(
+                            f"{host}: VLAN {vlan_id} "
+                            f"{'present' if vlan_present == 'YES' else 'not found'}"
+                        )
 
                     if save_config:
                         print(f"{host}: saving running-config")
