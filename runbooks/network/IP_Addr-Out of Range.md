@@ -194,11 +194,3 @@ en1 = approved NAS / storage network
 ```
 
 ---
-
-## Closure Notes Example
-
-```text
-Endpoint was isolated by the Cortex IP_Addr-Out of Range correlation rule. The offending IP was <offending-ip>. Investigation confirmed the IP was assigned to <interface>, which mapped to <hardware port>. The default route was using that interface, confirming the endpoint was actively using the out-of-range network.
-
-User disconnected from Wi-Fi. The offending IP is no longer present on the endpoint. Default route now points to the approved wired gateway via the approved wired interface. Malware scan was initiated. Endpoint is ready for isolation release per process.
-```
