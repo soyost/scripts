@@ -1,7 +1,7 @@
 ##### etsops - pre-req
 # git clone git@github.cerner.com:ETS-Bespin/gps-vault.git
 ssh-add ~<gps-vault location>/chef.cerner.com/cho_prod/<facility>/etsops.pem
-# Enter password from vault https://vault.cerner.com/safe?companyID=7522
+# Enter password from vault https://vault.cerner.com/
 ssh -i etsops.pem etsops@<CCA VPN IP>
 
 ##### Troubleshooting
@@ -26,21 +26,7 @@ cat /etc/resolv.conf # find the client DNS nameserver
 nslookup <host> <IP from etc/resolv.conf> # forces nslookup from client nameserver
 
 #### jumpbox jump box
-# EMEA2
-7.207.3.53 choaplsemgmt201.cernse.com
-# US
-choaplmgmt101.cernerasp.com # bastion
-# Canda CA CD
-10.23.34.86 # ip-10-23-34-86.ca-central-1.compute.internal # Canada
-# UK 
-ssh ssh.cernuksphere.net
-<password for uk>
-1 # for duo push
-ssh 7.168.0.18 # don't forget this
-<password for uk>
-ssh <VPN as normal>
-# AU
-10.23.165.51
+<removed>
 #####
 # check to see if able to reach out to AWS
 curl -v https://ibus-aws-proxy.prod.us.careaware.com/meta/health
