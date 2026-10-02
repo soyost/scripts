@@ -10,7 +10,7 @@ python switch_mapper.py
 Example:
 
 ```bash
-Switch hostname or IP: Switchname
+Switch hostname or IP: <Switchname>
 Username: user
 Password: 
 Connected to Switchname
@@ -24,6 +24,3 @@ Wrote mapping\Switchname.csv
 
 * Rendering will open in browser
 
-Example:
-
-<img src="../../../images/switch-map-2.png" width="800" alt="Rendering In Browser">

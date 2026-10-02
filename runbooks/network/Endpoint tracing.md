@@ -15,18 +15,13 @@ CLI:
 ```bash
 show mac all
 ```
-Example: 5c:77:57:00:d9:20 ethernet1/2
+Example: 5c:77:57:XX:XX:XX ethernet1/2
 
 3. Identify endpoint 
 
 Option A: Network > DHCP > DHCP Server > View Allocation 
 
 Option B: DHCP Logs > Match MAC address. 
-
-Example: 
-MAC: 5c:77:57:00:d9:20 
-IP: 10.77.250.8 
-Hostname: PKITDEC02A
 
 
 
@@ -49,8 +44,6 @@ Hostname: PKITDEC02A
    ping <ip> source <gateway-or-local-interface-ip> vrf <vrf>
 ```
 
-   Example:
-   ping 10.77.250.8 source 10.77.250.1 vrf ENG
 
 4. Find the ARP entry
 
@@ -58,13 +51,9 @@ Hostname: PKITDEC02A
    show ip arp vrf <vrf> <ip>
 ```
 
-   Example:
-   show ip arp vrf ENG 10.77.250.8
 
 5. Get the MAC address from ARP
 
-   Example:
-   10.77.250.8  5c77.5700.d920  Vlan250
 
 6. Find where the MAC is learned
 
@@ -72,8 +61,6 @@ Hostname: PKITDEC02A
    show mac address-table address <mac>
 ``` 
 
-   Example:
-   show mac address-table address 5c77.5700.d920
 
 7. Interpret the result
    - Access port = endpoint/interface found

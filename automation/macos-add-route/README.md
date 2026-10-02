@@ -23,8 +23,8 @@ Adds route to .plist file and reloads
 ### OP
 
 ```bash
-sudo route -n delete -net 10.79.172.0/24 192.168.5.1
-sudo route -n delete -net 10.79.69.0/24 192.168.5.1
+sudo route -n delete -net 10.10.10.10/24 10.10.10.10
+sudo route -n delete -net 10.10.10.1/24 10.10.10.1
 ```
 
 Remove Persistent

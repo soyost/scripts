@@ -241,13 +241,13 @@ nmcli con show
 # -----------------------------
 
 # Set static IP
-nmcli con mod eno1 ipv4.addresses 10.79.156.79/23
+nmcli con mod eno1 ipv4.addresses 10.10.10.10/23
 
 # Set gateway
-nmcli con mod eno1 ipv4.gateway 10.79.156.1
+nmcli con mod eno1 ipv4.gateway 10.10.10.10.1
 
 # Set DNS
-nmcli con mod eno1 ipv4.dns "10.253.1.53"
+nmcli con mod eno1 ipv4.dns "10.10.10.10"
 
 # Set manual/static addressing
 nmcli con mod eno1 ipv4.method manual
@@ -267,10 +267,10 @@ ip addr
 ip route
 
 # Ping gateway
-ping -c 4 10.79.156.1
+ping -c 4 10.10.10.10.1
 
 # Ping DNS server
-ping -c 4 10.253.1.53
+ping -c 4 10.10.10.10
 
 # Show ARP/neighbors
 ip neigh

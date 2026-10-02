@@ -34,8 +34,8 @@ A-END: SWITCH01 Eth1/46
   VRF OAM / Eth1/46.21
     Circuit in config: YES
     Interface: protocol-up/link-up/admin-up (YES)
-    Local IP: 10.77.31.192/31
-    Neighbor: 10.77.31.193
+    Local IP: 10.10.10.10/31
+    Neighbor: 10.10.10.1
     Remote AS: 65079
     BGP state: Established
     BGP uptime: 06:14:27
@@ -48,8 +48,8 @@ Z-END: SWITCH02 Eth1/46
   VRF OAM / Eth1/46.21
     Circuit in config: YES
     Interface: protocol-up/link-up/admin-up (YES)
-    Local IP: 10.77.31.193/31
-    Neighbor: 10.77.31.192
+    Local IP: 10.10.10.1/31
+    Neighbor: 10.10.10.10
     Remote AS: 65066
     BGP state: Established
     BGP uptime: 06:14:34
@@ -114,7 +114,7 @@ Calculates the expected BGP neighbor address.
 
 Example:
 
-ip address 10.77.31.192/31
+ip address 10.10.10.10/31
 vrf member OAM
 
 
@@ -143,7 +143,7 @@ Example:
 ```bash
 Neighbor        AS      Up/Down    State/PfxRcd
 
-10.77.31.193    65079   06:14:27   30
+10.10.10.10    65079   06:14:27   30
 ```
 
 The script interprets:

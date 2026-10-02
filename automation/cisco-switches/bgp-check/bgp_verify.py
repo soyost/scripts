@@ -3,15 +3,13 @@
 """Validate Nexus interfaces and BGP neighbors for a carrier circuit.
 
 Example:
-    python bgp_verify.py --circuit 447550116 --xlsx circuits.xlsx
+    python bgp_verify.py --circuit XXXXXXX --xlsx circuits.xlsx
 
 The circuit workbook must contain these logical columns (matching is flexible):
     Service/Circuit
     "A"-END-Router
     "Z"-END-Router
 
-Router cells are expected to resemble:
-    NXWASEADX01 - eth1/46
 """
 
 from __future__ import annotations
@@ -132,9 +130,7 @@ def parse_router_cell(side: str, raw_value: str) -> Endpoint:
     if not raw or raw.lower() == "unknown":
         raise ValueError(f'{side}-end router is missing or "Unknown" in the workbook.')
 
-    # Expected examples:
-    #   NXWASEADX01 - eth1/46
-    #   NXKSOPHEX01-eth1/46
+
     match = re.search(
         r"(?P<host>[A-Za-z0-9_.-]+)\s*-\s*(?P<intf>(?:Eth(?:ernet)?|Po(?:rt-?channel)?)\s*\d+(?:/\d+)*(?:\.\d+)?)",
         raw,
