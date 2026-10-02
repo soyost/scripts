@@ -4,7 +4,7 @@
   gather_facts: no
 
   vars:
-    scp_server: "10.79.253.15"
+    scp_server: "10.10.10.10"
     scp_user: "{{ lookup('env', 'SCP_BACKUP_USER') }}"
     scp_password: "{{ lookup('env', 'SCP_BACKUP_PASSWORD') }}"
     backup_vrf: "OAM"

@@ -21,7 +21,7 @@ Example:
 Look for:
 
 ```json
-"agent_hostname":"TMF5KCG018N5RN"
+"agent_hostname":"XXXXX"
 ```
 
 4. Identify the offending IP address.
@@ -29,7 +29,7 @@ Look for:
 Look for:
 
 ```json
-"ipaddr":"10.35.240.238"
+"ipaddr":"10.10.10.10"
 ```
 
 > [!NOTE]
@@ -79,7 +79,7 @@ ifconfig -a | grep -B3 -A6 "<offending-ip>"
 Example:
 
 ```bash
-ifconfig -a | grep -B3 -A6 "10.35.240.238"
+ifconfig -a | grep -B3 -A6 "10.10.10.10"
 ```
 
 Example output:
@@ -88,7 +88,7 @@ Example output:
 options=6460<TSO4,TSO6,CHANNEL_IO,PARTIAL_CSUM,ZEROINVERT_CSUM>
 ether 36:ea:4d:93:51:ad
 inet6 fe80::148a:1111:318f:a71d%en2 prefixlen 64 secured scopeid 0x8
-inet 10.35.240.238 netmask 0xfffff800 broadcast 10.35.247.255
+inet 10.10.10.10 netmask 0xfffff800 broadcast 10.10.10.10
 nd6 options=201<PERFORMNUD,DAD>
 media: autoselect
 status: active
@@ -115,7 +115,7 @@ Example:
 ```text
 Hardware Port: Wi-Fi
 Device: en2
-Ethernet Address: f8:ff:c2:5f:7c:9f
+Ethernet Address: f8:ff:c2:XX:XX:XX
 ```
 
 10. Check the default route.
@@ -127,7 +127,7 @@ route -n get default
 Example of a bad state:
 
 ```text
-gateway: 10.35.240.1
+gateway: 10.10.10.10
 interface: en2
 ```
 
@@ -175,7 +175,7 @@ interface: <approved wired interface>
 Example of a good state:
 
 ```text
-gateway: 10.79.164.1
+gateway: 10.10.10.1
 interface: en0
 ```
 
@@ -186,11 +186,3 @@ ifconfig en0
 ifconfig en1
 ```
 
-Example expected state:
-
-```text
-en0 = approved wired corporate network
-en1 = approved NAS / storage network
-```
-
----

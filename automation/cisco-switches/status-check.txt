@@ -2,29 +2,46 @@
 Button configuration for SecureCRT for consistant and repeatable current state check for given OS
 ###############
 ###Catalyst
-!
 terminal length 0\r
 \w300
 sh clock\r
+show ntp association\r
 sh version\r
 \w
 \r
 \r
+show switch stack-mode\r
+show switch stack-ports sum\r
+show switch stack-ring speed\r
+show authentication sessions\r
+show switch detail\r
 show lldp neighbors\r
 sh interface status | exclude disabled|xcvrAbsen\r
+\r
+\r 
+sh inter description | ex admin down\r
+\r 
+\r 
 sh interface trunk\r
 sh vlan brief\r
 sh spanning-tree root\r
 sh spanning-tree summary\r
 sh etherchannel summary\r
+sh mac address-table\r
+\w
+\r
 sh mac address-table count\r
 sh vrf\r
 sh hsrp brief\r
 sh ip bgp summary\r
 sh ip route vrf PROD\r
 sh ip route vrf OAM\r
+sh ip route vrf Mgmt-vrf\r
 sh ip route vrf vPC-KeepAlive\r
 sh ip route vrf WEAKFE\r
+sh ip route vrf WEBCAST\r
+\r
+\r
 
 
 ###Nexus
@@ -32,8 +49,6 @@ sh ip route vrf WEAKFE\r
 terminal length 0\r
 sh clock\r
 sh version\r
-\w
-\r
 sh lldp neighbors\r
 sh interface status | exclude disabled|xcvrAbsen\r
 \p
