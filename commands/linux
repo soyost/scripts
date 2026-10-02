@@ -190,3 +190,88 @@ docker ps -a -q -f status=exited | xargs docker start
 
 netstat -ano | findstr 5000
 netstat -ano | findstr :8080
+
+# Check firewalld status
+systemctl status firewalld
+
+# Show full firewall config
+firewall-cmd --list-all
+
+# Show allowed services
+firewall-cmd --list-services
+
+# Allow SSH permanently
+firewall-cmd --permanent --add-service=ssh
+
+# Reload firewall
+firewall-cmd --reload
+
+# Check sshd status
+systemctl status sshd
+
+# Enable/start sshd
+systemctl enable --now sshd
+
+# Verify SSH listening on port 22
+ss -tulpn | grep :22
+
+# SSH key 
+ssh-keygen -R <IP>
+
+
+# -----------------------------
+# INTERFACES / NETWORKING
+# -----------------------------
+
+# Show interfaces
+ip link
+
+# Show IP addresses
+ip addr
+
+# Show routes
+ip route
+
+# Show NetworkManager connections
+nmcli con show
+
+
+# -----------------------------
+# CONFIGURE STATIC IP ON eno1
+# -----------------------------
+
+# Set static IP
+nmcli con mod eno1 ipv4.addresses 10.79.156.79/23
+
+# Set gateway
+nmcli con mod eno1 ipv4.gateway 10.79.156.1
+
+# Set DNS
+nmcli con mod eno1 ipv4.dns "10.253.1.53"
+
+# Set manual/static addressing
+nmcli con mod eno1 ipv4.method manual
+
+# Apply interface config
+nmcli con up eno1
+
+
+# -----------------------------
+# VERIFY NETWORKING
+# -----------------------------
+
+# Verify IP config
+ip addr
+
+# Verify routing
+ip route
+
+# Ping gateway
+ping -c 4 10.79.156.1
+
+# Ping DNS server
+ping -c 4 10.253.1.53
+
+# Show ARP/neighbors
+ip neigh
+
