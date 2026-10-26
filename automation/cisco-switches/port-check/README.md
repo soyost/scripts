@@ -16,4 +16,4 @@ This script is for the use in SecureCRT for high level status checsk of a given 
 6. While connected to your Cisco switch, click it. You should get the little interface prompt, enter the given port.
 
 EXAMPLE:
-<img src="../../../images/port-check.png" width="800" alt="Port Check Button Prompt">
+<img src="../../../images/portcheck.png" width="800" alt="Port Check Button Prompt">
