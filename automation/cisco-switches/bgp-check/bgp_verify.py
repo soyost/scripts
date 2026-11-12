@@ -37,7 +37,7 @@ from paramiko.ssh_exception import SSHException
 
 DEFAULT_CIRCUIT_FILE = "circuits.xlsx"
 DEFAULT_RESULTS_FILE = "bgp-verification-results.csv"
-DEFAULT_VRFS = ("OAM", "PROD")
+DEFAULT_VRFS = ("OAM", "PROD", "ENG", "WEBCONTROL", "WEBCAST")
 DEVICE_TYPES = ("cisco_nxos", "cisco_xe", "cisco_ios")
 CIRCUIT_RE = re.compile(r"^4\d{8}$")
 
